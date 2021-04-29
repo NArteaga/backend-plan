@@ -1,0 +1,315 @@
+'use strict';
+
+const debug = require('debug')('app:service:auth');
+const crypto = require('crypto');
+const Issuer = require('openid-client').Issuer;
+const { ErrorApp } = require('../../lib/error');
+const url = require('url');
+const { config } = require('../../../common');
+const { iss } = require('../../lib/util');
+const { generateToken } = require('../../../application/lib/auth');
+const moment = require('moment');
+
+// Métodos para CIUDADANÍA DIGITAL
+module.exports = function authService (repositories, helpers, res) {
+  const UsuarioService = require('./UsuarioService')(repositories, helpers, res);
+  const { AuthRepository, UsuarioRepository, ModuloRepository, ParametroRepository, PermisoRepository } = repositories;
+  const issuer = new Issuer(iss);
+  const { FechaHelper } = helpers;
+  // console.log('---------------------------- issuer', issuer);
+  // const keystore = jose.JWK.createKeyStore();
+  const cliente = new issuer.Client(config.openid.client);
+  cliente.CLOCK_TOLERANCE = 5;
+
+  async function verificarPermisos (params) {
+    try {
+      const permisos = await PermisoRepository.verificarPermisos(params);
+      return permisos;
+    } catch (error) {
+
+    }
+  }
+
+  async function verificarHorarios (idUsuario) {
+    const dia = moment().locale('es').format('dddd');
+    const { rows: horarios } = await ParametroRepository.findHorarios({ dia, idUsuario });
+    let tieneAcceso = true;
+    for (const horario of horarios) {
+      const { horaInicio, horaFin } = horario;
+      const fechaActual = moment().format('DD/MM/YYYY');
+      const horaActual = moment().format('HH:mm:ss');
+      if (Date.parse(`${fechaActual} ${horaActual}`) < Date.parse(`${fechaActual} ${horaInicio}`) ||
+          Date.parse(`${fechaActual} ${horaActual}`) > Date.parse(`${fechaActual} ${horaFin}`)) {
+        tieneAcceso = false;
+      }
+    }
+    return tieneAcceso;
+  }
+
+  async function getResponse (usuario) {
+    try {
+      if (!usuario.rol) {
+        throw new Error('El rol no esta asignado al usuario');
+      }
+      const { rows: modulos } = await ModuloRepository.findByRol(usuario.rol.id);
+      const permissions = [];
+      const permissionsFrontend = {};
+      const menuFinal = [];
+
+      for (const modulo of modulos) {
+        let incluir = false;
+        const padre = {
+          url        : modulo.url,
+          ruta       : modulo.ruta,
+          label      : modulo.label,
+          icono      : modulo.icono,
+          orden      : modulo.orden,
+          subModulos : []
+        };
+        if (modulo.subModulos.length > 0) {
+          for (const subModulo of modulo.subModulos) {
+            if (subModulo.permisos[0]) {
+              if (subModulo.permisos[0].access) {
+                padre.subModulos.push({
+                  url        : subModulo.url,
+                  ruta       : subModulo.ruta,
+                  label      : subModulo.label,
+                  icono      : subModulo.icono,
+                  orden      : subModulo.orden,
+                  subModulos : []
+                });
+              }
+            }
+            for (const permiso in subModulo.permisos[0]) {
+              if (subModulo.permisos[0][permiso]) {
+                permissionsFrontend[`${subModulo.url}:${permiso}`] = true;
+                permissions.push(`${subModulo.url}:${permiso}`);
+              }
+            }
+          }
+          if (padre.subModulos.length > 0) {
+            incluir = true;
+          }
+        } else {
+          if (modulo.permisos[0] && modulo.url) {
+            if (modulo.permisos[0].access) {
+              incluir = true;
+            }
+            for (const permiso in modulo.permisos[0]) {
+              if (modulo.permisos[0][permiso]) {
+                permissionsFrontend[`${modulo.url}:${permiso}`] = true;
+                permissions.push(`${modulo.url}:${permiso}`);
+              }
+            }
+          }
+        }
+        if (incluir) {
+          menuFinal.push(padre);
+        }
+      }
+      usuario.menu = menuFinal;
+      usuario.permissions = permissionsFrontend;
+      usuario.token = await generateToken(ParametroRepository, {
+        idUsuario         : usuario.id,
+        idSucursal        : usuario.sucursal ? usuario.sucursal.id : null,
+        celular           : usuario.celular,
+        correoElectronico : usuario.correoElectronico,
+        foto              : usuario.foto,
+        usuario           : usuario.usuario,
+        idRol             : usuario.rol.id,
+        permissions       : []
+      });
+      return usuario;
+    } catch (error) {
+      throw new ErrorApp(error.message, 400);
+    }
+  }
+
+  async function login (usuario, contrasena) {
+    try {
+      const existeUsuario = await UsuarioRepository.findOne({ usuario, contrasena });
+      if (!existeUsuario) {
+        throw new Error('No existe el usuario.');
+      }
+      return getResponse(existeUsuario);
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
+  async function refreshToken (idRol, idUsuario) {
+    const existeUsuario = await UsuarioRepository.findById(idUsuario);
+    if (!existeUsuario) {
+      throw new Error('No existe el usuario.');
+    }
+    return getResponse(existeUsuario, idRol);
+  }
+
+  async function getCode (data) {
+    debug('Obtener código state');
+    const state = crypto.randomBytes(16).toString('hex');
+    const nonce = crypto.randomBytes(16).toString('hex');
+
+    try {
+      const authorizationRequest = Object.assign({
+        redirect_uri: config.openid.client.redirect_uris[0],
+        state,
+        nonce
+      }, config.openid.client_params);
+
+      const authorizeUrl = cliente.authorizationUrl(authorizationRequest);
+
+      const data = {
+        state,
+        parametros: {
+          nonce
+        },
+        _user_created: 1
+      };
+      await AuthRepository.createOrUpdate(data);
+
+      return res.success({
+        url    : authorizeUrl,
+        codigo : state
+      });
+    } catch (e) {
+      return res.error(e);
+    }
+  }
+
+  async function authorizate (req, info) {
+    debug('Autorizar código');
+    let usuario;
+    let respuesta;
+    try {
+      const params = cliente.callbackParams(req);
+      if (!params.state) {
+        throw new Error('Parámetro state es requerido.');
+      }
+      if (!params.code) {
+        throw new Error('Parámetro code es requerido.');
+      }
+      const parametros = {
+        state  : params.state,
+        estado : 'INICIO'
+      };
+      const resultadoState = await AuthRepository.findOne(parametros);
+
+      if (resultadoState) {
+        // obtenemos el code
+        const respuestaCode = await cliente.callback(cliente.redirect_uris[0], params, {
+          nonce : resultadoState.parametros.nonce,
+          state : resultadoState.state
+        });
+        resultadoState.tokens = respuestaCode;
+
+        const claims = await cliente.userinfo(respuestaCode);
+        // const claims = respuestaCode.userinfo(respuesta);
+        claims.fecha_nacimiento = FechaHelper.formatearFecha(claims.fecha_nacimiento);
+        console.log('-------------------------------claims', claims);
+        const [numeroDocumento, complemento] = claims.documento_identidad.numero_documento.split('-');
+        const complementoVisible = !!complemento;
+        const wherePersona = {
+          numeroDocumento : numeroDocumento,
+          fechaNacimiento : claims.fecha_nacimiento,
+          complementoVisible
+        };
+        if (complemento) {
+          Object.assign(wherePersona, { complemento });
+        }
+        usuario = await UsuarioRepository.findByPersona(wherePersona);
+        if (!usuario) {
+          const tipoDocumento = await ParametroRepository.findOne({ codigo: claims.documento_identidad.tipo_documento });
+          if (!tipoDocumento) {
+            throw new Error('El usuario no cuenta con un tipo de documento Valido.');
+          }
+          if (!claims.nombre.primer_apellido && !claims.nombre.segundo_apellido) {
+            throw new Error(`El usuario con numero de documento ${numeroDocumento} no tiene apellido paterno y apellido materno.`);
+          }
+          const usuarioCreado = await UsuarioService.guardarUsuario({
+            usuario           : numeroDocumento + (complemento ? `-${complemento}` : ''),
+            correoElectronico : claims.email,
+            persona           : {
+              parIdTipoDocumento : tipoDocumento.id,
+              numeroDocumento    : numeroDocumento,
+              complementoVisible,
+              complemento        : complemento,
+              fechaNacimiento    : claims.fecha_nacimiento,
+              nombres            : claims.nombre.nombres,
+              primerApellido     : claims.nombre.primer_apellido,
+              segundoApellido    : claims.nombre.segundo_apellido,
+              estado             : config.constants.ESTADO_ACTIVO,
+              correoElectronico  : claims.email,
+              parIdTipoPersona   : config.constants.TIPO_PERSONA_NATURAL,
+              usuarioCreacion    : config.constants.USUARIO_CREACION_DEFAULT
+            }
+          });
+          usuario = await UsuarioRepository.findByUsername(usuarioCreado.usuario, true);
+        }
+        respuesta = await registrarLogin(usuario, info, resultadoState);
+        return res.success(respuesta);
+      } else {
+        return res.warning(new Error('Los códigos de verificacion no coenciden. Intente nuevamente.'));
+      }
+    } catch (e) {
+      return res.error(e);
+    }
+  }
+
+  async function registrarLogin (user, info, resultadoState) {
+    info.state = resultadoState.state;
+    const respuesta = await UsuarioService.getResponse(user, null, info);
+    resultadoState.id_usuario = user.id;
+    resultadoState.estado = config.constants.ESTADO_ACTIVO;
+    resultadoState._user_created = user.id;
+    await AuthRepository.createOrUpdate(resultadoState);
+    return respuesta;
+  }
+
+  async function logout (code, usuario) {
+    debug('Salir del sistema');
+    let resultUrl;
+    const urlExit = '/oauth/logout.html';
+    try {
+      const user = await UsuarioRepository.findByUsername(usuario, false);
+      if (user) {
+        const parametros = {
+          state      : code,
+          id_usuario : user.id,
+          estado     : config.constants.ESTADO_ACTIVO
+        };
+        const result = await AuthRepository.findOne(parametros);
+        if (result) {
+          resultUrl = getUrl(result);
+        } else {
+          resultUrl = urlExit;
+        }
+      } else {
+        resultUrl = urlExit;
+      }
+      return res.success({ url: resultUrl });
+    } catch (e) {
+      return res.error(e);
+    }
+  }
+
+  function getUrl (data) {
+    return url.format(Object.assign(url.parse(issuer.end_session_endpoint), {
+      search : null,
+      query  : {
+        id_token_hint            : data.tokens.id_token,
+        post_logout_redirect_uri : cliente.post_logout_redirect_uris[0]
+      }
+    }));
+  }
+
+  return {
+    verificarHorarios,
+    verificarPermisos,
+    login,
+    getCode,
+    authorizate,
+    logout,
+    refreshToken
+  };
+};

@@ -1,0 +1,166 @@
+@import './fonts.css';
+
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Arial';
+}
+
+.container {
+  height: 780px;
+  width: 590px;
+  margin: 0 auto;
+  background-color: #FFF;
+}
+
+.pa-0 {
+  padding: 0;
+}
+.pa-1 {
+  padding: 8px;
+}
+.pa-2 {
+  padding: 16px;
+}
+.pa-3 {
+  padding: 24px;
+}
+.mt-1 {
+  margin: 4px;
+}
+.mt-2 {
+  margin: 8px;
+}
+.ma-0 {
+  margin: 0;
+}
+.ma-1 {
+  margin: 8px;
+}
+.ma-2 {
+  margin: 16px;
+}
+.ma-3 {
+  margin: 24px;
+}
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+.primary--color {
+  color: #004B68;
+}
+
+.fs2em {
+  font-size: 1.8em;
+  font-weight: 600;
+}
+.fs-1 {
+  font-size: 1em;
+  font-weight: 600;
+}
+.fs2_5em {
+  font-size: 3em;
+  font-weight: 600;
+}
+
+.certificado {
+  bottom: 60px;
+  left: 70px;
+  position: absolute;
+  right: 70px;
+  top: 60px;
+  z-index: 4;
+}
+.certificado header {
+  text-align: center;
+}
+.fecha--certificado {
+  position: absolute;
+  width: 500px;
+  margin: auto;
+  top: 620px;
+}
+
+.border-certificado {
+  border: 8px solid rgb(36, 36, 36);
+  bottom: 35px;
+  left: 35px;
+  position: absolute;
+  right: 35px;
+  top: 35px;
+  z-index: 2;
+}
+
+.border-certificado::after {
+  border: 1px solid rgb(36, 36, 36);
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+  top: 2px;
+  content: "";
+  position: absolute;
+}
+
+.escudo {
+  background: url(../images/escudo.png) #FFF;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 150px;
+  position: absolute;
+  width: 150px;
+  z-index: 3;
+}
+
+.escudo-top {
+  left: 10px;
+  top: 10px;
+  background-position: top;
+}
+.esquina {
+  background: url(../images/dashed.png) #FFF;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 120px;
+  position: absolute;
+  width: 120px;
+  z-index: 3;
+}
+
+.esquina-top {
+  left: 20px;
+  top: 20px;
+  background-position: top;
+}
+
+.esquina-right {
+  right: 20px;
+  top: 20px;
+  background-position: right;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.esquina-bottom {
+  bottom: 20px;
+  right: 20px;
+  background-position: bottom;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.esquina-left {
+  bottom: 20px;
+  left: 20px;
+  background-position: left;
+  -webkit-transform: rotate(270deg);
+  transform: rotate(270deg);
+}

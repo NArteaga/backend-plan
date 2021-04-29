@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Invitacion</title>
+</head>
+<style>
+  body {
+    margin: 0;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Noto Sans', sans-serif;
+    /* Tipo de fuente global */
+    color: #22292f;
+    /* Color de fuente global */
+  }
+
+  .titulo {
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .producto {
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+  }
+
+  .observacion {
+    margin: 0px;
+    padding: 0px;
+    font-size: 10px;
+  }
+
+
+  .titulo-2 {
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .parrafo {
+    font-size: 12px;
+    text-align: justify;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-bold {
+    font-weight: bold;
+  }
+
+  table,
+  th,
+  td {
+    border-collapse: collapse;
+    /* border: 1px solid black; */
+    text-align: center;
+    font-size: 13px;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <p class="titulo"><%= orden.numeroOrden %></p>
+    <p class="titulo-2"><%= orden.nombreCliente %></p>
+    <p class="titulo-2"><%= orden.nit %></p>
+    <p class="titulo-2">COMANDA</p>
+    <div style="width:100%;margin-top: 50px !important;">
+      <table style="width:100%;margin-top: 50px !important;">
+        <tr>
+          <th style="width:50px;min-width:50px !important;">Cant.</th>
+          <th>Descripcion</th>
+          <!-- <th style="width:120px;min-width:120px !important;">Precio unitario</th>
+            <th style="width:120px;min-width:120px !important;">SubTotal</th> -->
+        </tr>
+        <tbody>
+          <% orden.ordenProducto.forEach(function(ordenProducto) { %>
+          <tr>
+            <td><%= ordenProducto.cantidad %></td>
+            <td style="text-align: left;">
+              <p class="producto"><%= ordenProducto.producto.nombre %></p>
+              <p class="observacion"><%= ordenProducto.observaciones %></p>
+            </td>
+            <!-- <td style="text-align: right;"><%= ordenProducto.precioUnit %> Bs.</td> -->
+            <!-- <td style="text-align: right;"><%= ordenProducto.subTotal %> Bs.</td> -->
+          </tr>
+          <% }); %>
+          <!-- <tr>
+            <td colspan="2" style="text-align: right;font-weight: bold;">Descuento:</td>
+            <td></td>
+            <td style="text-align: right;font-weight: bold;"><%= orden.descuento %> Bs.</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: right;font-weight: bold;">Total:</td>
+            <td></td>
+            <td style="text-align: right;font-weight: bold;"><%= orden.total %> Bs.</td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
