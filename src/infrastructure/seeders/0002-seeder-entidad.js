@@ -3,8 +3,7 @@
 const { setTimestampsSeeder } = require('../lib/util');
 
 let items = [
-  { id: 1, id_entidad: 1, nombre: 'ROL SUPER ADMIN', descripcion: 'Rol administrador.', estado: 'ACTIVO' },
-  { id: 2, id_entidad: 1, nombre: 'ROL ADMIN', descripcion: 'Rol administrador.', estado: 'ACTIVO' }
+  { id: 1, nombre: 'Ministerio de justicia y Transparencia Institucional', sigla: 'MJTI', direccion: 'Direccion 1', telefono: '78745815', estado: 'ACTIVO' }
 ];
 
 // Asignando datos de log y timestamps a los datos
@@ -12,8 +11,8 @@ items = setTimestampsSeeder(items);
 
 module.exports = {
   up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('sys_rol', items, {})
-      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "sys_rol_id_seq" RESTART WITH ${items.length + 1}`))
+    return queryInterface.bulkInsert('sys_entidad', items, {})
+      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "sys_entidad_id_seq" RESTART WITH ${items.length + 1}`))
       .catch(error => {
         if (error.message.indexOf('already exists') > -1) return;
         console.error(error);

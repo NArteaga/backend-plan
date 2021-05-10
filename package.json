@@ -51,6 +51,7 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
+    "uuid": "^8.3.2",
     "validate.js": "^0.13.1"
   },
   "devDependencies": {

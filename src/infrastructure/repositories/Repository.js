@@ -12,7 +12,7 @@ async function createOrUpdate (object, model, t) {
   const item = await model.findOne(cond);
 
   if (item) {
-    object._updated_at = new Date();
+    object.updatedAt = new Date();
     let updated;
     try {
       if (t) {
@@ -36,7 +36,7 @@ async function createOrUpdate (object, model, t) {
 
   let result;
   try {
-    object._created_at = new Date();
+    object.createdAt = new Date();
     result = await model.create(object, t ? { transaction: t } : {});
   } catch (e) {
     if (t) {
@@ -109,8 +109,8 @@ async function inactivateItem (id, model, object) {
       id
     }
   };
-  if (object && !object._updated_at) {
-    object._updated_at = new Date();
+  if (object && !object.updatedAt) {
+    object.updatedAt = new Date();
   }
   try {
     const item = await model.findOne(cond);

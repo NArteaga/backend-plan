@@ -4,7 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const lang = require('../lang');
-const { array } = require('../../common');
+const {
+  array
+} = require('../../common');
 
 /**
  * Carga los modelos de la carpeta especificada
@@ -102,24 +104,38 @@ const pk = {
 };
 
 const timestamps = {
-  _user_created: {
+  userCreated: {
     type      : Sequelize.INTEGER,
     allowNull : false,
-    label     : lang.t('fields._user_created')
+    label     : lang.t('fields.userCreated'),
+    field     : '_user_created'
   },
-  _user_updated: {
+  userUpdated: {
     type  : Sequelize.INTEGER,
-    label : lang.t('fields._user_updated')
+    label : lang.t('fields.userUpdated'),
+    field : '_user_updated'
   },
-  _created_at: {
+  userDeleted: {
+    type  : Sequelize.INTEGER,
+    label : lang.t('fields.userDeleted'),
+    field : '_user_deleted'
+  },
+  createdAt: {
     type         : Sequelize.DATE,
     allowNull    : false,
-    label        : lang.t('fields._created_at'),
-    defaultValue : Sequelize.NOW
+    defaultValue : Sequelize.NOW,
+    xlabel       : lang.t('fields.createdAt'),
+    field        : '_created_at'
   },
-  _updated_at: {
+  updatedAt: {
     type   : Sequelize.DATE,
-    xlabel : lang.t('fields._updated_at')
+    xlabel : lang.t('fields.updatedAt'),
+    field  : '_updated_at'
+  },
+  deletedAt: {
+    type   : Sequelize.DATE,
+    xlabel : lang.t('fields.deletedAt'),
+    field  : '_deleted_at'
   }
 };
 
@@ -130,9 +146,9 @@ function setTimestamps (fields) {
 function setTimestampsSeeder (arr, idUser = 1) {
   arr.map((el, index) => {
     arr[index] = Object.assign(el, {
-      _user_created : idUser,
-      _created_at   : new Date(),
-      _updated_at   : new Date()
+      userCreated : idUser,
+      _created_at : new Date(),
+      _updated_at : new Date()
     });
   });
 
@@ -149,15 +165,19 @@ function getQuery (options = {}, arr = []) {
   }
 
   if (!options.order) {
-    options.order = '_created_at';
+    options.order = 'createdAt';
   }
 
   if (arr.indexOf(options.order ? options.order.replace('-', '') : null) === -1) {
     if (options.order) {
       if (options.order.startsWith('-')) {
-        query.order = [[options.order.substring(1), 'DESC']];
+        query.order = [
+          [options.order.substring(1), 'DESC']
+        ];
       } else {
-        query.order = [[options.order, 'ASC']];
+        query.order = [
+          [options.order, 'ASC']
+        ];
       }
     }
   }

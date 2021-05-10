@@ -6,7 +6,7 @@ const Repository = require('../Repository');
 module.exports = function rolesRepository (models, Sequelize) {
   const { rol, ruta, menu } = models;
   const Op = Sequelize.Op;
-  const attributes = ['id', 'nombre', 'path', 'descripcion', 'estado'];
+  const attributes = ['id','idEntidad', 'nombre', 'descripcion', 'estado'];
 
   function findAll (params = {}) {
     const query = getQuery(params);

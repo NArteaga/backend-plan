@@ -10,33 +10,25 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.INTEGER,
       allowNull : false,
       xlabel    : lang.t('fields.idEntidad'),
-      field     : 'id_entidad'
+      filed     : 'id_entidad'
     },
-    nombre: {
-      type      : DataTypes.STRING(50),
+    idTema: {
+      type      : DataTypes.INTEGER,
       allowNull : false,
-      xlabel    : lang.t('fields.nombre')
-    },
-    descripcion: {
-      type   : DataTypes.TEXT,
-      xlabel : lang.t('fields.descripcion')
-    },
-    estado: {
-      type   : DataTypes.ENUM,
-      values : ['ACTIVO', 'INACTIVO'],
-      xlabel : lang.t('fields.estado'),
-      field  : 'estado'
+      xlabel    : lang.t('fields.idTema'),
+      filed     : 'id_tema'
     }
   };
 
   // Agregando campos para el log
   fields = util.setTimestamps(fields);
+  // Agregando campos para el log fields = util.setTimestamps(fields);
 
-  const Rol = sequelize.define('rol', fields, {
+  const TemaEntidad = sequelize.define('tema_entidad', fields, {
     paranoid   : true,
     timestamps : true,
-    tableName  : 'sys_rol'
+    tableName  : 'tema_entidad'
   });
 
-  return Rol;
+  return TemaEntidad;
 };

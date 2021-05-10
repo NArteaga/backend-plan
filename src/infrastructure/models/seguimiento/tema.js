@@ -10,16 +10,16 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.INTEGER,
       allowNull : false,
       xlabel    : lang.t('fields.idEntidad'),
-      field     : 'id_entidad'
+      filed     : 'id_entidad'
     },
-    nombre: {
-      type      : DataTypes.STRING(50),
+    titulo: {
+      type      : DataTypes.STRING(250),
       allowNull : false,
-      xlabel    : lang.t('fields.nombre')
+      xlabel    : lang.t('fields.grupo')
     },
     descripcion: {
       type   : DataTypes.TEXT,
-      xlabel : lang.t('fields.descripcion')
+      xlabel : lang.t('fields.nombre')
     },
     estado: {
       type   : DataTypes.ENUM,
@@ -31,12 +31,13 @@ module.exports = (sequelize, DataTypes) => {
 
   // Agregando campos para el log
   fields = util.setTimestamps(fields);
+  // Agregando campos para el log fields = util.setTimestamps(fields);
 
-  const Rol = sequelize.define('rol', fields, {
+  const Tema = sequelize.define('tema', fields, {
     paranoid   : true,
     timestamps : true,
-    tableName  : 'sys_rol'
+    tableName  : 'tema'
   });
 
-  return Rol;
+  return Tema;
 };

@@ -16,8 +16,6 @@ module.exports = function usuariosRepository (models, Sequelize) {
       'estado',
       'foto',
       'id',
-      'idRol',
-      'idSucursal',
       'nombres',
       'numeroDocumento',
       'primerApellido',
@@ -30,10 +28,6 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     if (params.estado) {
       query.where.estado = params.estado;
-    }
-
-    if (params.idSucursal) {
-      query.where.idSucursal = params.idSucursal;
     }
 
     if (params.idRol) {
@@ -96,20 +90,10 @@ module.exports = function usuariosRepository (models, Sequelize) {
       'celular',
       'correoElectronico',
       'foto',
-      'idSucursal',
-      'idRol',
       'estado'
     ];
 
     query.where = params;
-
-    query.include = [
-      {
-        model      : rol,
-        as         : 'rol',
-        attributes : ['id', 'nombre', 'descripcion']
-      }
-    ];
 
     const result = await usuario.findOne(query);
     if (result) {

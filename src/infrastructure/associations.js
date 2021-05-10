@@ -4,26 +4,85 @@
 module.exports = function associations (models) {
   const {
     rol,
+    auth,
     usuario,
-    parametro,
-    permisos,
-    modulos
+    permiso,
+    modulos,
+    convenio,
+    entidad,
+    servicio,
+    rolPermiso,
+    usuarioRol,
+    rolMenu,
+    menu,
+
+    tarea,
+    tema,
+    comentario,
+    temaEntidad,
+    reunion,
+    reunionTema,
+    reunionParticipante
   } = models;
 
-  usuario.belongsTo(rol, { foreignKey: { name: 'idRol' }, as: 'rol' });
-  rol.hasMany(usuario,  { foreignKey: { name: 'idRol' }, as: 'usuarios' });
+  reunionTema.belongsTo(reunion, { foreignKey: { name: 'idReunion' }, as: 'reunion' });
+  reunion.hasMany(reunionTema,  { foreignKey: { name: 'idReunion' }, as: 'reunionTema' });
 
-  // Asociaciones tablas permisos - roles
-  permisos.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
-  rol.hasMany(permisos, { foreignKey: { name: 'idRol', allowNull: false }, as: 'permisos' });
+  reunionTema.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
+  tema.hasMany(reunionTema,  { foreignKey: { name: 'idTema' }, as: 'reunionTema' });
 
-  // Asociaciones tablas permisos - modulos
-  permisos.belongsTo(modulos, { foreignKey: { name: 'idModulo', allowNull: false }, as: 'modulo' });
-  modulos.hasMany(permisos, { foreignKey: { name: 'idModulo', allowNull: false } });
+  reunionParticipante.belongsTo(reunion, { foreignKey: { name: 'idReunion' }, as: 'reunion' });
+  reunion.hasMany(reunionParticipante,  { foreignKey: { name: 'idReunion' }, as: 'reunionParticipante' });
 
-  // Asociaciones tablas modulos - sección
-  modulos.belongsTo(modulos, { foreignKey: 'idModulo' });
-  modulos.hasMany(modulos, { foreignKey: 'idModulo', as: 'subModulos' });
+  reunionParticipante.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
+  usuario.hasMany(reunionParticipante,  { foreignKey: { name: 'idUsuario' }, as: 'reunionParticipante' });
+
+  auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
+  usuario.hasMany(auth,  { foreignKey: { name: 'idUsuario' }, as: 'sesiones' });
+
+  rol.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(rol,  { foreignKey: { name: 'idEntidad' }, as: 'roles' });
+
+  entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidadPadre' });
+  entidad.hasMany(entidad,  { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+
+  tarea.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
+  tema.hasMany(tarea,  { foreignKey: { name: 'idTema' }, as: 'tareas' });
+
+  comentario.belongsTo(tarea, { foreignKey: { name: 'idTarea' }, as: 'tarea' });
+  tarea.hasMany(comentario,  { foreignKey: { name: 'idTarea' }, as: 'comentarios' });
+
+  reunion.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(reunion,  { foreignKey: { name: 'idEntidad' }, as: 'reunion' });
+
+  temaEntidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(temaEntidad,  { foreignKey: { name: 'idEntidad' }, as: 'temaEntidad' });
+
+  temaEntidad.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
+  tema.hasMany(temaEntidad,  { foreignKey: { name: 'idTema' }, as: 'temaEntidad' });
+
+  usuario.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(usuario,  { foreignKey: { name: 'idEntidad' }, as: 'usuarios' });
+
+  // Asociaciones tablas permiso - roles
+  rolPermiso.belongsTo(permiso, { foreignKey: { name: 'idPermiso', allowNull: false }, as: 'permiso' });
+  permiso.hasMany(rolPermiso, { foreignKey: { name: 'idPermiso', allowNull: false }, as: 'rolPermisos' });
+
+  rolPermiso.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
+  rol.hasMany(rolPermiso, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rolPermisos' });
+
+  rolMenu.belongsTo(menu, { foreignKey: { name: 'idMenu', allowNull: false }, as: 'menu' });
+  menu.hasMany(rolMenu, { foreignKey: { name: 'idMenu', allowNull: false }, as: 'rolMenus' });
+
+  rolMenu.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
+  rol.hasMany(rolMenu, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rolMenus' });
+
+  // Roles de usuario
+  usuarioRol.belongsTo(usuario, { foreignKey: { name: 'idUsuario', allowNull: false }, as: 'usuario' });
+  usuario.hasMany(usuarioRol, { foreignKey: { name: 'idUsuario', allowNull: false }, as: 'usuarioRoles' });
+
+  usuarioRol.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
+  rol.hasMany(usuarioRol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'usuarioRoles' });
 
   return models;
 };

@@ -16,6 +16,7 @@ module.exports = async function setupApi (app, services) {
   const middlewares = loadMiddlewares(path.join(__dirname, 'middlewares'), services);
 
   const { AuthMiddleware } = middlewares;
+  /// para verficar con token
 
   app.use('/api/*', AuthMiddleware.verificarToken());
 

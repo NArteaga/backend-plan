@@ -1,56 +1,25 @@
 'use strict';
 
-const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
+const { getQuery, toJSON } = require('../../lib/util');
 
-module.exports = function entidadesRepository (models, Sequelize) {
-  const { entidades } = models;
+module.exports = function entidadRepository (models, Sequelize) {
+  const { entidad } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
     const query = getQuery(params);
+    // query.attributes = attributes;
     query.where = {};
+    query.include = [];
 
-    if (params.nombre) {
-      query.where.nombre = {
-        [Op.iLike]: `%${params.nombre}%`
-      };
-    }
-
-    if (params.sigla) {
-      query.where.sigla = {
-        [Op.iLike]: `%${params.sigla}%`
-      };
-    }
-
-    if (params.estado) {
-      query.where.estado = params.estado;
-    }
-
-    if (params.id_entidad) {
-      query.where.id = params.id_entidad;
-    }
-
-    return entidades.findAndCountAll(query);
-  }
-
-  async function findByNit (nit) {
-    const result = await entidades.findOne({
-      where: {
-        nit
-      }
-    });
-    if (result) {
-      return result.toJSON();
-    }
-    return null;
+    return entidad.findAndCountAll(query);
   }
 
   return {
     findAll,
-    findByNit,
-    findById       : (id) => Repository.findById(id, entidades),
-    createOrUpdate : (item, t) => Repository.createOrUpdate(item, entidades, t),
-    deleteItem     : (id, t) => Repository.deleteItem(id, entidades, t)
+    findOne        : (params) => Repository.findOne(params, entidad),
+    createOrUpdate : (item, t) => Repository.createOrUpdate(item, entidad, t),
+    deleteItem     : (id, t) => Repository.deleteItem(id, entidad, t)
   };
 };

@@ -1,16 +1,15 @@
 'use strict';
-
-const debug = require('debug')('app:controller:auth');
+const debug = require('debug')('app:controller:REPORTE');
 const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
-const { config } = require('../../../../common');
 
-module.exports = function setupUsuarioServicioController (services) {
-  const { UsuarioServicioService } = services;
+module.exports = function setupModuloController (services) {
+  const { ModuloService } = services;
 
   async function listar (req, res) {
     try {
-      const respuesta = await UsuarioServicioService.listar(req.query);
+      debug('Recuperando modulos');
+      const respuesta = await ModuloService.listar(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -19,9 +18,9 @@ module.exports = function setupUsuarioServicioController (services) {
 
   async function crear (req, res) {
     try {
-      const data = req.body;
-      data.userCreated = req.user.idUsuario;
-      const respuesta = await UsuarioServicioService.createOrUpdate(data);
+      const datos = req.body;
+      datos.userCreated = req.user.idUsuario;
+      const respuesta = await ModuloService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -30,10 +29,10 @@ module.exports = function setupUsuarioServicioController (services) {
 
   async function actualizar (req, res) {
     try {
-      const data = req.body;
-      data.id = req.params.id;
-      data._user_updated = req.user.idUsuario;
-      const respuesta = await UsuarioServicioService.createOrUpdate(data);
+      const datos = req.body;
+      datos._user_updated = req.user.idUsuario;
+      datos.id = req.params.id;
+      const respuesta = await ModuloService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -42,8 +41,16 @@ module.exports = function setupUsuarioServicioController (services) {
 
   async function eliminar (req, res) {
     try {
-      const { id } = req.params;
-      const respuesta = await UsuarioServicioService.eliminar(id);
+      const respuesta = await ModuloService.eliminar(req.params.id);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+  async function mostrar (req, res) {
+    try {
+      debug('Recuperando modulos');
+      const respuesta = await ModuloService.mostrar(req.params.id);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -51,9 +58,10 @@ module.exports = function setupUsuarioServicioController (services) {
   }
 
   return {
-    listar,
     crear,
     actualizar,
-    eliminar
+    eliminar,
+    listar,
+    mostrar
   };
 };

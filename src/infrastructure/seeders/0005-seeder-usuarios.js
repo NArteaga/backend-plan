@@ -16,8 +16,7 @@ let items = [
     numero_documento   : '',
     correo_electronico : 'admin@gmail.com',
     celular            : '',
-    estado             : 'ACTIVO',
-    id_rol             : 1
+    estado             : 'ACTIVO'
   }
 ];
 

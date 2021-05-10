@@ -19,7 +19,7 @@ module.exports = function setupParametroController (services) {
   async function crear (req, res) {
     try {
       const datos = req.body;
-      datos._user_created = req.user.idUsuario;
+      datos.userCreated = req.user.idUsuario;
       const respuesta = await ParametroService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {

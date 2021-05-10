@@ -48,76 +48,23 @@ module.exports = function authService (repositories, helpers, res) {
 
   async function getResponse (usuario) {
     try {
-      if (!usuario.rol) {
-        throw new Error('El rol no esta asignado al usuario');
-      }
-      const { rows: modulos } = await ModuloRepository.findByRol(usuario.rol.id);
-      const permissions = [];
-      const permissionsFrontend = {};
-      const menuFinal = [];
+      usuario.rol = {
+        nombre: 'SUPER ADMIN'
+      };
 
-      for (const modulo of modulos) {
-        let incluir = false;
-        const padre = {
-          url        : modulo.url,
-          ruta       : modulo.ruta,
-          label      : modulo.label,
-          icono      : modulo.icono,
-          orden      : modulo.orden,
+      usuario.menu = [
+        {
+          label      : 'Dashboard',
+          icon       : 'Dashboard',
+          ruta       : 'dashboard',
           subModulos : []
-        };
-        if (modulo.subModulos.length > 0) {
-          for (const subModulo of modulo.subModulos) {
-            if (subModulo.permisos[0]) {
-              if (subModulo.permisos[0].access) {
-                padre.subModulos.push({
-                  url        : subModulo.url,
-                  ruta       : subModulo.ruta,
-                  label      : subModulo.label,
-                  icono      : subModulo.icono,
-                  orden      : subModulo.orden,
-                  subModulos : []
-                });
-              }
-            }
-            for (const permiso in subModulo.permisos[0]) {
-              if (subModulo.permisos[0][permiso]) {
-                permissionsFrontend[`${subModulo.url}:${permiso}`] = true;
-                permissions.push(`${subModulo.url}:${permiso}`);
-              }
-            }
-          }
-          if (padre.subModulos.length > 0) {
-            incluir = true;
-          }
-        } else {
-          if (modulo.permisos[0] && modulo.url) {
-            if (modulo.permisos[0].access) {
-              incluir = true;
-            }
-            for (const permiso in modulo.permisos[0]) {
-              if (modulo.permisos[0][permiso]) {
-                permissionsFrontend[`${modulo.url}:${permiso}`] = true;
-                permissions.push(`${modulo.url}:${permiso}`);
-              }
-            }
-          }
         }
-        if (incluir) {
-          menuFinal.push(padre);
-        }
-      }
-      usuario.menu = menuFinal;
-      usuario.permissions = permissionsFrontend;
+      ];
       usuario.token = await generateToken(ParametroRepository, {
         idUsuario         : usuario.id,
-        idSucursal        : usuario.sucursal ? usuario.sucursal.id : null,
         celular           : usuario.celular,
         correoElectronico : usuario.correoElectronico,
-        foto              : usuario.foto,
-        usuario           : usuario.usuario,
-        idRol             : usuario.rol.id,
-        permissions       : []
+        usuario           : usuario.usuario
       });
       return usuario;
     } catch (error) {
@@ -164,7 +111,7 @@ module.exports = function authService (repositories, helpers, res) {
         parametros: {
           nonce
         },
-        _user_created: 1
+        userCreated: 1
       };
       await AuthRepository.createOrUpdate(data);
 
@@ -261,7 +208,7 @@ module.exports = function authService (repositories, helpers, res) {
     const respuesta = await UsuarioService.getResponse(user, null, info);
     resultadoState.id_usuario = user.id;
     resultadoState.estado = config.constants.ESTADO_ACTIVO;
-    resultadoState._user_created = user.id;
+    resultadoState.userCreated = user.id;
     await AuthRepository.createOrUpdate(resultadoState);
     return respuesta;
   }

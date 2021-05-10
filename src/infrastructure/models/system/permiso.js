@@ -5,21 +5,16 @@ const util = require('../../lib/util');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
-    id        : util.pk,
-    idEntidad : {
-      type      : DataTypes.INTEGER,
-      allowNull : false,
-      xlabel    : lang.t('fields.idEntidad'),
-      field     : 'id_entidad'
-    },
-    nombre: {
-      type      : DataTypes.STRING(50),
+    id     : util.pk,
+    nombre : {
+      type      : DataTypes.STRING(100),
       allowNull : false,
       xlabel    : lang.t('fields.nombre')
     },
     descripcion: {
-      type   : DataTypes.TEXT,
-      xlabel : lang.t('fields.descripcion')
+      type      : DataTypes.TEXT,
+      allowNull : true,
+      xlabel    : lang.t('fields.descripcion')
     },
     estado: {
       type   : DataTypes.ENUM,
@@ -32,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
   // Agregando campos para el log
   fields = util.setTimestamps(fields);
 
-  const Rol = sequelize.define('rol', fields, {
-    paranoid   : true,
-    timestamps : true,
-    tableName  : 'sys_rol'
+  const Permiso = sequelize.define('permiso', fields, {
+    paranoid: true,
+timestamps : true,
+    tableName  : 'sys_permiso'
   });
 
-  return Rol;
+  return Permiso;
 };

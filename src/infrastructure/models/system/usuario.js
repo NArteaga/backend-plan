@@ -5,8 +5,13 @@ const util = require('../../lib/util');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
-    id      : util.pk,
-    usuario : {
+    id        : util.pk,
+    idEntidad : {
+      type   : DataTypes.INTEGER,
+      xlabel : lang.t('fields.idEntidad'),
+      field  : 'id_entidad'
+    },
+    usuario: {
       type   : DataTypes.STRING(100),
       unique : true,
       xlabel : lang.t('fields.usuario')
@@ -63,18 +68,6 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.foto'),
       field     : 'foto'
     },
-    idSucursal: {
-      type      : DataTypes.INTEGER,
-      allowNull : true,
-      xlabel    : lang.t('fields.idSucursal'),
-      field     : 'id_sucursal'
-    },
-    idRol: {
-      type      : DataTypes.INTEGER,
-      allowNull : true,
-      xlabel    : lang.t('fields.idRol'),
-      field     : 'id_rol'
-    },
     estado: {
       type         : DataTypes.ENUM,
       values       : ['ACTIVO', 'INACTIVO'],
@@ -89,7 +82,8 @@ module.exports = (sequelize, DataTypes) => {
   fields = util.setTimestamps(fields);
 
   const User = sequelize.define('usuario', fields, {
-    timestamps : false,
+    paranoid   : true,
+    timestamps : true,
     tableName  : 'sys_usuario'
   });
 

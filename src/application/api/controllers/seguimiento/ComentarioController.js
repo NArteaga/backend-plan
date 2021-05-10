@@ -1,16 +1,18 @@
-'use strict';
 
-const debug = require('debug')('app:controller:auth');
+'use strict';
+const debug = require('debug')('app:controller:REPORTE');
 const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
-const { config } = require('../../../../common');
 
-module.exports = function setupUsuarioServicioController (services) {
-  const { UsuarioServicioService } = services;
+module.exports = function setupEntidadController (services) {
+  const {
+    ComentarioService
+  } = services;
 
   async function listar (req, res) {
     try {
-      const respuesta = await UsuarioServicioService.listar(req.query);
+      debug('Recuperando entidades');
+      const respuesta = await ComentarioService.listar(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -20,8 +22,9 @@ module.exports = function setupUsuarioServicioController (services) {
   async function crear (req, res) {
     try {
       const data = req.body;
-      data.userCreated = req.user.idUsuario;
-      const respuesta = await UsuarioServicioService.createOrUpdate(data);
+      debug('creando entidad');
+      data.userCreated = req.user.idUsuario; // corregir
+      const respuesta = await ComentarioService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -30,10 +33,11 @@ module.exports = function setupUsuarioServicioController (services) {
 
   async function actualizar (req, res) {
     try {
+      debug('actualizando entidad');
       const data = req.body;
       data.id = req.params.id;
-      data._user_updated = req.user.idUsuario;
-      const respuesta = await UsuarioServicioService.createOrUpdate(data);
+      data._user_updated = req.user.id;
+      const respuesta = await ComentarioService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -43,17 +47,17 @@ module.exports = function setupUsuarioServicioController (services) {
   async function eliminar (req, res) {
     try {
       const { id } = req.params;
-      const respuesta = await UsuarioServicioService.eliminar(id);
+      debug('Eliminando entidad');
+      const respuesta = await ComentarioService.deleteItem(id);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
-
   return {
     listar,
-    crear,
+    eliminar,
     actualizar,
-    eliminar
+    crear
   };
 };

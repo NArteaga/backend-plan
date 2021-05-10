@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
   fields = util.setTimestamps(fields);
 
   const Auth = sequelize.define('auth', fields, {
-    timestamps : false,
+    paranoid   : true,
+    timestamps : true,
     tableName  : 'sys_auth'
   });
 
