@@ -65,13 +65,13 @@ async function deleteItem (id, repository, res, name = '') {
 
 function validate (data, valueObjects = {}) {
   if (data.id) {
-    for (let key in valueObjects) {
+    for (const key in valueObjects) {
       if (data[key] !== undefined) {
         data[key] = new valueObjects[key](data[key]).value;
       }
     }
   } else {
-    for (let key in valueObjects) {
+    for (const key in valueObjects) {
       data[key] = new valueObjects[key](data[key]).value;
     }
   }

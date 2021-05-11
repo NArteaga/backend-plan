@@ -3,10 +3,10 @@
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { CategoriaController } = controllers;
 
-  api.get('/categoria', CategoriaController.listar);
-  api.post('/categoria', CategoriaController.crear);
-  api.put('/categoria/:id', CategoriaController.actualizar);
-  api.delete('/categoria/:id', CategoriaController.eliminar);
+  api.get('/categorias', CategoriaController.listar);
+  api.post('/categorias', CategoriaController.crear);
+  api.put('/categorias/:id', CategoriaController.actualizar);
+  api.delete('/categorias/:id', CategoriaController.eliminar);
 
   return api;
 };

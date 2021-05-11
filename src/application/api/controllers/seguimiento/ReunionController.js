@@ -24,6 +24,7 @@ module.exports = function setupEntidadController (services) {
       const data = req.body;
       debug('creando entidad');
       data.userCreated = req.user.idUsuario; // corregir
+      data.idEntidad = req.user.idEntidad;
       const respuesta = await ReunionService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
@@ -36,7 +37,8 @@ module.exports = function setupEntidadController (services) {
       debug('actualizando entidad');
       const data = req.body;
       data.id = req.params.id;
-      data._user_updated = req.user.id;
+      data.userUpdated = req.user.id;
+      data.idEntidad = req.user.idEntidad;
       const respuesta = await ReunionService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {

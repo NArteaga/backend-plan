@@ -3,10 +3,10 @@
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { ComentarioController } = controllers;
 
-  api.get('/comentario', ComentarioController.listar);
-  api.post('/comentario', ComentarioController.crear);
-  api.put('/comentario/:id', ComentarioController.actualizar);
-  api.delete('/comentario/:id', ComentarioController.eliminar);
+  api.get('/comentarios', ComentarioController.listar);
+  api.post('/comentarios', ComentarioController.crear);
+  api.put('/comentarios/:id', ComentarioController.actualizar);
+  api.delete('/comentarios/:id', ComentarioController.eliminar);
 
   return api;
 };

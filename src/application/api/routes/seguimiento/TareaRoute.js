@@ -3,10 +3,10 @@
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { TareaController } = controllers;
 
-  api.get('/tarea', TareaController.listar);
-  api.post('/tarea', TareaController.crear);
-  api.put('/tarea/:id', TareaController.actualizar);
-  api.delete('/tarea/:id', TareaController.eliminar);
+  api.get('/tareas', TareaController.listar);
+  api.post('/tareas', TareaController.crear);
+  api.put('/tareas/:id', TareaController.actualizar);
+  api.delete('/tareas/:id', TareaController.eliminar);
 
   return api;
 };

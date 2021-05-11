@@ -22,7 +22,19 @@ module.exports = function temaRepository (models, Sequelize) {
     query.where = {};
     query.include = [];
 
-    return tema.findAll(query);
+    if (params.titulo) {
+      query.where.titulo = {
+        [Op.iLike]: `%${params.titulo}%`
+      };
+    }
+
+    if (params.descripcion) {
+      query.where.descripcion = {
+        [Op.iLike]: `%${params.descripcion}%`
+      };
+    }
+
+    return tema.findAndCountAll(query);
   }
 
   return {

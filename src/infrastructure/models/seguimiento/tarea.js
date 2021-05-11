@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       field     : 'id_tema'
     },
     titulo: {
-      type      : DataTypes.STRING(25),
+      type      : DataTypes.STRING(250),
       allowNull : false,
       xlabel    : lang.t('fields.codigo')
     },
