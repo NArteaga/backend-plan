@@ -54,17 +54,19 @@ module.exports = function authService (repositories, helpers, res) {
 
       usuario.menu = [
         {
-          label      : 'Dashboard',
+          label      : 'Temas',
           icon       : 'Dashboard',
-          ruta       : 'dashboard',
+          ruta       : 'temas',
           subModulos : []
         }
       ];
+
       usuario.token = await generateToken(ParametroRepository, {
         idUsuario         : usuario.id,
         celular           : usuario.celular,
         correoElectronico : usuario.correoElectronico,
-        usuario           : usuario.usuario
+        usuario           : usuario.usuario,
+        idEntidad         : usuario.entidad.id
       });
       return usuario;
     } catch (error) {

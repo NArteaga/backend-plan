@@ -6,7 +6,7 @@ const Repository = require('../Repository');
 
 module.exports = function usuariosRepository (models, Sequelize) {
   const Op = Sequelize.Op;
-  const { usuario, rol, sucursal } = models;
+  const { usuario, rol, entidad } = models;
 
   async function findAll (params = {}) {
     const query = getQuery(params);
@@ -94,6 +94,14 @@ module.exports = function usuariosRepository (models, Sequelize) {
     ];
 
     query.where = params;
+
+    query.include = [
+      {
+        attributes : ['id', 'nombre', 'sigla'],
+        model      : entidad,
+        as         : 'entidad'
+      }
+    ];
 
     const result = await usuario.findOne(query);
     if (result) {

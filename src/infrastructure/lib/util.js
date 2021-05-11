@@ -146,9 +146,9 @@ function setTimestamps (fields) {
 function setTimestampsSeeder (arr, idUser = 1) {
   arr.map((el, index) => {
     arr[index] = Object.assign(el, {
-      userCreated : idUser,
-      _created_at : new Date(),
-      _updated_at : new Date()
+      _user_created : idUser,
+      _created_at   : new Date(),
+      _updated_at   : new Date()
     });
   });
 

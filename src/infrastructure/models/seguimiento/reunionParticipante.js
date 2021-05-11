@@ -10,13 +10,13 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.INTEGER,
       allowNull : false,
       xlabel    : lang.t('fields.idReunion'),
-      filed     : 'id_reunion'
+      field     : 'id_reunion'
     },
     idUsuario: {
       type      : DataTypes.INTEGER,
       allowNull : false,
       xlabel    : lang.t('fields.idUsuario'),
-      filed     : 'id_usuario'
+      field     : 'id_usuario'
     }
   };
 

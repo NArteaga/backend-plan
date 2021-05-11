@@ -10,16 +10,16 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.INTEGER,
       allowNull : false,
       xlabel    : lang.t('fields.idEntidad'),
-      filed     : 'id_entidad'
+      field     : 'id_entidad'
     },
     titulo: {
       type      : DataTypes.STRING(250),
       allowNull : false,
-      xlabel    : lang.t('fields.grupo')
+      xlabel    : lang.t('fields.titulo')
     },
     descripcion: {
       type   : DataTypes.TEXT,
-      xlabel : lang.t('fields.nombre')
+      xlabel : lang.t('fields.descripcion')
     },
     estado: {
       type   : DataTypes.ENUM,
