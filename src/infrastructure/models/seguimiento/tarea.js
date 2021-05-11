@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : false,
       xlabel    : lang.t('fields.fechaFinalizacion'),
       field     : 'fecha_finalizacion'
+    },
+    finalizado: {
+      type      : DataTypes.BOOLEAN,
+      allowNull : false,
+      xlabel    : lang.t('fields.finalizado'),
+      field     : 'finalizado'
     }
   };
 

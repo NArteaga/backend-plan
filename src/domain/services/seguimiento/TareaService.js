@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function tareaService (repositories, helpers, res) {
-  const { TareaRepository } = repositories;
+  const { TareaRepository, TemaRepository, CategoriaTareaRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function listar (params) {
@@ -19,12 +19,34 @@ module.exports = function tareaService (repositories, helpers, res) {
 
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
-    let rol;
+    let tarea;
+    let transaccion;
     try {
-      rol = await TareaRepository.createOrUpdate(data);
-      return rol;
-    } catch (err) {
-      throw new ErrorApp(err.message, 400);
+      transaccion = await transaction.create();
+      const existeTema = await TemaRepository.findOne({ id: data.idTema });
+      if (!existeTema) {
+        throw new Error('El tema de la categoria no existe.');
+      }
+      tarea = await TareaRepository.createOrUpdate(data, transaccion);
+      if (data.categorias) {
+        if (data.id) {
+          await CategoriaTareaRepository.deleteItemCond({ idTarea: tarea.id }, transaccion);
+        }
+
+        for (const categoria of data.categorias) {
+          await CategoriaTareaRepository.createOrUpdate({
+            idCategoria : categoria,
+            idTarea     : tarea.id,
+            userCreated : data.userCreated || data.userUpdated
+          }, transaccion);
+        }
+      }
+
+      await transaction.commit(transaccion);
+      return tarea;
+    } catch (error) {
+      await transaction.rollback(transaccion);
+      throw new ErrorApp(error.message, 400);
     }
   }
 
