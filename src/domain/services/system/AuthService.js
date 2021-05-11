@@ -55,7 +55,7 @@ module.exports = function authService (repositories, helpers, res) {
       usuario.menu = [
         {
           label      : 'Temas',
-          icon       : 'Dashboard',
+          icono      : 'fact_check',
           ruta       : 'temas',
           subModulos : []
         }

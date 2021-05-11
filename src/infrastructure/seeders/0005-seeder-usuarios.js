@@ -9,7 +9,7 @@ let items = [
   {
     id                 : 1,
     id_entidad         : 1,
-    usuario            : 'admin@gmail.com',
+    usuario            : 'admin',
     contrasena         : 'Developer',
     nombres            : 'Admin',
     primer_apellido    : '',

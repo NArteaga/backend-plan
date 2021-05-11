@@ -1,21 +1,18 @@
 
 module.exports = {
-  title    : 'Tema',
-  required : [
-    'titulo',
-    'descripcion',
-    'estado'
-  ],
-  type       : 'object',
-  properties : {
-    titulo: {
-      type: 'string'
-    },
-    descripcion: {
-      type: 'string'
-    },
-    estado: {
-      type: 'string'
+  titulo: {
+    presence: {
+      message: 'es requerido'
+    }
+  },
+  descripcion: {
+    presence: {
+      message: 'es requerido'
+    }
+  },
+  estado: {
+    presence: {
+      message: 'es requerido'
     }
   }
 };

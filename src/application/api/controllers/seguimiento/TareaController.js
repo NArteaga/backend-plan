@@ -36,7 +36,7 @@ module.exports = function setupEntidadController (services) {
       debug('actualizando entidad');
       const data = req.body;
       data.id = req.params.id;
-      data._user_updated = req.user.id;
+      data.userUpdated = req.user.idUsuario;
       const respuesta = await TareaService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {

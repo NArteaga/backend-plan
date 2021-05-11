@@ -39,11 +39,8 @@ module.exports = function associations (models) {
   reunionParticipante.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
   usuario.hasMany(reunionParticipante,  { foreignKey: { name: 'idUsuario' }, as: 'reunionParticipante' });
 
-  categoriaTarea.belongsTo(categoria, { foreignKey: { name: 'idCategoria' }, as: 'categoria' });
-  categoria.hasMany(categoriaTarea,  { foreignKey: { name: 'idCategoria' }, as: 'categoriaTarea' });
-
-  categoriaTarea.belongsTo(tarea, { foreignKey: { name: 'idTarea' }, as: 'tarea' });
-  tarea.hasMany(categoriaTarea,  { foreignKey: { name: 'idTarea' }, as: 'categoriaTarea' });
+  categoria.belongsToMany(tarea, { through: { model: categoriaTarea, unique: false }, as: 'tareas', foreignKey: 'idCategoria' });
+  tarea.belongsToMany(categoria, { through: { model: categoriaTarea, unique: false }, as: 'categorias', foreignKey: 'idTarea' });
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
   usuario.hasMany(auth,  { foreignKey: { name: 'idUsuario' }, as: 'sesiones' });

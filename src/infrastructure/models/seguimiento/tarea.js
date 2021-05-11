@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : false,
       xlabel    : lang.t('fields.codigo')
     },
+    palabrasClave: {
+      type      : DataTypes.STRING(250),
+      allowNull : false,
+      xlabel    : lang.t('fields.palabrasClave'),
+      field     : 'palabras_clave'
+    },
     fechaFinalizacion: {
       type      : DataTypes.DATE,
       allowNull : false,

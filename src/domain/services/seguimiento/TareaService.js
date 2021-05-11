@@ -23,6 +23,9 @@ module.exports = function tareaService (repositories, helpers, res) {
     let transaccion;
     try {
       transaccion = await transaction.create();
+      if (!data.idTema) {
+        throw new Error('Debe enviar el tema al que se le adicionará la tarea.');
+      }
       const existeTema = await TemaRepository.findOne({ id: data.idTema });
       if (!existeTema) {
         throw new Error('El tema de la categoria no existe.');

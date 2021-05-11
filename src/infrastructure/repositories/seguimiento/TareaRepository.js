@@ -4,7 +4,7 @@ const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function tareaRepository (models, Sequelize) {
-  const { tarea, categoriaTarea } = models;
+  const { tarea, categoriaTarea, categoria } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -12,6 +12,7 @@ module.exports = function tareaRepository (models, Sequelize) {
     query.attributes = [
       'id',
       'idTema',
+      'palabrasClave',
       'titulo',
       'fechaFinalizacion',
       'finalizado'
@@ -40,6 +41,12 @@ module.exports = function tareaRepository (models, Sequelize) {
       };
     }
 
+    if (params.palabrasClave) {
+      query.where.palabrasClave = {
+        [Op.iLike]: `%${params.palabrasClave}%`
+      };
+    }
+
     const categoriaWhere = {};
     if (params.idCategoria) {
       if (Array.isArray(params.idCategoria)) {
@@ -49,16 +56,15 @@ module.exports = function tareaRepository (models, Sequelize) {
       } else {
         categoriaWhere.idCategoria = params.idCategoria;
       }
-
-      query.include = [
-        {
-          attributes : [],
-          model      : categoriaTarea,
-          as         : 'categoriaTarea',
-          where      : categoriaWhere
-        }
-      ];
     }
+
+    query.include = [
+      {
+        through : { attributes: [] },
+        model   : categoria,
+        as      : 'categorias'
+      }
+    ];
 
     return tarea.findAndCountAll(query);
   }
