@@ -22,6 +22,28 @@ module.exports = function temaRepository (models, Sequelize) {
     query.where = {};
     query.include = [];
 
+    if (params.search) {
+      query.where = {
+        ...query.where,
+        ...{
+          [Op.or]: [
+            {
+              titulo: {
+                [Op.iLike]: `%${params.search}%`
+              }
+            },
+            {
+              descripcion: {
+                [Op.iLike]: `%${params.search}%`
+              }
+            }
+          ]
+        }
+      };
+    }
+    console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+    console.log(query.where[Op.or]);
+    console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
     if (params.titulo) {
       query.where.titulo = {
         [Op.iLike]: `%${params.titulo}%`
