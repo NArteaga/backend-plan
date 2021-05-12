@@ -82,9 +82,12 @@ module.exports = function setupEntidadController (services) {
       const { id } = req.params;
       const comentario = await ComentarioService.findOne({ id });
       const existeArchivo = fs.existsSync(`${dir}/${comentario.rutaAdjunto}`);
-      let archivo = null;
+      const archivo = {
+        nombre : comentario.rutaAdjunto,
+        codigo : null
+      };
       if (existeArchivo) {
-        archivo = fs.readFileSync(`${dir}/${comentario.rutaAdjunto}`, { encoding: 'base64' });
+        archivo.codigo = fs.readFileSync(`${dir}/${comentario.rutaAdjunto}`, { encoding: 'base64' });
       }
       debug('Eliminando entidad');
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, archivo));

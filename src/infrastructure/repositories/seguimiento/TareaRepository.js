@@ -15,7 +15,8 @@ module.exports = function tareaRepository (models, Sequelize) {
       'palabrasClave',
       'titulo',
       'fechaFinalizacion',
-      'finalizado'
+      'finalizado',
+      [Sequelize.literal('(SELECT COUNT(*) FROM comentario WHERE comentario.id_tarea = tarea.id)'), 'numeroComentarios']
     ];
     query.where = {};
     query.include = [];
