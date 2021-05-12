@@ -5,10 +5,10 @@ module.exports = function setupSocio (api, controllers, middlewares) {
   const { RolController } = controllers;
   const { PermisosMiddleware, SchemasMiddleware, EmpresaMiddleware } = middlewares;
 
-  api.get('/rol', RolController.recuperarTodo);
-  api.post('/rol', RolController.crear);
-  api.put('/rol/:id', RolController.actualizar);
-  api.delete('/rol/:id', RolController.eliminar);
+  api.get('/roles', RolController.recuperarTodo);
+  api.post('/roles', RolController.crear);
+  api.put('/roles/:id', RolController.actualizar);
+  api.delete('/roles/:id', RolController.eliminar);
 
   return api;
 };

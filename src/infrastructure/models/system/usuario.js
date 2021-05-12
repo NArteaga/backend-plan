@@ -62,6 +62,12 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.correoElectronico'),
       field     : 'correo_electronico'
     },
+    cargo: {
+      type      : DataTypes.STRING(100),
+      allowNull : false,
+      xlabel    : lang.t('fields.cargo'),
+      field     : 'cargo'
+    },
     foto: {
       type      : DataTypes.TEXT,
       allowNull : true,

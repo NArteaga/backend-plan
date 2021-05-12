@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.idEntidad'),
       field     : 'id_entidad'
     },
+    cite: {
+      type      : DataTypes.STRING(150),
+      allowNull : false,
+      xlabel    : lang.t('fields.cite')
+    },
     titulo: {
       type      : DataTypes.STRING(250),
       allowNull : false,

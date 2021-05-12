@@ -24,25 +24,55 @@ module.exports = function usuariosRepository (models, Sequelize) {
       'usuario'
     ];
     query.where = {};
-    const whereRol = {};
+
+    if (params.exclude) {
+      query.where.id = {
+        [Op.notIn]: Array.isArray(params.exclude) ? params.exclude : [params.exclude]
+      };
+    }
 
     if (params.estado) {
       query.where.estado = params.estado;
     }
 
-    if (params.idRol) {
-      query.where.idRol = params.idRol;
-    }
-
-    if (params.rol) {
-      whereRol.nombre = {
-        [Op.iLike]: `%${params.rol}%`
+    if (params.search) {
+      query.where = {
+        ...query.where,
+        [Op.or]: [
+          {
+            nombres: {
+              [Op.iLike]: `%${params.search}%`
+            }
+          },
+          {
+            primerApellido: {
+              [Op.iLike]: `%${params.search}%`
+            }
+          },
+          {
+            segundoApellido: {
+              [Op.iLike]: `%${params.search}%`
+            }
+          }
+        ]
       };
     }
 
-    if (params.nombre) {
-      query.where.nombre = {
-        [Op.iLike]: `%${params.nombre}%`
+    if (params.nombres) {
+      query.where.nombres = {
+        [Op.iLike]: `%${params.nombres}%`
+      };
+    }
+
+    if (params.primerApellido) {
+      query.where.primerApellido = {
+        [Op.iLike]: `%${params.primerApellido}%`
+      };
+    }
+
+    if (params.segundoApellido) {
+      query.where.segundoApellido = {
+        [Op.iLike]: `%${params.segundoApellido}%`
       };
     }
 
@@ -64,14 +94,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
       };
     }
 
-    query.include = [
-      {
-        model      : rol,
-        as         : 'rol',
-        attributes : ['id', 'nombre', 'descripcion'],
-        where      : whereRol
-      }
-    ];
+    query.include = [];
 
     const result = await usuario.findAndCountAll(query);
     return toJSON(result);

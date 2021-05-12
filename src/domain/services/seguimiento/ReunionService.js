@@ -5,10 +5,10 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function categoriaService (repositories, helpers, res) {
-  const { ReunionRepository, ReunionTemaRepository, ReunionParticipanteRepository, transaction } = repositories;
+  const { ReunionRepository, ReunionTemaRepository, ReunionParticipanteRepository, CiteRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
-  async function listar (params) {
+  async function findAll (params) {
     try {
       const parametros = await ReunionRepository.findAll(params);
       return parametros;
@@ -23,21 +23,39 @@ module.exports = function categoriaService (repositories, helpers, res) {
     let transaccion;
     try {
       transaccion = await transaction.create();
-      reunion = await ReunionRepository.createOrUpdate(data, transaccion);
-      for (const tema of data.temas) {
-        await ReunionTemaRepository.createOrUpdate({
-          idTema      : tema,
-          idReunion   : reunion.id,
-          userCreated : data.userCreated || data.userUpdated
-        }, transaccion);
+
+      const citeActual = await CiteRepository.findOne({ idEntidad: data.idEntidad });
+      let cite = null;
+
+      if (citeActual) {
+        const siguienteCorrelativo = citeActual.correlativo + 1;
+        cite = await  CiteRepository.generarCite(citeActual.prefijo, citeActual.sufijo, siguienteCorrelativo);
+        data.cite = cite.codigo;
+        await CiteRepository.createOrUpdate({ id: citeActual.id, correlativo: siguienteCorrelativo }, transaccion);
       }
 
-      for (const participante of data.participantes) {
-        await ReunionParticipanteRepository.createOrUpdate({
-          idUsuario   : participante,
-          idReunion   : reunion.id,
-          userCreated : data.userCreated || data.userUpdated
-        }, transaccion);
+      reunion = await ReunionRepository.createOrUpdate(data, transaccion);
+
+      await ReunionTemaRepository.deleteItemCond({ idReunion: reunion.id }, transaccion);
+      if (data.temas && Array.isArray(data.temas)) {
+        for (const tema of data.temas) {
+          await ReunionTemaRepository.createOrUpdate({
+            idTema      : tema,
+            idReunion   : reunion.id,
+            userCreated : data.userCreated || data.userUpdated
+          }, transaccion);
+        }
+      }
+
+      await ReunionParticipanteRepository.deleteItemCond({ idReunion: reunion.id }, transaccion);
+      if (data.temas && Array.isArray(data.temas)) {
+        for (const participante of data.participantes) {
+          await ReunionParticipanteRepository.createOrUpdate({
+            idUsuario   : participante,
+            idReunion   : reunion.id,
+            userCreated : data.userCreated || data.userUpdated
+          }, transaccion);
+        }
       }
 
       await transaction.commit(transaccion);
@@ -60,7 +78,7 @@ module.exports = function categoriaService (repositories, helpers, res) {
   }
 
   return {
-    listar,
+    findAll,
     createOrUpdate,
     deleteItem
   };

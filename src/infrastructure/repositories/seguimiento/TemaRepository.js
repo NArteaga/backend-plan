@@ -10,8 +10,6 @@ module.exports = function temaRepository (models, Sequelize) {
 
   function findAll (params = {}) {
     const query = getQuery(params);
-    // query.subQuery = false;
-    // query.group = ['tema.id', 'tareas.id'];
 
     query.attributes = [
       'id',
@@ -25,6 +23,12 @@ module.exports = function temaRepository (models, Sequelize) {
 
     query.where = {};
     query.include = [];
+
+    if (params.exclude) {
+      query.where.id = {
+        [Op.notIn]: Array.isArray(params.exclude) ? params.exclude : [params.exclude]
+      };
+    }
 
     if (params.search) {
       query.where = {

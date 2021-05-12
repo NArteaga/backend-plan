@@ -6,19 +6,13 @@ const Repository = require('../Repository');
 module.exports = function rolesRepository (models, Sequelize) {
   const { rol, ruta, menu } = models;
   const Op = Sequelize.Op;
-  const attributes = ['id','idEntidad', 'nombre', 'descripcion', 'estado'];
+  const attributes = ['id', 'nombre', 'descripcion', 'estado'];
 
   function findAll (params = {}) {
     const query = getQuery(params);
     query.attributes = attributes;
     query.where = {};
     query.include = [];
-
-    if (params.idSucursal) {
-      query.where.id = {
-        [Op.not]: 1
-      };
-    }
 
     if (params.estado) {
       query.where.estado = params.estado;

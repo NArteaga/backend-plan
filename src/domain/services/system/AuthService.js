@@ -58,6 +58,12 @@ module.exports = function authService (repositories, helpers, res) {
           icono      : 'fact_check',
           ruta       : 'temas',
           subModulos : []
+        },
+        {
+          label      : 'Reuniones',
+          icono      : 'groups',
+          ruta       : 'reuniones',
+          subModulos : []
         }
       ];
 
