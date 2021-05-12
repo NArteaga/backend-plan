@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function temaService (repositories, helpers, res) {
-  const { TemaRepository } = repositories;
+  const { TemaRepository, ComentarioRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function listar (params) {
@@ -19,12 +19,31 @@ module.exports = function temaService (repositories, helpers, res) {
 
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
-    let rol;
+    let tema;
+    let transaccion;
     try {
-      rol = await TemaRepository.createOrUpdate(data);
-      return rol;
-    } catch (err) {
-      throw new ErrorApp(err.message, 400);
+      transaccion = await transaction.create();
+      tema = await TemaRepository.createOrUpdate(data, transaccion);
+      if (data.id) {
+        await ComentarioRepository.createOrUpdate({
+          idUsuario   : data.userCreated || data.userUpdated,
+          idTema      : tema.id,
+          descripcion : 'ha modificado este tema.',
+          userCreated : data.userCreated || data.userUpdated
+        }, transaccion);
+      } else {
+        await ComentarioRepository.createOrUpdate({
+          idUsuario   : data.userCreated || data.userUpdated,
+          idTema      : tema.id,
+          descripcion : 'ha creado este tema.',
+          userCreated : data.userCreated || data.userUpdated
+        }, transaccion);
+      }
+      await transaction.commit(transaccion);
+      return tema;
+    } catch (error) {
+      await transaction.rollback(transaccion);
+      throw new ErrorApp(error.message, 400);
     }
   }
 

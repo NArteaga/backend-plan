@@ -8,5 +8,9 @@ module.exports = function setupSocio (api, controllers, middlewares) {
   api.put('/comentarios/:id', ComentarioController.actualizar);
   api.delete('/comentarios/:id', ComentarioController.eliminar);
 
+  api.post('/comentarios/subir-archivo', ComentarioController.subirArchivo);
+
+  api.get('/comentarios/recuperar-archivo/:id', ComentarioController.recuperarArchivo);
+
   return api;
 };

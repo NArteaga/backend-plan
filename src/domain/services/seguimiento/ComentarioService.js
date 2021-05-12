@@ -10,8 +10,20 @@ module.exports = function comentarioService (repositories, helpers, res) {
 
   async function listar (params) {
     try {
-      const parametros = await ComentarioRepository.findAll(params);
-      return parametros;
+      const comentarios = await ComentarioRepository.findAll(params);
+      return comentarios;
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
+  async function findOne (params) {
+    try {
+      const comentario = await ComentarioRepository.findOne(params);
+      if (!comentario) {
+        throw new Error('El comentario no existe');
+      }
+      return comentario;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
     }
@@ -19,10 +31,10 @@ module.exports = function comentarioService (repositories, helpers, res) {
 
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
-    let rol;
+    let comentario;
     try {
-      rol = await ComentarioRepository.createOrUpdate(data);
-      return rol;
+      comentario = await ComentarioRepository.createOrUpdate(data);
+      return comentario;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
     }
@@ -40,6 +52,7 @@ module.exports = function comentarioService (repositories, helpers, res) {
   }
 
   return {
+    findOne,
     listar,
     createOrUpdate,
     deleteItem

@@ -44,6 +44,20 @@ module.exports = function setupEntidadController (services) {
     }
   }
 
+  async function cambiarEstado (req, res) {
+    try {
+      debug('actualizando entidad');
+      const data = {
+        id          : req.params.id,
+        userUpdated : req.user.idUsuario
+      };
+      const respuesta = await TareaService.cambiarEstado(data);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
   async function eliminar (req, res) {
     try {
       const { id } = req.params;
@@ -54,7 +68,9 @@ module.exports = function setupEntidadController (services) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
   return {
+    cambiarEstado,
     listar,
     eliminar,
     actualizar,

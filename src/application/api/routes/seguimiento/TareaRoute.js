@@ -8,5 +8,7 @@ module.exports = function setupSocio (api, controllers, middlewares) {
   api.put('/tareas/:id', TareaController.actualizar);
   api.delete('/tareas/:id', TareaController.eliminar);
 
+  api.patch('/tareas/:id/finalizado', TareaController.cambiarEstado);
+
   return api;
 };

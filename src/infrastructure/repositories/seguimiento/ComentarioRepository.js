@@ -4,14 +4,68 @@ const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function comentarioRepository (models, Sequelize) {
-  const { comentario } = models;
+  const { comentario, usuario, tarea, tema, reunion } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
     const query = getQuery(params);
-    // query.attributes = [];
+    query.attributes = [
+      'id',
+      'idUsuario',
+      'idTarea',
+      'idTema',
+      'idReunion',
+      'descripcion',
+      'rutaAdjunto',
+      'createdAt'
+    ];
     query.where = {};
-    query.include = [];
+    query.include = [
+      {
+        attributes: [
+          'id',
+          'usuario',
+          'nombres',
+          'primerApellido',
+          'segundoApellido'
+        ],
+        model : usuario,
+        as    : 'usuario'
+      },
+      {
+        attributes: [
+          'id',
+          'idTema',
+          'titulo',
+          'palabrasClave',
+          'fechaFinalizacion',
+          'finalizado'
+        ],
+        model : tarea,
+        as    : 'tarea'
+      },
+      {
+        attributes: [
+          'id',
+          'idEntidad',
+          'titulo',
+          'descripcion',
+          'estado'
+        ],
+        model : tema,
+        as    : 'tema'
+      },
+      {
+        attributes: [
+          'id',
+          'titulo',
+          'descripcion',
+          'estado'
+        ],
+        model : reunion,
+        as    : 'reunion'
+      }
+    ];
 
     if (params.idTarea) {
       query.where.idTarea = params.idTarea;

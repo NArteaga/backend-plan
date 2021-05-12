@@ -14,18 +14,30 @@ module.exports = (sequelize, DataTypes) => {
     },
     idTarea: {
       type      : DataTypes.INTEGER,
-      allowNull : false,
+      allowNull : true,
       xlabel    : lang.t('fields.idTarea'),
       field     : 'id_tarea'
     },
+    idTema: {
+      type      : DataTypes.INTEGER,
+      allowNull : true,
+      xlabel    : lang.t('fields.idTema'),
+      field     : 'id_tema'
+    },
+    idReunion: {
+      type      : DataTypes.INTEGER,
+      allowNull : true,
+      xlabel    : lang.t('fields.idReunion'),
+      field     : 'id_reunion'
+    },
     descripcion: {
       type      : DataTypes.TEXT,
-      allowNull : false,
+      allowNull : true,
       xlabel    : lang.t('fields.descripcion')
     },
     rutaAdjunto: {
       type      : DataTypes.TEXT,
-      allowNull : false,
+      allowNull : true,
       xlabel    : lang.t('fields.rutaAdjunto'),
       field     : 'ruta_adjunto'
     }

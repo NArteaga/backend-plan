@@ -10,13 +10,17 @@ module.exports = function temaRepository (models, Sequelize) {
 
   function findAll (params = {}) {
     const query = getQuery(params);
+    // query.subQuery = false;
+    // query.group = ['tema.id', 'tareas.id'];
 
     query.attributes = [
       'id',
       'idEntidad',
       'titulo',
       'descripcion',
-      'estado'
+      'estado',
+      [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = FALSE)'), 'tareasPendientes'],
+      [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = TRUE)'), 'tareasCompletadas']
     ];
 
     query.where = {};
@@ -41,9 +45,7 @@ module.exports = function temaRepository (models, Sequelize) {
         }
       };
     }
-    console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-    console.log(query.where[Op.or]);
-    console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+
     if (params.titulo) {
       query.where.titulo = {
         [Op.iLike]: `%${params.titulo}%`
