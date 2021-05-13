@@ -2,6 +2,7 @@
 
 const lang = require('../../lang');
 const util = require('../../lib/util');
+const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
@@ -17,17 +18,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : false,
       xlabel    : lang.t('fields.codigo')
     },
-    palabrasClave: {
-      type      : DataTypes.STRING(250),
-      allowNull : false,
-      xlabel    : lang.t('fields.palabrasClave'),
-      field     : 'palabras_clave'
-    },
     fechaFinalizacion: {
       type      : DataTypes.DATE,
       allowNull : false,
       xlabel    : lang.t('fields.fechaFinalizacion'),
-      field     : 'fecha_finalizacion'
+      field     : 'fecha_finalizacion',
+      get       : function () {
+        if (this.getDataValue('fechaFinalizacion')) {
+          return moment.utc(this.getDataValue('fechaFinalizacion')).format('DD-MM-YYYY HH:mm:ss');
+        }
+        return null;
+      }
     },
     finalizado: {
       type      : DataTypes.BOOLEAN,

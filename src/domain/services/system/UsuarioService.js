@@ -30,6 +30,11 @@ module.exports = function userService (repositories, helpers, res) {
   async function guardarUsuario (data) {
     try {
       const existeUsuario = await UsuarioRepository.verificarCorreoElectronico({ id: data.id, correoElectronico: data.correoElectronico });
+
+      if (data.roles) {
+
+      }
+
       if (existeUsuario) {
         throw new Error(`Ya se encuentra registrado un usuario con el correo "${data.correoElectronico}".`);
       }

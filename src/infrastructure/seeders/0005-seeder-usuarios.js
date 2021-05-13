@@ -80,7 +80,7 @@ let items = [
     id                 : 6,
     id_entidad         : 1,
     cargo              : 'CARGO',
-    usuario            : 'jmendez',
+    usuario            : 'jquisbert',
     contrasena         : 'Developer',
     nombres            : 'Juanjo',
     primer_apellido    : 'Quisbert',

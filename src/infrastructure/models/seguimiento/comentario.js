@@ -40,6 +40,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : true,
       xlabel    : lang.t('fields.rutaAdjunto'),
       field     : 'ruta_adjunto'
+    },
+    tipo: {
+      type    : DataTypes.ENUM,
+      default : 'SISTEMA',
+      values  : ['SISTEMA', 'USUARIO'],
+      xlabel  : lang.t('fields.tipo'),
+      field   : 'tipo'
     }
   };
 

@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.telefono'),
       field     : 'telefono'
     },
+    urlLogo: {
+      type      : DataTypes.TEXT,
+      allowNull : false,
+      xlabel    : lang.t('fields.urlLogo'),
+      field     : 'url_logo'
+    },
     estado: {
       type         : DataTypes.ENUM,
       values       : ['ACTIVO', 'INACTIVO'],

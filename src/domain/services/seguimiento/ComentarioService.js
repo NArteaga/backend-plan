@@ -33,6 +33,7 @@ module.exports = function comentarioService (repositories, helpers, res) {
     debug('Crear o actualizar rol');
     let comentario;
     try {
+      data.tipo = 'USUARIO';
       comentario = await ComentarioRepository.createOrUpdate(data);
       return comentario;
     } catch (err) {

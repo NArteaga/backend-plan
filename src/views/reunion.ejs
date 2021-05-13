@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Empresa</title>
+  <title>Reunion</title>
   <style>
     body {
       font-family: 'Arial';
-      font-size: 9px;
+      font-size: 11px;
     }
 
     td {
@@ -54,7 +54,7 @@
     <div class="esquina esquina-left"></div>
     <div class="border-certificado"></div>
     <div class="certificado">
-      <img src=<%=reunion.entidad.logo%>
+      <img src=<%=reunion.entidad.urlLogo%>
         style="margin-bottom:20px;display: block;margin-left: auto;margin-right: auto;width: 200px;" alt="Logo"
         width="200">
 
@@ -118,7 +118,7 @@
           </tr>
             <% reunion.participantes.forEach(function(participante, index){ %>
             <tr>
-              <td><%= participante.nombre %></td>
+              <td><%= participante.nombres %> <%= participante.primerApellido %> <%= participante.segundoApellido %></td>
               <td><%= participante.cargo %></td>
               <td></td>
             </tr>

@@ -37,7 +37,6 @@ module.exports = function comentarioRepository (models, Sequelize) {
           'id',
           'idTema',
           'titulo',
-          'palabrasClave',
           'fechaFinalizacion',
           'finalizado'
         ],

@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function temaService (repositories, helpers, res) {
-  const { TemaRepository, ComentarioRepository, transaction } = repositories;
+  const { TemaRepository, ComentarioRepository, TemaEntidadRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function listar (params) {
@@ -24,6 +24,12 @@ module.exports = function temaService (repositories, helpers, res) {
     try {
       transaccion = await transaction.create();
       tema = await TemaRepository.createOrUpdate(data, transaccion);
+      await TemaEntidadRepository.createOrUpdate({
+        idEntidad   : data.idEntidad,
+        idTema      : tema.id,
+        userCreated : data.userCreated || data.userUpdated
+      }, transaccion);
+
       if (data.id) {
         await ComentarioRepository.createOrUpdate({
           idUsuario   : data.userCreated || data.userUpdated,

@@ -5,12 +5,12 @@ const util = require('../../lib/util');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
-    id          : util.pk,
-    idCategoria : {
+    id         : util.pk,
+    idEtiqueta : {
       type      : DataTypes.INTEGER,
       allowNull : false,
-      xlabel    : lang.t('fields.idCategoria'),
-      field     : 'id_categoria'
+      xlabel    : lang.t('fields.idEtiqueta'),
+      field     : 'id_etiqueta'
     },
     idTarea: {
       type      : DataTypes.INTEGER,
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
   fields = util.setTimestamps(fields);
   // Agregando campos para el log fields = util.setTimestamps(fields);
 
-  const CategoriaTarea = sequelize.define('categoria_tarea', fields, {
+  const EtiquetaTarea = sequelize.define('etiqueta_tarea', fields, {
     paranoid   : true,
     timestamps : true,
-    tableName  : 'categoria_tarea'
+    tableName  : 'etiqueta_tarea'
   });
 
-  return CategoriaTarea;
+  return EtiquetaTarea;
 };

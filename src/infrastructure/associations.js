@@ -23,8 +23,8 @@ module.exports = function associations (models) {
     reunion,
     reunionTema,
     reunionParticipante,
-    categoria,
-    categoriaTarea,
+    etiqueta,
+    etiquetaTarea,
     cite
   } = models;
 
@@ -34,8 +34,8 @@ module.exports = function associations (models) {
   usuario.belongsToMany(reunion, { through: { model: reunionParticipante, unique: false }, as: 'reuniones', foreignKey: 'idUsuario' });
   reunion.belongsToMany(usuario, { through: { model: reunionParticipante, unique: false }, as: 'participantes', foreignKey: 'idReunion' });
 
-  categoria.belongsToMany(tarea, { through: { model: categoriaTarea, unique: false }, as: 'tareas', foreignKey: 'idCategoria' });
-  tarea.belongsToMany(categoria, { through: { model: categoriaTarea, unique: false }, as: 'categorias', foreignKey: 'idTarea' });
+  etiqueta.belongsToMany(tarea, { through: { model: etiquetaTarea, unique: false }, as: 'tareas', foreignKey: 'idEtiqueta' });
+  tarea.belongsToMany(etiqueta, { through: { model: etiquetaTarea, unique: false }, as: 'etiquetas', foreignKey: 'idTarea' });
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
   usuario.hasMany(auth,  { foreignKey: { name: 'idUsuario' }, as: 'sesiones' });
@@ -43,8 +43,8 @@ module.exports = function associations (models) {
   rol.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(rol,  { foreignKey: { name: 'idEntidad' }, as: 'roles' });
 
-  categoria.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
-  tema.hasMany(categoria,  { foreignKey: { name: 'idTema' }, as: 'categorias' });
+  etiqueta.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
+  tema.hasMany(etiqueta,  { foreignKey: { name: 'idTema' }, as: 'etiquetas' });
 
   entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidadPadre' });
   entidad.hasMany(entidad,  { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
@@ -70,11 +70,8 @@ module.exports = function associations (models) {
   reunion.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(reunion,  { foreignKey: { name: 'idEntidad' }, as: 'reunion' });
 
-  temaEntidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
-  entidad.hasMany(temaEntidad,  { foreignKey: { name: 'idEntidad' }, as: 'temaEntidad' });
-
-  temaEntidad.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
-  tema.hasMany(temaEntidad,  { foreignKey: { name: 'idTema' }, as: 'temaEntidad' });
+  entidad.belongsToMany(tema, { through: { model: temaEntidad, unique: false }, as: 'temas', foreignKey: 'idEntidad' });
+  tema.belongsToMany(entidad, { through: { model: temaEntidad, unique: false }, as: 'entidades', foreignKey: 'idTema' });
 
   usuario.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(usuario,  { foreignKey: { name: 'idEntidad' }, as: 'usuarios' });

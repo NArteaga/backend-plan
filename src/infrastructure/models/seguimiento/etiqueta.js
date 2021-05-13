@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
   fields = util.setTimestamps(fields);
   // Agregando campos para el log fields = util.setTimestamps(fields);
 
-  const Categoria = sequelize.define('categoria', fields, {
+  const Etiqueta = sequelize.define('etiqueta', fields, {
     paranoid   : true,
     timestamps : true,
-    tableName  : 'categoria'
+    tableName  : 'etiqueta'
   });
 
-  return Categoria;
+  return Etiqueta;
 };

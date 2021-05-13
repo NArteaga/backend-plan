@@ -4,7 +4,7 @@ const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function reunionRepository (models, Sequelize) {
-  const { reunion, usuario, tema } = models;
+  const { reunion, usuario, tema, entidad } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -26,15 +26,35 @@ module.exports = function reunionRepository (models, Sequelize) {
       }
     ];
 
-    console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-    console.log(query);
-    console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
     return reunion.findAndCountAll(query);
+  }
+
+  async function findOne (params = {}) {
+    const query = {};
+
+    query.where = params;
+
+    query.include = [
+      {
+        through : { attributes: [] },
+        model   : usuario,
+        as      : 'participantes'
+      },
+      {
+        model : entidad,
+        as    : 'entidad'
+      }
+    ];
+    const result = await reunion.findOne(query);
+    if (result) {
+      return result.toJSON();
+    }
+    return null;
   }
 
   return {
     findAll,
-    findOne        : params => Repository.findOne(params, reunion),
+    findOne,
     findById       : id => Repository.findById(id, reunion),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, reunion, t),
     deleteItem     : (id, t) => Repository.deleteItem(id, reunion, t)

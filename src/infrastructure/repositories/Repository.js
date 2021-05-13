@@ -100,7 +100,6 @@ async function findOne (params, model) {
   if (result) {
     return result.toJSON();
   }
-
   return null;
 }
 async function inactivateItem (id, model, object) {

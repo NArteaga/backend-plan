@@ -4,7 +4,7 @@ const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function tareaRepository (models, Sequelize) {
-  const { tarea, categoriaTarea, categoria } = models;
+  const { tarea, etiqueta } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -12,7 +12,6 @@ module.exports = function tareaRepository (models, Sequelize) {
     query.attributes = [
       'id',
       'idTema',
-      'palabrasClave',
       'titulo',
       'fechaFinalizacion',
       'finalizado',
@@ -42,28 +41,22 @@ module.exports = function tareaRepository (models, Sequelize) {
       };
     }
 
-    if (params.palabrasClave) {
-      query.where.palabrasClave = {
-        [Op.iLike]: `%${params.palabrasClave}%`
-      };
-    }
-
-    const categoriaWhere = {};
-    if (params.idCategoria) {
-      if (Array.isArray(params.idCategoria)) {
-        categoriaWhere.idCategoria = {
-          [Op.in]: params.idCategoria
+    const etiquetaWhere = {};
+    if (params.idEtiqueta) {
+      if (Array.isArray(params.idEtiqueta)) {
+        etiquetaWhere.idEtiqueta = {
+          [Op.in]: params.idEtiqueta
         };
       } else {
-        categoriaWhere.idCategoria = params.idCategoria;
+        etiquetaWhere.idEtiqueta = params.idEtiqueta;
       }
     }
 
     query.include = [
       {
         through : { attributes: [] },
-        model   : categoria,
-        as      : 'categorias'
+        model   : etiqueta,
+        as      : 'etiquetas'
       }
     ];
 

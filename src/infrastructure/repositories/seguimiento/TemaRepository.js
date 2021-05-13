@@ -5,7 +5,7 @@ const tarea = require('../../models/seguimiento/tarea');
 const Repository = require('../Repository');
 
 module.exports = function temaRepository (models, Sequelize) {
-  const { tema, tarea } = models;
+  const { tema, tarea, entidad } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -17,12 +17,25 @@ module.exports = function temaRepository (models, Sequelize) {
       'titulo',
       'descripcion',
       'estado',
+      'createdAt',
+      'updatedAt',
       [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = FALSE)'), 'tareasPendientes'],
       [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = TRUE)'), 'tareasCompletadas']
     ];
 
     query.where = {};
-    query.include = [];
+    query.include = [
+      {
+        through    : { attributes: [] },
+        attributes : [
+          'id',
+          'nombre',
+          'sigla'
+        ],
+        model : entidad,
+        as    : 'entidades'
+      }
+    ];
 
     if (params.exclude) {
       query.where.id = {

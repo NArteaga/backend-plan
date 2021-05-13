@@ -4,9 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const lang = require('../lang');
-const {
-  array
-} = require('../../common');
+const { array } = require('../../common');
+const moment = require('moment');
 
 /**
  * Carga los modelos de la carpeta especificada
@@ -125,17 +124,35 @@ const timestamps = {
     allowNull    : false,
     defaultValue : Sequelize.NOW,
     xlabel       : lang.t('fields.createdAt'),
-    field        : '_created_at'
+    field        : '_created_at',
+    get          : function () {
+      if (this.getDataValue('createdAt')) {
+        return moment.utc(this.getDataValue('createdAt')).format('DD-MM-YYYY HH:mm:ss');
+      }
+      return null;
+    }
   },
   updatedAt: {
     type   : Sequelize.DATE,
     xlabel : lang.t('fields.updatedAt'),
-    field  : '_updated_at'
+    field  : '_updated_at',
+    get    : function () {
+      if (this.getDataValue('updatedAt')) {
+        return moment.utc(this.getDataValue('updatedAt')).format('DD-MM-YYYY HH:mm:ss');
+      }
+      return null;
+    }
   },
   deletedAt: {
     type   : Sequelize.DATE,
     xlabel : lang.t('fields.deletedAt'),
-    field  : '_deleted_at'
+    field  : '_deleted_at',
+    get    : function () {
+      if (this.getDataValue('deletedAt')) {
+        return moment.utc(this.getDataValue('deletedAt')).format('DD-MM-YYYY HH:mm:ss');
+      }
+      return null;
+    }
   }
 };
 

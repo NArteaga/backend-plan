@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function tareaService (repositories, helpers, res) {
-  const { TareaRepository, TemaRepository, CategoriaTareaRepository, ComentarioRepository, transaction } = repositories;
+  const { TareaRepository, TemaRepository, EtiquetaTareaRepository, ComentarioRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function listar (params) {
@@ -60,7 +60,7 @@ module.exports = function tareaService (repositories, helpers, res) {
       }
       const existeTema = await TemaRepository.findOne({ id: data.idTema });
       if (!existeTema) {
-        throw new Error('El tema de la categoria no existe.');
+        throw new Error('El tema de la etiqueta no existe.');
       }
       if (data.id) {
         const existeTareaFinalizada = await TareaRepository.findOne({ id: data.id, finalizado: true });
@@ -69,7 +69,7 @@ module.exports = function tareaService (repositories, helpers, res) {
         }
       }
       tarea = await TareaRepository.createOrUpdate(data, transaccion);
-      if (data.categorias) {
+      if (data.etiquetas) {
         if (data.id) {
           await ComentarioRepository.createOrUpdate({
             idUsuario   : data.userCreated || data.userUpdated,
@@ -77,7 +77,7 @@ module.exports = function tareaService (repositories, helpers, res) {
             descripcion : 'ha modificado esta tarea.',
             userCreated : data.userCreated || data.userUpdated
           }, transaccion);
-          await CategoriaTareaRepository.deleteItemCond({ idTarea: tarea.id }, transaccion);
+          await EtiquetaTareaRepository.deleteItemCond({ idTarea: tarea.id }, transaccion);
         } else {
           await ComentarioRepository.createOrUpdate({
             idUsuario   : data.userCreated || data.userUpdated,
@@ -87,9 +87,9 @@ module.exports = function tareaService (repositories, helpers, res) {
           }, transaccion);
         }
 
-        for (const categoria of data.categorias) {
-          await CategoriaTareaRepository.createOrUpdate({
-            idCategoria : categoria,
+        for (const etiqueta of data.etiquetas) {
+          await EtiquetaTareaRepository.createOrUpdate({
+            idEtiqueta  : etiqueta,
             idTarea     : tarea.id,
             userCreated : data.userCreated || data.userUpdated
           }, transaccion);

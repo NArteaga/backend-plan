@@ -4,6 +4,7 @@
   "description": "Backend base",
   "main": "src/application/index.js",
   "scripts": {
+     "db": "npm run setup && npm run seeders",
     "start": "node src/application/server",
     "start:dev": "nodemon src/application/server",
     "dev": "nodemon src/application/server",

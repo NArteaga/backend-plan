@@ -6,14 +6,14 @@ const {
 
 // Datos de producción
 let items = [
-  { id: 1, id_tema: 1, titulo: 'Tarea 1', fecha_finalizacion: '2021-05-31', finalizado: false }
+  { id: 1, id_entidad: 1, fecha_reunion: new Date(), cite: '10000', titulo: 'Titulo de la reunion', descripcion: 'Descripcion de la reunion', estado: 'ACTIVO' }
 ];
 items = setTimestampsSeeder(items);
 
 module.exports = {
   up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('tarea', items, {})
-      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "tarea_id_seq" RESTART WITH ${items.length + 1}`))
+    return queryInterface.bulkInsert('reunion', items, {})
+      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "reunion_id_seq" RESTART WITH ${items.length + 1}`))
       .catch(error => {
         if (error.message.indexOf('already exists') > -1) return;
         console.error(error);

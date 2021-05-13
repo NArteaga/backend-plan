@@ -56,7 +56,20 @@ module.exports = function setupEntidadController (services) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
+  async function reporteReunion (req, res) {
+    try {
+      const { id } = req.params;
+      debug('Eliminando entidad');
+      const respuesta = await ReunionService.reporteReunion(id);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
   return {
+    reporteReunion,
     listar,
     eliminar,
     actualizar,
