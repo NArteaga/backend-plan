@@ -27,34 +27,10 @@ module.exports = function rolUsuarioRepository (models, Sequelize) {
     return null;
   }
 
-  async function eliminarRolesAsociados (idUsuario) {
-    const query = {};
-    query.where = {
-      idUsuario
-    };
-    return rolUsuario.destroy(query);
-  }
-
-  async function crearRolesAsociados (idUsuario, roles) {
-    const items = [];
-    let rolCiudadano = await rol.findOne({ where: { ciudadano: true } });
-    rolCiudadano = rolCiudadano.toJSON();
-    for (const rol of roles) {
-      if (rolCiudadano.id !== rol) {
-        items.push({
-          idUsuario,
-          idRol: rol
-        });
-      }
-    }
-    return rolUsuario.bulkCreate(items);
-  }
-
   return {
     findOne,
-    crearRolesAsociados,
-    eliminarRolesAsociados,
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, rolUsuario, t),
-    deleteItem     : (id, t) => Repository.deleteItem(id, rolUsuario, t)
+    deleteItem     : (id, t) => Repository.deleteItem(id, rolUsuario, t),
+    deleteItemCond : (params, t) => Repository.deleteItemCond(params, rolUsuario, t)
   };
 };

@@ -9,7 +9,7 @@
   <style>
     body {
       font-family: 'Arial';
-      font-size: 11px;
+      font-size: 15px;
     }
 
     td {
@@ -96,6 +96,7 @@
             <td>
               <% reunion.tareasProgramadas.forEach(function(tareaProgramada, index){ %>
               <p><%= tareaProgramada.titulo %></p>
+              <p style="font-size: 14px; margin-top: -15px; color: grey;"><%= tareaProgramada.tema.titulo %></p>
               <% }); %>
             </td>
           </tr>

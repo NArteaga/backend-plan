@@ -6,7 +6,7 @@ const Repository = require('../Repository');
 
 module.exports = function usuariosRepository (models, Sequelize) {
   const Op = Sequelize.Op;
-  const { usuario, rol, entidad } = models;
+  const { usuario, rol, entidad, menu } = models;
 
   async function findAll (params = {}) {
     const query = getQuery(params);
@@ -120,9 +120,22 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     query.include = [
       {
-        attributes : ['id', 'nombre', 'sigla'],
+        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
         model      : entidad,
         as         : 'entidad'
+      },
+      {
+        required   : true,
+        through    : { attributes: [] },
+        attributes : [
+          'id',
+          'idEntidad',
+          'nombre',
+          'descripcion',
+          'estado'
+        ],
+        model : rol,
+        as    : 'roles'
       }
     ];
 
@@ -187,8 +200,26 @@ module.exports = function usuariosRepository (models, Sequelize) {
   async function verificarCorreoElectronico (params) {
     const query = {};
     query.where = {};
+
     if (params.correoElectronico) {
-      query.where.correoElectronico = params.correoElectronico;
+      Object.assign(query.where, { correoElectronico: params.correoElectronico });
+    }
+
+    if (params.usuario) {
+      Object.assign(query.where, { usuario: params.usuario });
+    }
+
+    if (params.usuario && params.correoElectronico) {
+      query.where = {
+        [Op.or]: [
+          {
+            usuario: params.usuario
+          },
+          {
+            correoElectronico: params.correoElectronico
+          }
+        ]
+      };
     }
 
     if (params.id) {

@@ -12,7 +12,7 @@ module.exports = function associations (models) {
     entidad,
     servicio,
     rolPermiso,
-    usuarioRol,
+    rolUsuario,
     rolMenu,
     menu,
 
@@ -46,8 +46,8 @@ module.exports = function associations (models) {
   etiqueta.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
   tema.hasMany(etiqueta,  { foreignKey: { name: 'idTema' }, as: 'etiquetas' });
 
-  entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidadPadre' });
-  entidad.hasMany(entidad,  { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(entidad,  { foreignKey: { name: 'idEntidad' }, as: 'entidades' });
 
   tarea.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
   tema.hasMany(tarea,  { foreignKey: { name: 'idTema' }, as: 'tareas' });
@@ -83,18 +83,12 @@ module.exports = function associations (models) {
   rolPermiso.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
   rol.hasMany(rolPermiso, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rolPermisos' });
 
-  rolMenu.belongsTo(menu, { foreignKey: { name: 'idMenu', allowNull: false }, as: 'menu' });
-  menu.hasMany(rolMenu, { foreignKey: { name: 'idMenu', allowNull: false }, as: 'rolMenus' });
-
-  rolMenu.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
-  rol.hasMany(rolMenu, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rolMenus' });
+  rol.belongsToMany(menu, { through: { model: rolMenu, unique: false }, as: 'menus', foreignKey: 'idRol' });
+  menu.belongsToMany(rol, { through: { model: rolMenu, unique: false }, as: 'roles', foreignKey: 'idMenu' });
 
   // Roles de usuario
-  usuarioRol.belongsTo(usuario, { foreignKey: { name: 'idUsuario', allowNull: false }, as: 'usuario' });
-  usuario.hasMany(usuarioRol, { foreignKey: { name: 'idUsuario', allowNull: false }, as: 'usuarioRoles' });
-
-  usuarioRol.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
-  rol.hasMany(usuarioRol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'usuarioRoles' });
+  usuario.belongsToMany(rol,  { through: { model: rolUsuario, unique: false }, as: 'roles', foreignKey: 'idUsuario' });
+  rol.belongsToMany(usuario, { through: { model: rolUsuario, unique: false }, as: 'usuarios', foreignKey: 'idRol' });
 
   return models;
 };

@@ -30,7 +30,7 @@ module.exports = function setupUsuarioController (services) {
     try {
       const data = req.body;
       data.userCreated = req.user.idUsuario;
-      const respuesta = await UsuarioService.guardarUsuario(data);
+      const respuesta = await UsuarioService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -40,9 +40,9 @@ module.exports = function setupUsuarioController (services) {
   async function actualizar (req, res) {
     try {
       const data = req.body;
-      data._user_updated = req.user.idUsuario;
+      data.userUpdated = req.user.idUsuario;
       data.id = req.params.id;
-      const respuesta = await UsuarioService.guardarUsuario(data);
+      const respuesta = await UsuarioService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));

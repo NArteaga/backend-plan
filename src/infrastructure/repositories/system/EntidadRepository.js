@@ -11,12 +11,37 @@ module.exports = function entidadRepository (models, Sequelize) {
     const query = getQuery(params);
     // query.attributes = attributes;
     query.where = {};
+
+    if (params.nivel) {
+      query.where.nivel = params.nivel;
+    }
+
     query.include = [];
 
     return entidad.findAndCountAll(query);
   }
 
+  async function findDependientes (entidades, nivel) {
+    const query = {
+      attributes: ['id',
+        'sigla',
+        'nombre',
+        'idEntidad',
+        'nivel'
+      ],
+      where: {
+        idEntidad: {
+          [Op.in]: entidades
+        },
+        nivel
+      }
+    };
+    const result = await entidad.findAndCountAll(query);
+    return toJSON(result);
+  }
+
   return {
+    findDependientes,
     findAll,
     findOne        : (params) => Repository.findOne(params, entidad),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, entidad, t),

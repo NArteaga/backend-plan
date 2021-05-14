@@ -4,7 +4,7 @@ const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function modulossRepository (models, Sequelize) {
-  const { permisos, modulos, rol } = models;
+  const { permiso, modulos, rol } = models;
   const Op = Sequelize.Op;
 
   async function findAll (params = {}) {
@@ -22,7 +22,7 @@ module.exports = function modulossRepository (models, Sequelize) {
       }
     ];
 
-    const result = await permisos.findAndCountAll(query);
+    const result = await permiso.findAndCountAll(query);
     return toJSON(result);
   }
 
@@ -51,8 +51,8 @@ module.exports = function modulossRepository (models, Sequelize) {
           'delete',
           'csv'
         ],
-        model   : permisos,
-        as      : 'permisos',
+        model   : permiso,
+        as      : 'permiso',
         include : [
           {
             attributes : [],
@@ -67,7 +67,7 @@ module.exports = function modulossRepository (models, Sequelize) {
     return toJSON(result);
   }
 
-  async function verificarPermisos (params) {
+  async function verificarpermiso (params) {
     const query = {
       attributes: ['id']
     };
@@ -86,16 +86,16 @@ module.exports = function modulossRepository (models, Sequelize) {
       }
     ];
 
-    const result = await permisos.findOne(query);
+    const result = await permiso.findOne(query);
     return result.toJSON();
   }
 
   return {
-    verificarPermisos,
+    verificarpermiso,
     findAll,
     findOne,
-    findById       : (id) => Repository.findById(id, permisos),
-    createOrUpdate : (item, t) => Repository.createOrUpdate(item, permisos, t),
-    deleteItem     : (id, t) => Repository.deleteItem(id, permisos, t)
+    findById       : (id) => Repository.findById(id, permiso),
+    createOrUpdate : (item, t) => Repository.createOrUpdate(item, permiso, t),
+    deleteItem     : (id, t) => Repository.deleteItem(id, permiso, t)
   };
 };

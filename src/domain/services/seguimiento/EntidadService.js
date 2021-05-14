@@ -8,7 +8,7 @@ module.exports = function entidadService (repositories, helpers, res) {
   const { EntidadRepository } = repositories;
   const { FechaHelper } = helpers;
 
-  async function listar (params) {
+  async function findAll (params) {
     try {
       const parametros = await EntidadRepository.findAll(params);
       return parametros;
@@ -40,7 +40,7 @@ module.exports = function entidadService (repositories, helpers, res) {
   }
 
   return {
-    listar,
+    findAll,
     createOrUpdate,
     deleteItem
   };

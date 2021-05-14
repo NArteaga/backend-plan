@@ -25,6 +25,14 @@ function mensajeError (res, code, mensaje, datos) {
   });
 }
 
+function verificarEntidad (objeto, entidadesPermitidas) {
+  if (objeto.idEntidad) {
+    if (!entidadesPermitidas.includes(parseInt(objeto.idEntidad))) {
+      throw new Error('No tiene permitido ver datos de esta entidad.');
+    }
+  }
+}
+
 const AuthMiddleware = function (services) {
   const { AuthService } = services;
   function verificarToken () {
@@ -38,9 +46,11 @@ const AuthMiddleware = function (services) {
         tokenRequest = req.headers.authorization.replace('Bearer ', '');
         data = await verify(tokenRequest, config.auth.secret);
         req.user = data;
-        if (req.user.idRol !== config.constants.ROL_SUPER_ADMIN) {
-          req.query.idSucursal = req.user.idSucursal;
-        }
+
+        // verificarEntidad(req.params, req.user.entidadesDependientes);
+        // verificarEntidad(req.query, req.user.entidadesDependientes);
+        // verificarEntidad(req.body, req.user.entidadesDependientes);
+
         next();
       } catch (error) {
         mensajeError(res, HTTP_CODES.UNAUTHORIZED, error.message);
@@ -63,13 +73,6 @@ const AuthMiddleware = function (services) {
         if (!tienePermiso) {
           throw new Error('No tiene permisos para realizar esta accion.');
         }
-        // console.log(`tiene permisos de --->>> ${acceso} a --->>> ${ruta}`);
-        // const tieneAcceso = await AuthService.verificarHorarios(req.user.idUsuario);
-        // if (!tieneAcceso) {
-        //   throw new Error('No tiene acceso al sistema en este horario.');
-        // }
-        // console.log('tiene acceso en el horario');
-
         next();
       } catch (error) {
         mensajeError(res, HTTP_CODES.UNAUTHORIZED, error.message);

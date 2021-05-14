@@ -3,13 +3,13 @@ const debug = require('debug')('app:controller:REPORTE');
 const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
 
-module.exports = function setupModuloController (services) {
-  const { ModuloService } = services;
+module.exports = function setupPermisoController (services) {
+  const { PermisoService } = services;
 
   async function listar (req, res) {
     try {
       debug('Recuperando modulos');
-      const respuesta = await ModuloService.listar(req.query);
+      const respuesta = await PermisoService.listar(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -20,7 +20,7 @@ module.exports = function setupModuloController (services) {
     try {
       const datos = req.body;
       datos.userCreated = req.user.idUsuario;
-      const respuesta = await ModuloService.createOrUpdate(datos);
+      const respuesta = await PermisoService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -30,9 +30,9 @@ module.exports = function setupModuloController (services) {
   async function actualizar (req, res) {
     try {
       const datos = req.body;
-      datos._user_updated = req.user.idUsuario;
+      datos.userUpdated = req.user.idUsuario;
       datos.id = req.params.id;
-      const respuesta = await ModuloService.createOrUpdate(datos);
+      const respuesta = await PermisoService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -41,7 +41,7 @@ module.exports = function setupModuloController (services) {
 
   async function eliminar (req, res) {
     try {
-      const respuesta = await ModuloService.eliminar(req.params.id);
+      const respuesta = await PermisoService.eliminar(req.params.id);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -50,7 +50,7 @@ module.exports = function setupModuloController (services) {
   async function mostrar (req, res) {
     try {
       debug('Recuperando modulos');
-      const respuesta = await ModuloService.mostrar(req.params.id);
+      const respuesta = await PermisoService.mostrar(req.params.id);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));

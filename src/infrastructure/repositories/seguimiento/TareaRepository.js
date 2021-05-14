@@ -4,7 +4,7 @@ const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function tareaRepository (models, Sequelize) {
-  const { tarea, etiqueta } = models;
+  const { tarea, etiqueta, tema } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -15,6 +15,8 @@ module.exports = function tareaRepository (models, Sequelize) {
       'titulo',
       'fechaFinalizacion',
       'finalizado',
+      'createdAt',
+      'updatedAt',
       [Sequelize.literal('(SELECT COUNT(*) FROM comentario WHERE comentario.id_tarea = tarea.id)'), 'numeroComentarios']
     ];
     query.where = {};
@@ -42,21 +44,37 @@ module.exports = function tareaRepository (models, Sequelize) {
     }
 
     const etiquetaWhere = {};
+    let requiredTag = false;
     if (params.idEtiqueta) {
+      requiredTag = true;
       if (Array.isArray(params.idEtiqueta)) {
-        etiquetaWhere.idEtiqueta = {
+        etiquetaWhere.id = {
           [Op.in]: params.idEtiqueta
         };
       } else {
-        etiquetaWhere.idEtiqueta = params.idEtiqueta;
+        etiquetaWhere.id = params.idEtiqueta;
       }
+    }
+
+    const whereTema = {};
+    if (params.entidades) {
+      whereTema.idEntidad = {
+        [Op.in]: params.entidades
+      };
     }
 
     query.include = [
       {
-        through : { attributes: [] },
-        model   : etiqueta,
-        as      : 'etiquetas'
+        model : tema,
+        as    : 'tema',
+        where : whereTema
+      },
+      {
+        required : requiredTag,
+        through  : { attributes: [] },
+        model    : etiqueta,
+        as       : 'etiquetas',
+        where    : etiquetaWhere
       }
     ];
 

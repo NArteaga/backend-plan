@@ -3,8 +3,8 @@
 const { setTimestampsSeeder } = require('../lib/util');
 
 let items = [
-  { id: 1, id_entidad: null, nivel: 1, nombre: 'Ministerio de justicia y Transparencia Institucional', sigla: 'MJTI', direccion: 'Direccion 1', url_logo: 'https://pbs.twimg.com/profile_images/1351275781515784196/EINZDxAk_400x400.png', telefono: '78745815', estado: 'ACTIVO' },
-  { id: 2, id_entidad: null, nivel: 1, nombre: 'Viceministerio de transparencia', sigla: 'VT', direccion: 'Direccion 1', url_logo: 'https://pbs.twimg.com/profile_images/1351275781515784196/EINZDxAk_400x400.png', telefono: '78745815', estado: 'ACTIVO' }
+  { id: 3, id_entidad: 1, nivel: 2, nombre: 'Viceministerio', sigla: 'MJTI', direccion: 'Direccion 1', url_logo: 'https://pbs.twimg.com/profile_images/1351275781515784196/EINZDxAk_400x400.png', telefono: '78745815', estado: 'ACTIVO' },
+  { id: 4, id_entidad: 1, nivel: 2, nombre: 'Direccion', sigla: 'VT', direccion: 'Direccion 1', url_logo: 'https://pbs.twimg.com/profile_images/1351275781515784196/EINZDxAk_400x400.png', telefono: '78745815', estado: 'ACTIVO' }
 ];
 
 // Asignando datos de log y timestamps a los datos

@@ -13,7 +13,7 @@ const moment = require('moment');
 // Métodos para CIUDADANÍA DIGITAL
 module.exports = function authService (repositories, helpers, res) {
   const UsuarioService = require('./UsuarioService')(repositories, helpers, res);
-  const { AuthRepository, UsuarioRepository, ModuloRepository, ParametroRepository, PermisoRepository } = repositories;
+  const { AuthRepository, UsuarioRepository, EntidadRepository, ParametroRepository, MenuRepository, PermisoRepository } = repositories;
   const issuer = new Issuer(iss);
   const { FechaHelper } = helpers;
   // console.log('---------------------------- issuer', issuer);
@@ -30,49 +30,34 @@ module.exports = function authService (repositories, helpers, res) {
     }
   }
 
-  async function verificarHorarios (idUsuario) {
-    const dia = moment().locale('es').format('dddd');
-    const { rows: horarios } = await ParametroRepository.findHorarios({ dia, idUsuario });
-    let tieneAcceso = true;
-    for (const horario of horarios) {
-      const { horaInicio, horaFin } = horario;
-      const fechaActual = moment().format('DD/MM/YYYY');
-      const horaActual = moment().format('HH:mm:ss');
-      if (Date.parse(`${fechaActual} ${horaActual}`) < Date.parse(`${fechaActual} ${horaInicio}`) ||
-          Date.parse(`${fechaActual} ${horaActual}`) > Date.parse(`${fechaActual} ${horaFin}`)) {
-        tieneAcceso = false;
-      }
+  async function getMenusRoles (roles) {
+    const idRoles = roles.map(x => x.id);
+    const { rows } = await MenuRepository.findByRoles(idRoles);
+    return rows;
+  }
+
+  async function getEntidadesDependientes (entidades, nivel) {
+    let entidadesDependientes = [];
+    if (entidades.length > 0) {
+      const idEntidades = entidades.map(x => x.id);
+      entidadesDependientes = await EntidadRepository.findDependientes(idEntidades, nivel);
+      return entidades.concat(await getEntidadesDependientes(entidadesDependientes.rows, nivel + 1));
     }
-    return tieneAcceso;
+    return [...entidades];
   }
 
   async function getResponse (usuario) {
     try {
-      usuario.rol = {
-        nombre: 'SUPER ADMIN'
-      };
-
-      usuario.menu = [
-        {
-          label      : 'Temas',
-          icono      : 'fact_check',
-          ruta       : 'temas',
-          subModulos : []
-        },
-        {
-          label      : 'Reuniones',
-          icono      : 'groups',
-          ruta       : 'reuniones',
-          subModulos : []
-        }
-      ];
-
+      usuario.menu = await getMenusRoles(usuario.roles);
+      const entidadesDependientes = await getEntidadesDependientes([usuario.entidad], usuario.entidad.nivel + 1);
+      usuario.entidades = entidadesDependientes;
       usuario.token = await generateToken(ParametroRepository, {
-        idUsuario         : usuario.id,
-        celular           : usuario.celular,
-        correoElectronico : usuario.correoElectronico,
-        usuario           : usuario.usuario,
-        idEntidad         : usuario.entidad.id
+        idUsuario             : usuario.id,
+        celular               : usuario.celular,
+        correoElectronico     : usuario.correoElectronico,
+        usuario               : usuario.usuario,
+        idEntidad             : usuario.entidad.id,
+        entidadesDependientes : entidadesDependientes.map(x => x.id)
       });
       return usuario;
     } catch (error) {
@@ -259,7 +244,7 @@ module.exports = function authService (repositories, helpers, res) {
   }
 
   return {
-    verificarHorarios,
+    getMenusRoles,
     verificarPermisos,
     login,
     getCode,

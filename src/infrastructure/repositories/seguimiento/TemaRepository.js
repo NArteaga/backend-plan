@@ -37,6 +37,16 @@ module.exports = function temaRepository (models, Sequelize) {
       }
     ];
 
+    if (params.idEntidad) {
+      query.where.idEntidad = params.idEntidad;
+    }
+
+    if (params.entidades && !params.idEntidad) {
+      query.where.idEntidad = {
+        [Op.in]: params.entidades
+      };
+    }
+
     if (params.exclude) {
       query.where.id = {
         [Op.notIn]: Array.isArray(params.exclude) ? params.exclude : [params.exclude]

@@ -6,7 +6,7 @@ const {
 
 // Datos de producción
 let items = [
-  { id: 1, id_usuario: 1, id_tarea: 1, id_tema: null, id_reunion: null, descripcion: 'ha creado una nueva tarea', ruta_adjunto: null }
+  { id: 1, id_usuario: 1, id_tarea: 1, id_tema: null, id_reunion: null, tipo: 'SISTEMA', descripcion: 'ha creado una nueva tarea', ruta_adjunto: null }
 ];
 items = setTimestampsSeeder(items);
 

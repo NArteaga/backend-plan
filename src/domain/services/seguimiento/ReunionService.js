@@ -114,9 +114,6 @@ module.exports = function reunionService (repositories, helpers, res) {
 
       const fechaInicioConcluidos = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').subtract(7, 'days');
       const fechaFinProgramados = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').add(7, 'days');
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(fechaInicioConcluidos, _existeReunion.fechaReunion, fechaFinProgramados);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       const tareasConcluidas = await TareaRepository.findAll({ finalizado: true, fechaIni: fechaInicioConcluidos, fechaFin: _existeReunion.fechaReunion });
       const tareasProgramadas = await TareaRepository.findAll({ finalizado: false, fechaIni: _existeReunion.fechaReunion, fechaFin: fechaFinProgramados });
       _existeReunion.tareasConcluidas = tareasConcluidas.rows;

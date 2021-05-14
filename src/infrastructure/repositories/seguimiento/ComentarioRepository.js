@@ -70,6 +70,10 @@ module.exports = function comentarioRepository (models, Sequelize) {
       query.where.idTarea = params.idTarea;
     }
 
+    if (params.tipo) {
+      query.where.tipo = params.tipo;
+    }
+
     return comentario.findAndCountAll(query);
   }
 

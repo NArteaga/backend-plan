@@ -19,10 +19,8 @@ module.exports = function permisoService (repositories, helpers, res) {
   async function createOrUpdate (datos = {}) {
     debug('Creando o actualizando permisos');
     try {
-      datos.id_rol = datos.idRol;
-      datos.id_modulo = datos.idModulo;
-      const permisos = await PermisoRepository.createOrUpdate(datos);
-      return permisos;
+      const permiso = await PermisoRepository.createOrUpdate(datos);
+      return permiso;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
     }

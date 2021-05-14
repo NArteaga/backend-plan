@@ -22,7 +22,7 @@ let items = [
   },
   {
     id                 : 2,
-    id_entidad         : 1,
+    id_entidad         : 3,
     cargo              : 'CARGO',
     usuario            : 'jllusco',
     contrasena         : 'Developer',
@@ -50,7 +50,7 @@ let items = [
   },
   {
     id                 : 4,
-    id_entidad         : 1,
+    id_entidad         : 4,
     cargo              : 'CARGO',
     usuario            : 'itancara',
     contrasena         : 'Developer',

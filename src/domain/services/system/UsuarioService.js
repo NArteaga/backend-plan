@@ -27,21 +27,46 @@ module.exports = function userService (repositories, helpers, res) {
     }
   }
 
-  async function guardarUsuario (data) {
+  async function createOrUpdate (data) {
+    let transaccion;
     try {
-      const existeUsuario = await UsuarioRepository.verificarCorreoElectronico({ id: data.id, correoElectronico: data.correoElectronico });
+      transaccion = await transaction.create();
 
-      if (data.roles) {
+      if (data.id) delete data.contrasena;
 
-      }
+      const existeUsuario = await UsuarioRepository.verificarCorreoElectronico({
+        id                : data.id,
+        correoElectronico : data.correoElectronico,
+        usuario           : data.usuario
+      }, transaccion);
 
       if (existeUsuario) {
-        throw new Error(`Ya se encuentra registrado un usuario con el correo "${data.correoElectronico}".`);
+        if (existeUsuario.correoElectronico === data.correoElectronico) {
+          throw new Error(`Ya se encuentra registrado un usuario con el correo electronico "${data.correoElectronico}".`);
+        }
+
+        if (existeUsuario.usuario === data.usuario) {
+          throw new Error(`Ya se encuentra registrado un usuario con el nombre de usuario "${data.usuario}".`);
+        }
       }
 
-      const usuarioCreado = await UsuarioRepository.createOrUpdate(data);
+      const usuarioCreado = await UsuarioRepository.createOrUpdate(data, transaccion);
+
+      if (data.roles) {
+        await RolUsuarioRepository.deleteItemCond({ idUsuario: usuarioCreado.id });
+        for (const rol of data.roles) {
+          await RolUsuarioRepository.createOrUpdate({
+            idUsuario   : usuarioCreado.id,
+            idRol       : rol,
+            userCreated : data.userCreated || data.userUpdated
+          }, transaccion);
+        }
+      }
+
+      await transaction.commit(transaccion);
       return usuarioCreado;
     } catch (error) {
+      await transaction.rollback(transaccion);
       throw new ErrorApp(error.message, 400);
     }
   }
@@ -165,7 +190,7 @@ module.exports = function userService (repositories, helpers, res) {
     asignarRoles,
     listarUsuarios,
     mostrar,
-    guardarUsuario,
+    createOrUpdate,
     eliminar,
     getResponse
   };

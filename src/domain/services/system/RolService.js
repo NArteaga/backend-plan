@@ -4,7 +4,7 @@ const debug = require('debug')('app:service:rol');
 const Service = require('../Service');
 const { ErrorApp } = require('../../lib/error');
 module.exports = function rolService (repositories, helpers, res) {
-  const { RolRepository, RolRutaRepository, RolMenuRepository, transaction } = repositories;
+  const { RolRepository, RolRutaRepository, RolMenuRepository, RolPermisoRepository, transaction } = repositories;
 
   async function findAll (params = {}) {
     debug('Lista de roles|filtros');
@@ -30,10 +30,34 @@ module.exports = function rolService (repositories, helpers, res) {
 
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
-
     let rol;
     try {
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      console.log(data);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       rol = await RolRepository.createOrUpdate(data);
+      if (data.menus) {
+        await RolMenuRepository.deleteItemCond({ idRol: rol.id });
+        for (const menu of data.menus) {
+          await RolMenuRepository.createOrUpdate({
+            idRol       : rol.id,
+            idMenu      : menu,
+            userCreated : data.userCreated || data.userUpdated
+          });
+        }
+      }
+
+      if (data.permisos) {
+        await RolPermisoRepository.deleteItemCond({ idRol: rol.id });
+
+        for (const permiso of data.permisos) {
+          await RolPermisoRepository.createOrUpdate({
+            idRol       : rol.id,
+            idPermiso   : permiso,
+            userCreated : data.userCreated || data.userUpdated
+          });
+        }
+      }
       return rol;
     } catch (err) {
       throw new ErrorApp(err.message, 400);

@@ -55,6 +55,7 @@ module.exports = function tareaService (repositories, helpers, res) {
     let transaccion;
     try {
       transaccion = await transaction.create();
+      data.fechaFinalizacion = FechaHelper.formatearFecha(data.fechaFinalizacion);
       if (!data.idTema) {
         throw new Error('Debe enviar el tema al que se le adicionará la tarea.');
       }

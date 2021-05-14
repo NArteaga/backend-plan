@@ -22,9 +22,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     idMenu: {
       type      : DataTypes.INTEGER,
-      allowNull : false,
+      allowNull : true,
       xlabel    : lang.t('fields.idMenu'),
       field     : 'id_menu'
+    },
+    orden: {
+      type         : DataTypes.INTEGER,
+      defaultValue : 0,
+      xlabel       : lang.t('fields.orden'),
+      field        : 'orden'
     },
     estado: {
       type   : DataTypes.ENUM,

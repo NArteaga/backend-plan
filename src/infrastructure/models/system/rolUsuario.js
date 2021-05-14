@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
   // Agregando campos para el log
   fields = util.setTimestamps(fields);
 
-  const UsuarioRol = sequelize.define('usuario_rol', fields, {
+  const RolUsuario = sequelize.define('rol_usuario', fields, {
     paranoid   : true,
     timestamps : true,
-    tableName  : 'sys_usuario_rol'
+    tableName  : 'sys_rol_usuario'
   });
 
-  return UsuarioRol;
+  return RolUsuario;
 };

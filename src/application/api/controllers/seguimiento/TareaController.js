@@ -12,6 +12,8 @@ module.exports = function setupEntidadController (services) {
   async function listar (req, res) {
     try {
       debug('Recuperando entidades');
+      req.query.entidades = req.user.entidadesDependientes;
+
       const respuesta = await TareaService.listar(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
