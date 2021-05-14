@@ -17,11 +17,14 @@ module.exports = function usuariosRepository (models, Sequelize) {
       'foto',
       'id',
       'nombres',
+      'cargo',
+      'idEntidad',
       'numeroDocumento',
       'primerApellido',
       'segundoApellido',
       'telefono',
-      'usuario'
+      'usuario',
+      'createdAt'
     ];
     query.where = {};
 
@@ -94,7 +97,13 @@ module.exports = function usuariosRepository (models, Sequelize) {
       };
     }
 
-    query.include = [];
+    query.include = [
+      {
+        through : { attributes: [] },
+        model   : rol,
+        as      : 'roles'
+      }
+    ];
 
     const result = await usuario.findAndCountAll(query);
     return toJSON(result);
@@ -104,6 +113,53 @@ module.exports = function usuariosRepository (models, Sequelize) {
     const query = {};
     query.attributes = [
       'id',
+      'usuario',
+      'nombres',
+      'primerApellido',
+      'segundoApellido',
+      'numeroDocumento',
+      'telefono',
+      'celular',
+      'correoElectronico',
+      'foto',
+      'estado'
+    ];
+
+    query.where = params;
+
+    query.include = [
+      {
+        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        model      : entidad,
+        as         : 'entidad'
+      },
+      {
+        required   : true,
+        through    : { attributes: [] },
+        attributes : [
+          'id',
+          'idEntidad',
+          'nombre',
+          'descripcion',
+          'estado'
+        ],
+        model : rol,
+        as    : 'roles'
+      }
+    ];
+
+    const result = await usuario.findOne(query);
+    if (result) {
+      return result.toJSON();
+    }
+    return null;
+  }
+
+  async function login (params = {}) {
+    const query = {};
+    query.attributes = [
+      'id',
+      'contrasena',
       'usuario',
       'nombres',
       'primerApellido',
@@ -236,6 +292,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
   }
 
   return {
+    login,
     findById,
     verificarCorreoElectronico,
     findAll,

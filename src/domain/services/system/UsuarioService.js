@@ -2,13 +2,12 @@
 
 const debug = require('debug')('app:service:usuario');
 const moment = require('moment');
-const crypto = require('crypto');
 const { generateToken } = require('../../../application/lib/auth');
 const { ErrorApp } = require('../../lib/error');
 const { config } = require('../../../common');
 
 module.exports = function userService (repositories, helpers, res) {
-  const { Iop, UsuarioRepository, RolUsuarioRepository, Parametro, Log, PersonaRepository, transaction, RolRepository } = repositories;
+  const { Iop, UsuarioRepository, RolUsuarioRepository, Parametro, Log, AuthRepository, transaction, RolRepository } = repositories;
   const { FechaHelper } = helpers;
 
   async function listarUsuarios (params) {
@@ -34,6 +33,10 @@ module.exports = function userService (repositories, helpers, res) {
 
       if (data.id) delete data.contrasena;
 
+      if (data.contrasena) {
+        data.contrasena = await AuthRepository.codificarContrasena(data.contrasena);
+      }
+
       const existeUsuario = await UsuarioRepository.verificarCorreoElectronico({
         id                : data.id,
         correoElectronico : data.correoElectronico,
@@ -53,6 +56,7 @@ module.exports = function userService (repositories, helpers, res) {
       const usuarioCreado = await UsuarioRepository.createOrUpdate(data, transaccion);
 
       if (data.roles) {
+        if (data.roles.length === 0) throw new Error('Debe asignar al menos un rol al usuario');
         await RolUsuarioRepository.deleteItemCond({ idUsuario: usuarioCreado.id });
         for (const rol of data.roles) {
           await RolUsuarioRepository.createOrUpdate({

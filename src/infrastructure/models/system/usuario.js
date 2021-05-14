@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       xlabel : lang.t('fields.usuario')
     },
     contrasena: {
-      type   : DataTypes.STRING(50),
+      type   : DataTypes.STRING(500),
       xlabel : lang.t('fields.usuario')
     },
     nombres: {
@@ -33,10 +33,9 @@ module.exports = (sequelize, DataTypes) => {
       field     : 'primer_apellido'
     },
     segundoApellido: {
-      type      : DataTypes.STRING(100),
-      allowNull : false,
-      xlabel    : lang.t('fields.segundoApellido'),
-      field     : 'segundo_apellido'
+      type   : DataTypes.STRING(100),
+      xlabel : lang.t('fields.segundoApellido'),
+      field  : 'segundo_apellido'
     },
     numeroDocumento: {
       type      : DataTypes.STRING(50),

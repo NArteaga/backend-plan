@@ -67,10 +67,15 @@ module.exports = function authService (repositories, helpers, res) {
 
   async function login (usuario, contrasena) {
     try {
-      const existeUsuario = await UsuarioRepository.findOne({ usuario, contrasena });
+      const existeUsuario = await UsuarioRepository.login({ usuario });
       if (!existeUsuario) {
         throw new Error('No existe el usuario.');
       }
+      const respuestaVerificacion = await AuthRepository.verificarContrasena(contrasena, existeUsuario.contrasena);
+      if (!respuestaVerificacion) {
+        throw new Error('Error en su usuario o su contraseña.');
+      }
+
       return getResponse(existeUsuario);
     } catch (err) {
       throw new ErrorApp(err.message, 400);

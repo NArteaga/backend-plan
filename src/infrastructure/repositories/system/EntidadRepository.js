@@ -23,7 +23,8 @@ module.exports = function entidadRepository (models, Sequelize) {
 
   async function findDependientes (entidades, nivel) {
     const query = {
-      attributes: ['id',
+      attributes: [
+        'id',
         'sigla',
         'nombre',
         'idEntidad',

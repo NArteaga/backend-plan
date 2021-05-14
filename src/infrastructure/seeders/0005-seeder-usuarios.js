@@ -1,8 +1,8 @@
 'use strict';
 
-const {
-  setTimestampsSeeder
-} = require('../lib/util');
+const { setTimestampsSeeder } = require('../lib/util');
+const { saltRounds } = require('../../common/config/auth');
+const bcrypt = require('bcrypt');
 
 // Datos de producción
 let items = [
@@ -11,7 +11,7 @@ let items = [
     id_entidad         : 1,
     cargo              : 'CARGO',
     usuario            : 'admin',
-    contrasena         : 'Developer',
+    contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Ivan',
     primer_apellido    : 'Ticona',
     segundo_apellido   : 'Castillo',
@@ -25,7 +25,7 @@ let items = [
     id_entidad         : 3,
     cargo              : 'CARGO',
     usuario            : 'jllusco',
-    contrasena         : 'Developer',
+    contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Juan',
     primer_apellido    : 'Llusco',
     segundo_apellido   : 'Catacora',
@@ -39,7 +39,7 @@ let items = [
     id_entidad         : 1,
     cargo              : 'CARGO',
     usuario            : 'jmamani',
-    contrasena         : 'Developer',
+    contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Juan',
     primer_apellido    : 'Mamani',
     segundo_apellido   : 'Mamani',
@@ -53,7 +53,7 @@ let items = [
     id_entidad         : 4,
     cargo              : 'CARGO',
     usuario            : 'itancara',
-    contrasena         : 'Developer',
+    contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Ivan',
     primer_apellido    : 'Tancara',
     segundo_apellido   : 'Casilla',
@@ -67,7 +67,7 @@ let items = [
     id_entidad         : 1,
     cargo              : 'CARGO',
     usuario            : 'jmendez',
-    contrasena         : 'Developer',
+    contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Juancho',
     primer_apellido    : 'Mendez',
     segundo_apellido   : 'Alaro',
@@ -81,7 +81,7 @@ let items = [
     id_entidad         : 1,
     cargo              : 'CARGO',
     usuario            : 'jquisbert',
-    contrasena         : 'Developer',
+    contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Juanjo',
     primer_apellido    : 'Quisbert',
     segundo_apellido   : 'Argandoña',

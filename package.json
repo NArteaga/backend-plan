@@ -4,7 +4,7 @@
   "description": "Backend base",
   "main": "src/application/index.js",
   "scripts": {
-     "db": "npm run setup && npm run seeders",
+    "db": "npm run setup && npm run seeders",
     "start": "node src/application/server",
     "start:dev": "nodemon src/application/server",
     "dev": "nodemon src/application/server",
@@ -29,6 +29,7 @@
   "license": "",
   "dependencies": {
     "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.1",
     "cors": "^2.8.5",
