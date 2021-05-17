@@ -32,9 +32,6 @@ module.exports = function rolService (repositories, helpers, res) {
     debug('Crear o actualizar rol');
     let rol;
     try {
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(data);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       rol = await RolRepository.createOrUpdate(data);
       if (data.menus) {
         await RolMenuRepository.deleteItemCond({ idRol: rol.id });

@@ -25,7 +25,16 @@ module.exports = function reunionService (repositories, helpers, res) {
     let reunion;
     let transaccion;
     try {
+      console.log('==============================_ANTES_==============================');
+      console.log(data);
+      console.log('==============================_ANTES_==============================');
       transaccion = await transaction.create();
+
+      data.fechaReunion = FechaHelper.formatearFecha(data.fechaReunion);
+
+      console.log('==============================_DESPUES_==============================');
+      console.log(data, new Date());
+      console.log('==============================_DESPUES_==============================');
 
       const citeActual = await CiteRepository.findOne({ idEntidad: data.idEntidad });
       let cite = null;
@@ -39,19 +48,8 @@ module.exports = function reunionService (repositories, helpers, res) {
 
       reunion = await ReunionRepository.createOrUpdate(data, transaccion);
 
-      await ReunionTemaRepository.deleteItemCond({ idReunion: reunion.id }, transaccion);
-      if (data.temas && Array.isArray(data.temas)) {
-        for (const tema of data.temas) {
-          await ReunionTemaRepository.createOrUpdate({
-            idTema      : tema,
-            idReunion   : reunion.id,
-            userCreated : data.userCreated || data.userUpdated
-          }, transaccion);
-        }
-      }
-
       await ReunionParticipanteRepository.deleteItemCond({ idReunion: reunion.id }, transaccion);
-      if (data.temas && Array.isArray(data.temas)) {
+      if (data.participantes && Array.isArray(data.participantes)) {
         for (const participante of data.participantes) {
           await ReunionParticipanteRepository.createOrUpdate({
             idUsuario   : participante,
@@ -87,10 +85,10 @@ module.exports = function reunionService (repositories, helpers, res) {
           width  : width,
           height : height,
           border : {
-            top    : '3mm',
-            right  : '3mm',
-            bottom : '3mm',
-            left   : '3mm'
+            top    : '15mm',
+            right  : '20mm',
+            bottom : '15mm',
+            left   : '30mm'
           },
           phantomArgs: ['--ignore-ssl-errors=yes']
         };
@@ -112,13 +110,19 @@ module.exports = function reunionService (repositories, helpers, res) {
         throw new Error('La reunion no existe.');
       }
 
-      const fechaInicioConcluidos = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').subtract(7, 'days');
+      const fechaInicioConcluidos = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').subtract(8, 'days');
       const fechaFinProgramados = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').add(7, 'days');
+
       const tareasConcluidas = await TareaRepository.findAll({ finalizado: true, fechaIni: fechaInicioConcluidos, fechaFin: _existeReunion.fechaReunion });
       const tareasProgramadas = await TareaRepository.findAll({ finalizado: false, fechaIni: _existeReunion.fechaReunion, fechaFin: fechaFinProgramados });
       _existeReunion.tareasConcluidas = tareasConcluidas.rows;
+      for (const tareaProgramada of tareasProgramadas.rows) {
+        const fecha = moment(tareaProgramada.fechaFinalizacion, 'DD-MM-YYYY hh:mm:ss').format('DD-MM-YYYY');
+        tareaProgramada.fechaFinalizacion = fecha;
+      }
+
       _existeReunion.tareasProgramadas = tareasProgramadas.rows;
-      _existeReunion.fechaReunion = moment(_existeReunion.fechaReunion, 'YYYY-MM-DDTHH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
+      _existeReunion.fechaReunion = moment(_existeReunion.fechaReunion).format('DD-MM-YYYY');
       const html = await ejs.renderFile(`${rootPath}/../../views/reunion.ejs`, {
         reunion: _existeReunion
       });

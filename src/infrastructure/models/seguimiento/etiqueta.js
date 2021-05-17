@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     titulo: {
       type      : DataTypes.STRING(250),
       allowNull : false,
-      xlabel    : lang.t('fields.grupo')
+      xlabel    : lang.t('fields.titulo')
     },
     color: {
       type   : DataTypes.STRING(250),

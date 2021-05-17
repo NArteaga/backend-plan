@@ -15,11 +15,13 @@ module.exports = (sequelize, DataTypes) => {
     titulo: {
       type      : DataTypes.STRING(250),
       allowNull : false,
-      xlabel    : lang.t('fields.grupo')
+      xlabel    : lang.t('fields.titulo'),
+      field     : 'titulo'
     },
     descripcion: {
       type   : DataTypes.TEXT,
-      xlabel : lang.t('fields.nombre')
+      xlabel : lang.t('fields.descripcion'),
+      field  : 'descripcion'
     },
     estado: {
       type   : DataTypes.ENUM,

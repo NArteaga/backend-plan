@@ -1,13 +1,13 @@
 'use strict';
 
-const { getQuery } = require('../../lib/util');
+const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function tareaRepository (models, Sequelize) {
   const { tarea, etiqueta, tema } = models;
   const Op = Sequelize.Op;
 
-  function findAll (params = {}) {
+  async function findAll (params = {}) {
     const query = getQuery(params);
     query.attributes = [
       'id',
@@ -32,8 +32,8 @@ module.exports = function tareaRepository (models, Sequelize) {
 
     if (params.fechaIni || params.fechaFin) {
       query.where.fechaFinalizacion = {
-        [Op.gt] : params.fechaIni || new Date('2000', '01', '01'),
-        [Op.lt] : params.fechaFin || new Date()
+        [Op.gt]  : params.fechaIni || new Date('2000', '01', '01'),
+        [Op.lte] : params.fechaFin || new Date()
       };
     }
 
@@ -57,7 +57,11 @@ module.exports = function tareaRepository (models, Sequelize) {
     }
 
     const whereTema = {};
-    if (params.entidades) {
+    if (params.idEntidad) {
+      whereTema.idEntidad = params.idEntidad;
+    }
+
+    if (params.entidades && !params.idEntidad) {
       whereTema.idEntidad = {
         [Op.in]: params.entidades
       };
@@ -78,7 +82,8 @@ module.exports = function tareaRepository (models, Sequelize) {
       }
     ];
 
-    return tarea.findAndCountAll(query);
+    const result = await tarea.findAndCountAll(query);
+    return toJSON(result);
   }
 
   return {
