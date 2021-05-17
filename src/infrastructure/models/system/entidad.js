@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     nombre: {
       type   : DataTypes.STRING(250),
-      xlabel : lang.t('fields.usuario')
+      xlabel : lang.t('fields.nombre')
     },
     sigla: {
       type   : DataTypes.STRING(50),

@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     contrasena: {
       type   : DataTypes.STRING(500),
-      xlabel : lang.t('fields.usuario')
+      xlabel : lang.t('fields.contrasena')
     },
     nombres: {
       type      : DataTypes.STRING(100),
