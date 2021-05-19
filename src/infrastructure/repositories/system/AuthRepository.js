@@ -19,6 +19,7 @@ module.exports = function authRepository (models) {
     codificarContrasena,
     verificarContrasena,
     findOne        : (params) => Repository.findOne(params, auth),
-    createOrUpdate : (item, t) => Repository.createOrUpdate(item, auth, t)
+    createOrUpdate : (item, t) => Repository.createOrUpdate(item, auth, t),
+    deleteItemCond : (params, t) => Repository.deleteItemCond(params, auth, t)
   };
 };

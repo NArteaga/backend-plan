@@ -1,32 +1,46 @@
 'use strict';
 
 const util = require('../../lib/util');
+const lang = require('../../lang');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
-    id    : util.pk,
-    state : {
-      type      : DataTypes.STRING(100),
+    id : util.pk,
+    ip : {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.ip'),
+      field  : 'ip'
+    },
+    navegador: {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.navegador'),
+      field  : 'navegador'
+    },
+    userAgent: {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.userAgent'),
+      field  : 'user_agent'
+    },
+    token: {
+      type      : DataTypes.TEXT,
       allowNull : false,
-      unique    : true
+      xlabel    : lang.t('fields.token'),
+      field     : 'token'
     },
-    parametros: { // nonce
-      type      : DataTypes.TEXT,
-      allowNull : true
+    idEntidad: {
+      type   : DataTypes.INTEGER,
+      xlabel : lang.t('fields.idEntidad'),
+      field  : 'id_entidad'
     },
-    tokens: { // id_token, access_token, refresh_token
-      type      : DataTypes.TEXT,
-      allowNull : true
+    idRol: {
+      type   : DataTypes.INTEGER,
+      xlabel : lang.t('fields.idRol'),
+      field  : 'id_rol'
     },
-    id_usuario: { // id_usuario
-      type      : DataTypes.INTEGER,
-      allowNull : true
-    },
-    estado: {
-      type         : DataTypes.ENUM,
-      values       : ['INICIO', 'ACTIVO', 'ELIMINADO'],
-      defaultValue : 'INICIO',
-      allowNull    : false
+    idUsuario: {
+      type   : DataTypes.INTEGER,
+      xlabel : lang.t('fields.idUsuario'),
+      field  : 'id_usuario'
     }
   };
 

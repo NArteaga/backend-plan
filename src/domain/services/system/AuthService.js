@@ -65,7 +65,7 @@ module.exports = function authService (repositories, helpers, res) {
     }
   }
 
-  async function login (usuario, contrasena) {
+  async function login (usuario, contrasena, request) {
     try {
       const existeUsuario = await UsuarioRepository.login({ usuario });
       if (!existeUsuario) {
@@ -75,8 +75,19 @@ module.exports = function authService (repositories, helpers, res) {
       if (!respuestaVerificacion) {
         throw new Error('Error en su usuario o su contraseña.');
       }
-
-      return getResponse(existeUsuario);
+      const respuesta = await  getResponse(existeUsuario);
+      await AuthRepository.deleteItemCond({ idUsuario: existeUsuario.id });
+      await AuthRepository.createOrUpdate({
+        ip          : request.ipInfo.ip,
+        navegador   : request.ipInfo.navigator,
+        userAgent   : request.headers['user-agent'],
+        token       : respuesta.token,
+        idUsuario   : existeUsuario.id,
+        idRol       : existeUsuario.roles.map(x => x.id).join(','),
+        idEntidad   : existeUsuario.entidad.id,
+        userCreated : existeUsuario.id
+      });
+      return respuesta;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
     }

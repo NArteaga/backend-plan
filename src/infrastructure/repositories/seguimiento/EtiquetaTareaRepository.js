@@ -27,6 +27,5 @@ module.exports = function etiquetaTareaRepository (models, Sequelize) {
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, etiquetaTarea, t),
     deleteItem     : (id, t) => Repository.deleteItem(id, etiquetaTarea, t),
     deleteItemCond : (params, t) => Repository.deleteItemCond(params, etiquetaTarea, t)
-
   };
 };
