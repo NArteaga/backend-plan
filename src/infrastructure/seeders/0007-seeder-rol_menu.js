@@ -12,12 +12,19 @@ let items = [
   { id: 4, id_rol: 1, id_menu: 4 },
   { id: 5, id_rol: 1, id_menu: 5 },
   { id: 6, id_rol: 1, id_menu: 6 },
+  { id: 7, id_rol: 1, id_menu: 7 },
 
-  { id: 7, id_rol: 2, id_menu: 1 },
-  { id: 8, id_rol: 2, id_menu: 2 },
-  { id: 9, id_rol: 2, id_menu: 3 },
-  { id: 10, id_rol: 2, id_menu: 4 },
-  { id: 11, id_rol: 2, id_menu: 5 }
+  { id: 8, id_rol: 2, id_menu: 1 },
+  { id: 9, id_rol: 2, id_menu: 2 },
+  { id: 10, id_rol: 2, id_menu: 3 },
+  { id: 11, id_rol: 2, id_menu: 4 },
+
+  { id: 12, id_rol: 3, id_menu: 1 },
+  { id: 13, id_rol: 3, id_menu: 2 },
+  { id: 14, id_rol: 3, id_menu: 3 },
+
+  { id: 15, id_rol: 4, id_menu: 1 },
+  { id: 16, id_rol: 4, id_menu: 3 }
 
 ];
 
