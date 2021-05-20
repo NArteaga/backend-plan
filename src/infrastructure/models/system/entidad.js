@@ -13,18 +13,21 @@ module.exports = (sequelize, DataTypes) => {
       field     : 'id_entidad'
     },
     nivel: {
-      type      : DataTypes.INTEGER,
-      allowNull : false,
-      xlabel    : lang.t('fields.nivel'),
-      field     : 'nivel'
+      type         : DataTypes.INTEGER,
+      allowNull    : false,
+      defaultValue : 0,
+      xlabel       : lang.t('fields.nivel'),
+      field        : 'nivel'
     },
     nombre: {
-      type   : DataTypes.STRING(250),
-      xlabel : lang.t('fields.nombre')
+      type      : DataTypes.STRING(250),
+      allowNull : false,
+      xlabel    : lang.t('fields.nombre')
     },
     sigla: {
-      type   : DataTypes.STRING(50),
-      xlabel : lang.t('fields.sigla')
+      type      : DataTypes.STRING(50),
+      allowNull : false,
+      xlabel    : lang.t('fields.sigla')
     },
     direccion: {
       type   : DataTypes.TEXT,
@@ -37,9 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       field  : 'telefono'
     },
     urlLogo: {
-      type   : DataTypes.TEXT,
-      xlabel : lang.t('fields.urlLogo'),
-      field  : 'url_logo'
+      type      : DataTypes.TEXT,
+      allowNull : false,
+      xlabel    : lang.t('fields.urlLogo'),
+      field     : 'url_logo'
     },
     estado: {
       type         : DataTypes.ENUM,

@@ -19,10 +19,19 @@ module.exports = function entidadService (repositories, helpers, res) {
 
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
-    let rol;
+    let entidad;
     try {
-      rol = await EntidadRepository.createOrUpdate(data);
-      return rol;
+      if (data.idEntidad) {
+        const existeEntidad = await EntidadRepository.findOne({ id: data.idEntidad });
+        if (!existeEntidad) {
+          throw new Error('No existe la entidad superior.');
+        }
+        data.nivel = existeEntidad.nivel + 1;
+      }
+
+      entidad = await EntidadRepository.createOrUpdate(data);
+
+      return entidad;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
     }

@@ -9,7 +9,18 @@ module.exports = function entidadRepository (models, Sequelize) {
 
   function findAll (params = {}) {
     const query = getQuery(params);
-    // query.attributes = attributes;
+    query.attributes = [
+      'id',
+      'sigla',
+      'nombre',
+      'idEntidad',
+      'nivel',
+      'direccion',
+      'telefono',
+      'urlLogo',
+      'estado',
+      [Sequelize.literal('(SELECT TRUE)'), 'lazy']
+    ];
     query.where = {};
 
     if (params.nivel) {
@@ -28,7 +39,11 @@ module.exports = function entidadRepository (models, Sequelize) {
         'sigla',
         'nombre',
         'idEntidad',
-        'nivel'
+        'nivel',
+        'direccion',
+        'telefono',
+        'urlLogo',
+        'estado'
       ],
       where: {
         idEntidad: {

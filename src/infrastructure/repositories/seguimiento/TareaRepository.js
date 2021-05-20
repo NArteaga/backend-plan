@@ -9,6 +9,10 @@ module.exports = function tareaRepository (models, Sequelize) {
 
   async function findAll (params = {}) {
     const query = getQuery(params);
+
+    // query.subQuery = false;
+    query.distinct = true;
+
     query.attributes = [
       'id',
       'idTema',
@@ -19,6 +23,7 @@ module.exports = function tareaRepository (models, Sequelize) {
       'updatedAt',
       [Sequelize.literal('(SELECT COUNT(*) FROM comentario WHERE comentario.id_tarea = tarea.id)'), 'numeroComentarios']
     ];
+
     query.where = {};
     query.include = [];
 
