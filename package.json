@@ -54,7 +54,8 @@
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
     "uuid": "^8.3.2",
-    "validate.js": "^0.13.1"
+    "validate.js": "^0.13.1",
+    "web-push": "^3.4.4"
   },
   "devDependencies": {
     "ava": "^3.15.0",

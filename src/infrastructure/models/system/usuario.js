@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
       field     : 'correo_electronico'
     },
     cargo: {
-      type      : DataTypes.STRING(100),
+      type      : DataTypes.STRING(500),
       allowNull : false,
       xlabel    : lang.t('fields.cargo'),
       field     : 'cargo'

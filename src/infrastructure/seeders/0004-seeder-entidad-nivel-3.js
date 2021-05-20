@@ -23,7 +23,7 @@ items = setTimestampsSeeder(items);
 module.exports = {
   up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('sys_entidad', items, {})
-      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "sys_entidad_id_seq" RESTART WITH ${items.length + 8}`))
+      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "sys_entidad_id_seq" RESTART WITH ${items.length + 10}`))
       .catch(error => {
         if (error.message.indexOf('already exists') > -1) return;
         console.error(error);

@@ -13,7 +13,7 @@ const moment = require('moment');
 // Métodos para CIUDADANÍA DIGITAL
 module.exports = function authService (repositories, helpers, res) {
   const UsuarioService = require('./UsuarioService')(repositories, helpers, res);
-  const { AuthRepository, UsuarioRepository, EntidadRepository, ParametroRepository, MenuRepository, PermisoRepository } = repositories;
+  const { AuthRepository, UsuarioRepository, SuscripcionRepository, EntidadRepository, ParametroRepository, MenuRepository, PermisoRepository } = repositories;
   const issuer = new Issuer(iss);
   const { FechaHelper } = helpers;
   // console.log('---------------------------- issuer', issuer);
@@ -85,6 +85,12 @@ module.exports = function authService (repositories, helpers, res) {
         idUsuario   : existeUsuario.id,
         idRol       : existeUsuario.roles.map(x => x.id).join(','),
         idEntidad   : existeUsuario.entidad.id,
+        userCreated : existeUsuario.id
+      });
+      await SuscripcionRepository.deleteItemCond({ idUsuario: existeUsuario.id });
+      await SuscripcionRepository.createOrUpdate({
+        idUsuario   : existeUsuario.id,
+        suscripcion : request.body.subscription,
         userCreated : existeUsuario.id
       });
       return respuesta;
@@ -259,7 +265,13 @@ module.exports = function authService (repositories, helpers, res) {
     }));
   }
 
+  async function getSubscription (idUsuario) {
+    const subscriptions = await SuscripcionRepository.findOne({ idUsuario });
+    return subscriptions;
+  }
+
   return {
+    getSubscription,
     getMenusRoles,
     verificarPermisos,
     login,
