@@ -11,6 +11,8 @@ module.exports = function temaRepository (models, Sequelize) {
   function findAll (params = {}) {
     const query = getQuery(params);
 
+    query.distinct = true;
+
     query.attributes = [
       'id',
       'idEntidad',
