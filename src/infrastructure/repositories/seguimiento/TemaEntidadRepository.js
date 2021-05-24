@@ -21,6 +21,7 @@ module.exports = function temaEntidadRepository (models, Sequelize) {
     findOne        : params => Repository.findOne(params, temaEntidad),
     findById       : id => Repository.findById(id, temaEntidad),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, temaEntidad, t),
-    deleteItem     : (id, t) => Repository.deleteItem(id, temaEntidad, t)
+    deleteItem     : (id, t) => Repository.deleteItem(id, temaEntidad, t),
+    deleteItemCond : (params, t) => Repository.deleteItemCond(params, temaEntidad, t)
   };
 };

@@ -4,7 +4,7 @@ const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function tareaRepository (models, Sequelize) {
-  const { tarea, etiqueta, tema } = models;
+  const { tarea, etiqueta, tema, entidad } = models;
   const Op = Sequelize.Op;
 
   async function findAll (params = {}) {
@@ -62,21 +62,43 @@ module.exports = function tareaRepository (models, Sequelize) {
     }
 
     const whereTema = {};
+    if (params.idEntidadTema) {
+      whereTema.id = params.idEntidadTema;
+    }
+
+    if (params.entidadesTema && !params.idEntidadTema) {
+      whereTema.id = {
+        [Op.in]: params.entidades
+      };
+    }
+
     if (params.idEntidad) {
-      whereTema.idEntidad = params.idEntidad;
+      query.where.idEntidad = params.idEntidad;
     }
 
     if (params.entidades && !params.idEntidad) {
-      whereTema.idEntidad = {
-        [Op.in]: params.entidades
+      whereTema.id = {
+        [Op.in]: params.idEntidad
       };
     }
 
     query.include = [
       {
-        model : tema,
-        as    : 'tema',
-        where : whereTema
+        model   : tema,
+        as      : 'tema',
+        include : [
+          {
+            through    : { attributes: [] },
+            attributes : [
+              'id',
+              'nombre',
+              'sigla'
+            ],
+            model : entidad,
+            as    : 'entidades',
+            where : whereTema
+          }
+        ]
       },
       {
         required : requiredTag,

@@ -23,6 +23,26 @@ module.exports = function entidadRepository (models, Sequelize) {
     ];
     query.where = {};
 
+    if (params.search) {
+      query.where = {
+        ...query.where,
+        ...{
+          [Op.or]: [
+            {
+              nombre: {
+                [Op.iLike]: `%${params.search}%`
+              }
+            },
+            {
+              sigla: {
+                [Op.iLike]: `%${params.search}%`
+              }
+            }
+          ]
+        }
+      };
+    }
+
     if (params.nivel) {
       query.where.nivel = params.nivel;
     }

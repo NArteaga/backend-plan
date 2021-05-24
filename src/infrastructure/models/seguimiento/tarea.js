@@ -6,8 +6,14 @@ const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
-    id     : util.pk,
-    idTema : {
+    id        : util.pk,
+    idEntidad : {
+      type      : DataTypes.INTEGER,
+      allowNull : false,
+      xlabel    : lang.t('fields.idEntidad'),
+      field     : 'id_entidad'
+    },
+    idTema: {
       type      : DataTypes.INTEGER,
       allowNull : false,
       xlabel    : lang.t('fields.idTema'),

@@ -5,14 +5,8 @@ const util = require('../../lib/util');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
-    id        : util.pk,
-    idEntidad : {
-      type      : DataTypes.INTEGER,
-      allowNull : false,
-      xlabel    : lang.t('fields.idEntidad'),
-      field     : 'id_entidad'
-    },
-    titulo: {
+    id     : util.pk,
+    titulo : {
       type      : DataTypes.STRING(250),
       allowNull : false,
       xlabel    : lang.t('fields.titulo'),

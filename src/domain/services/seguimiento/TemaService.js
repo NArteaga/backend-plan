@@ -23,10 +23,17 @@ module.exports = function temaService (repositories, helpers, res) {
     let transaccion;
     try {
       transaccion = await transaction.create();
-      tema = await TemaRepository.createOrUpdate(data, transaccion);
-      data.userCreated = data.userCreated || data.userUpdated;
 
-      await TemaEntidadRepository.createOrUpdate(data, transaccion);
+      tema = await TemaRepository.createOrUpdate(data, transaccion);
+      await TemaEntidadRepository.deleteItemCond({ idTema: tema.id }, transaccion);
+
+      for (const idEntidad of data.entidades) {
+        await TemaEntidadRepository.createOrUpdate({
+          idEntidad,
+          idTema      : tema.id,
+          userCreated : data.userCreated || data.userUpdated
+        }, transaccion);
+      }
 
       if (data.id) {
         await ComentarioRepository.createOrUpdate({
@@ -53,12 +60,18 @@ module.exports = function temaService (repositories, helpers, res) {
 
   async function deleteItem (id) {
     debug('Eliminando rol', id);
+    let transaccion;
     try {
-      const resultado = await TemaRepository.deleteItem(id);
+      transaccion = await transaction.create();
+
+      await TemaEntidadRepository.deleteItemCond({ idTema: id }, transaccion);
+      const resultado = await TemaRepository.deleteItem(id, transaccion);
+
+      await transaction.commit(transaccion);
       return resultado;
-    } catch (err) {
-      debug(err);
-      throw new ErrorApp(err.message, 400);
+    } catch (error) {
+      await transaction.rollback(transaccion);
+      throw new ErrorApp(error.message, 400);
     }
   }
 

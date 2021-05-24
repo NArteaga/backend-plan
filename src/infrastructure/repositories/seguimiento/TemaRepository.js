@@ -15,7 +15,6 @@ module.exports = function temaRepository (models, Sequelize) {
 
     query.attributes = [
       'id',
-      'idEntidad',
       'titulo',
       'descripcion',
       'estado',
@@ -26,25 +25,15 @@ module.exports = function temaRepository (models, Sequelize) {
     ];
 
     query.where = {};
-    query.include = [
-      {
-        through    : { attributes: [] },
-        attributes : [
-          'id',
-          'nombre',
-          'sigla'
-        ],
-        model : entidad,
-        as    : 'entidades'
-      }
-    ];
+
+    const whereEntidad = {};
 
     if (params.idEntidad) {
-      query.where.idEntidad = params.idEntidad;
+      whereEntidad.id = params.idEntidad;
     }
 
     if (params.entidades && !params.idEntidad) {
-      query.where.idEntidad = {
+      whereEntidad.id = {
         [Op.in]: params.entidades
       };
     }
@@ -86,6 +75,20 @@ module.exports = function temaRepository (models, Sequelize) {
         [Op.iLike]: `%${params.descripcion}%`
       };
     }
+
+    query.include = [
+      {
+        through    : { attributes: [] },
+        attributes : [
+          'id',
+          'nombre',
+          'sigla'
+        ],
+        model : entidad,
+        as    : 'entidades',
+        where : whereEntidad
+      }
+    ];
 
     return tema.findAndCountAll(query);
   }

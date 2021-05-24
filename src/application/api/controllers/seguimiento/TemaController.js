@@ -25,7 +25,11 @@ module.exports = function setupEntidadController (services) {
       const data = req.body;
       debug('creando entidad');
       data.userCreated = req.user.idUsuario;
-      data.idEntidad = req.user.idEntidad;
+
+      if (!data.entidades.includes(req.user.idEntidad)) {
+        data.entidades.push(req.user.idEntidad);
+      }
+
       const respuesta = await TemaService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
@@ -39,7 +43,11 @@ module.exports = function setupEntidadController (services) {
       const data = req.body;
       data.id = req.params.id;
       data.userUpdated = req.user.idUsuario;
-      // data.idEntidad = req.user.idEntidad;
+
+      if (!data.entidades.includes(req.user.idEntidad)) {
+        data.entidades.push(req.user.idEntidad);
+      }
+
       const respuesta = await TemaService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
@@ -51,6 +59,7 @@ module.exports = function setupEntidadController (services) {
     try {
       const { id } = req.params;
       debug('Eliminando entidad');
+
       const respuesta = await TemaService.deleteItem(id);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
