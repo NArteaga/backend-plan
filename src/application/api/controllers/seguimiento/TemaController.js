@@ -40,6 +40,7 @@ module.exports = function setupEntidadController (services) {
       data.id = req.params.id;
       data.userUpdated = req.user.idUsuario;
       data.idEntidad = req.user.idEntidad;
+      delete data.idEntidad;
       const respuesta = await TemaService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {

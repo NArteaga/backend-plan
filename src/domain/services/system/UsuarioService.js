@@ -82,13 +82,14 @@ module.exports = function userService (repositories, helpers, res) {
         throw new Error('No existe el usuario.');
       }
 
-      if (existeUsuario.contrasena !== data.antiguaContrasena) {
+      const respuestaVerificacion = await AuthRepository.verificarContrasena(data.antiguaContrasena, existeUsuario.contrasena);
+      if (!respuestaVerificacion) {
         throw new Error('Su contraseña anterior no coincide.');
       }
 
-      const usuarioCreado = await UsuarioRepository.createOrUpdate({
+      await UsuarioRepository.createOrUpdate({
         id         : existeUsuario.id,
-        contrasena : data.nuevaContrasena
+        contrasena : await AuthRepository.codificarContrasena(data.nuevaContrasena)
       });
       return true;
     } catch (error) {

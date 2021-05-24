@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       field  : 'id_entidad'
     },
     idRol: {
-      type   : DataTypes.INTEGER,
+      type   : DataTypes.TEXT,
       xlabel : lang.t('fields.idRol'),
       field  : 'id_rol'
     },

@@ -24,7 +24,11 @@ let items = [
   { id: 14, id_rol: 3, id_menu: 3 },
 
   { id: 15, id_rol: 4, id_menu: 1 },
-  { id: 16, id_rol: 4, id_menu: 3 }
+  { id: 16, id_rol: 4, id_menu: 3 },
+
+  { id: 17, id_rol: 5, id_menu: 1 },
+  { id: 18, id_rol: 5, id_menu: 2 },
+  { id: 19, id_rol: 5, id_menu: 3 }
 
 ];
 

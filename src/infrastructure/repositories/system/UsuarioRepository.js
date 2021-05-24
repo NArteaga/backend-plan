@@ -61,6 +61,12 @@ module.exports = function usuariosRepository (models, Sequelize) {
       };
     }
 
+    if (params.usuario) {
+      query.where.usuario = {
+        [Op.iLike]: `%${params.usuario}%`
+      };
+    }
+
     if (params.nombres) {
       query.where.nombres = {
         [Op.iLike]: `%${params.nombres}%`
@@ -232,6 +238,9 @@ module.exports = function usuariosRepository (models, Sequelize) {
         if (t) {
           cond.transaction = t;
         }
+        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+        console.log(cond, usuarioParam);
+        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
         updated = await usuario.update(usuarioParam, cond);
       } catch (e) {
         errorHandler(e);
