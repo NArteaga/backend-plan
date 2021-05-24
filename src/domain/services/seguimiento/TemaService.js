@@ -24,11 +24,9 @@ module.exports = function temaService (repositories, helpers, res) {
     try {
       transaccion = await transaction.create();
       tema = await TemaRepository.createOrUpdate(data, transaccion);
-      await TemaEntidadRepository.createOrUpdate({
-        idEntidad   : data.idEntidad,
-        idTema      : tema.id,
-        userCreated : data.userCreated || data.userUpdated
-      }, transaccion);
+      data.userCreated = data.userCreated || data.userUpdated;
+
+      await TemaEntidadRepository.createOrUpdate(data, transaccion);
 
       if (data.id) {
         await ComentarioRepository.createOrUpdate({
