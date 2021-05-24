@@ -317,6 +317,21 @@ let items = [
     correo_electronico : 'julia.rios@justicia.gob.bo',
     celular            : '77546960',
     estado             : 'ACTIVO'
+  },
+  // Usuario
+  {
+    id                 : 23,
+    id_entidad         : 1,
+    cargo              : 'ASESOR(A) DE DESPACHO',
+    usuario            : 'gonzalo.gutierrez',
+    contrasena         : bcrypt.hashSync('3397508', saltRounds),
+    nombres            : 'GONZALO HUMBERTO',
+    primer_apellido    : 'GUTIERREZ',
+    segundo_apellido   : 'MOLLARD',
+    numero_documento   : '3397508',
+    correo_electronico : 'gonzalo.gutierrez@justicia.gob.bo',
+    celular            : '70518752',
+    estado             : 'ACTIVO'
   }
 ];
 
