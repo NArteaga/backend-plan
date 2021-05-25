@@ -59,7 +59,18 @@ module.exports = function authService (repositories, helpers, res) {
     try {
       usuario.menu = await getMenusRoles(usuario.roles);
       usuario.permisos = await getPermisos(usuario.roles);
-      const entidadesDependientes = await getEntidadesDependientes([usuario.entidad], usuario.entidad.nivel + 1);
+      const entidadesSinFiltros = await PermisoRepository.verificarPermisos({
+        roles    : usuario.roles.map(x => x.id),
+        permisos : ['entidades:sinFiltros']
+      });
+      let entidadesDependientes = [];
+      if (entidadesSinFiltros) {
+        entidadesDependientes = await EntidadRepository.findAll({});
+        entidadesDependientes = entidadesDependientes.rows;
+      } else {
+        entidadesDependientes = await getEntidadesDependientes([usuario.entidad], usuario.entidad.nivel + 1);
+      }
+
       usuario.entidades = entidadesDependientes;
       usuario.token = await generateToken(ParametroRepository, {
         idRoles               : usuario.roles.map(x => x.id),

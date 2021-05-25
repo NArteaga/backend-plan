@@ -127,6 +127,9 @@ module.exports = function modulossRepository (models, Sequelize) {
     ];
 
     const result = await permiso.findOne(query);
+    if (!result) {
+      return null;
+    }
     return result.toJSON();
   }
 

@@ -7,7 +7,8 @@ let items = [
   { id: 2, id_entidad: 1, nombre: 'MINISTRO', descripcion: 'Rol ministro.', estado: 'ACTIVO' },
   { id: 3, id_entidad: 1, nombre: 'VICEMINISTRO', descripcion: 'Rol viceministro.', estado: 'ACTIVO' },
   { id: 4, id_entidad: 1, nombre: 'DIRECTOR', descripcion: 'Rol director.', estado: 'ACTIVO' },
-  { id: 5, id_entidad: 1, nombre: 'ASESOR(A) DE DESPACHO', descripcion: 'Rol asesor de despacho.', estado: 'ACTIVO' }
+  { id: 5, id_entidad: 1, nombre: 'ASESOR(A) DE DESPACHO', descripcion: 'Rol asesor de despacho.', estado: 'ACTIVO' },
+  { id: 6, id_entidad: 1, nombre: 'PLANIFICACION', descripcion: 'Rol de planificacion.', estado: 'ACTIVO' }
 ];
 
 // Asignando datos de log y timestamps a los datos

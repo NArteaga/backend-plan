@@ -47,6 +47,16 @@ module.exports = function entidadRepository (models, Sequelize) {
       query.where.nivel = params.nivel;
     }
 
+    if (params.idEntidad) {
+      query.where.id = params.idEntidad;
+    }
+
+    if (params.entidades && !params.idEntidad) {
+      query.where.id = {
+        [Op.in]: params.entidades
+      };
+    }
+
     query.include = [];
 
     return entidad.findAndCountAll(query);

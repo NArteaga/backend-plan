@@ -4,6 +4,7 @@ module.exports = function setupSocio (api, controllers, middlewares) {
   const { ReunionController } = controllers;
 
   api.get('/reuniones', ReunionController.listar);
+  api.get('/reuniones/:id', ReunionController.findById);
   api.post('/reuniones', ReunionController.crear);
   api.put('/reuniones/:id', ReunionController.actualizar);
   api.delete('/reuniones/:id', ReunionController.eliminar);

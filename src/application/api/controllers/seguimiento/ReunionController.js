@@ -19,6 +19,15 @@ module.exports = function setupEntidadController (services) {
     }
   }
 
+  async function findById (req, res) {
+    try {
+      const respuesta = await ReunionService.findById(req.params.id);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
   async function crear (req, res) {
     try {
       const data = req.body;
@@ -92,6 +101,7 @@ module.exports = function setupEntidadController (services) {
   }
 
   return {
+    findById,
     asignarTarea,
     removerTarea,
     reporteReunion,

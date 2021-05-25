@@ -118,7 +118,32 @@ let items = [
   { id: 106, id_rol: 5, id_permiso: 38 },
   { id: 107, id_rol: 5, id_permiso: 39 },
   { id: 108, id_rol: 5, id_permiso: 40 },
-  { id: 109, id_rol: 5, id_permiso: 41 }
+  { id: 109, id_rol: 5, id_permiso: 41 },
+
+  { id: 110, id_rol: 6, id_permiso: 22 },
+  { id: 111, id_rol: 6, id_permiso: 27 },
+  { id: 112, id_rol: 6, id_permiso: 28 },
+  { id: 113, id_rol: 6, id_permiso: 29 },
+  { id: 114, id_rol: 6, id_permiso: 30 },
+  { id: 115, id_rol: 6, id_permiso: 31 },
+  { id: 116, id_rol: 6, id_permiso: 32 },
+  { id: 117, id_rol: 6, id_permiso: 33 },
+  { id: 118, id_rol: 6, id_permiso: 34 },
+  { id: 119, id_rol: 6, id_permiso: 35 },
+  { id: 120, id_rol: 6, id_permiso: 36 },
+  { id: 121, id_rol: 6, id_permiso: 37 },
+  { id: 122, id_rol: 6, id_permiso: 38 },
+  { id: 123, id_rol: 6, id_permiso: 39 },
+  { id: 124, id_rol: 6, id_permiso: 40 },
+  { id: 125, id_rol: 6, id_permiso: 41 },
+  { id: 126, id_rol: 6, id_permiso: 26 },
+
+  { id: 127, id_rol: 6, id_permiso: 17 },
+  { id: 128, id_rol: 6, id_permiso: 18 },
+  { id: 129, id_rol: 6, id_permiso: 19 },
+  { id: 130, id_rol: 6, id_permiso: 20 },
+  { id: 131, id_rol: 6, id_permiso: 21 }
+
 ];
 
 items = setTimestampsSeeder(items);

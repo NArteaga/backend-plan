@@ -46,7 +46,25 @@ module.exports = function permisoService (repositories, helpers, res) {
     }
   }
 
+  async function buscarFiltros (req = {}, nombresPermisos = ['entidades:sinFiltros']) {
+    try {
+      const permisos = await PermisoRepository.verificarPermisos({
+        roles    : req.user.idRoles,
+        permisos : nombresPermisos
+      });
+      if (permisos) {
+        delete req.query.idEntidad;
+      } else {
+        req.query.entidades = req.user.entidadesDependientes;
+      }
+      return req;
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   return {
+    buscarFiltros,
     createOrUpdate,
     findOne,
     listar,

@@ -5,13 +5,11 @@ const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
 
 module.exports = function setupEntidadController (services) {
-  const {
-    EntidadService
-  } = services;
+  const { EntidadService, PermisoService } = services;
 
   async function listar (req, res) {
     try {
-      debug('Recuperando entidades');
+      req = await PermisoService.buscarFiltros(req, ['entidades:sinFiltros']);
       const respuesta = await EntidadService.findAll(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {

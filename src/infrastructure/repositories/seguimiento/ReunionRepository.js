@@ -41,6 +41,11 @@ module.exports = function reunionRepository (models, Sequelize) {
         as      : 'participantes'
       },
       {
+        through : { attributes: [] },
+        model   : tarea,
+        as      : 'tareas'
+      },
+      {
         model : entidad,
         as    : 'entidad'
       }

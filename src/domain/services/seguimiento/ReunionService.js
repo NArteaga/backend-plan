@@ -20,6 +20,15 @@ module.exports = function reunionService (repositories, helpers, res) {
     }
   }
 
+  async function findById (id) {
+    try {
+      const reunion = await ReunionRepository.findOne({ id });
+      return reunion;
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
     let reunion;
@@ -184,6 +193,7 @@ module.exports = function reunionService (repositories, helpers, res) {
   }
 
   return {
+    findById,
     asignarTarea,
     removerTarea,
     reporteReunion,

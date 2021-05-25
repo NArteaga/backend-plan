@@ -62,7 +62,7 @@ module.exports = function tareaRepository (models, Sequelize) {
       }
     }
 
-    const whereTema = {};
+    let whereTema = {};
     if (params.idEntidadTema) {
       whereTema.id = params.idEntidadTema;
     }
@@ -70,6 +70,25 @@ module.exports = function tareaRepository (models, Sequelize) {
     if (params.entidadesTema && !params.idEntidadTema) {
       whereTema.id = {
         [Op.in]: params.entidades
+      };
+    }
+
+    if (params.searchTema) {
+      whereTema = {
+        ...whereTema,
+        [Op.or]: [
+          {
+            titulo: {
+              [Op.iLike]: `%${params.searchTema}%`
+            }
+          },
+          {
+            descripcion: {
+              [Op.iLike]: `%${params.descripcion}%`
+            }
+          }
+        ]
+
       };
     }
 
