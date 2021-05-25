@@ -35,6 +35,7 @@ module.exports = function comentarioRepository (models, Sequelize) {
       {
         attributes: [
           'id',
+          'idEntidad',
           'idTema',
           'titulo',
           'fechaFinalizacion',
@@ -46,7 +47,6 @@ module.exports = function comentarioRepository (models, Sequelize) {
       {
         attributes: [
           'id',
-          'idEntidad',
           'titulo',
           'descripcion',
           'estado'

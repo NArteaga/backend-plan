@@ -10,11 +10,12 @@ module.exports = function tareaRepository (models, Sequelize) {
   async function findAll (params = {}) {
     const query = getQuery(params);
 
-    // query.subQuery = false;
+    query.subQuery = false;
     query.distinct = true;
 
     query.attributes = [
       'id',
+      'idEntidad',
       'idTema',
       'titulo',
       'fechaFinalizacion',
@@ -62,43 +63,30 @@ module.exports = function tareaRepository (models, Sequelize) {
     }
 
     const whereTema = {};
-    // if (params.idEntidadTema) {
-    //   whereTema.id = params.idEntidadTema;
-    // }
+    if (params.idEntidadTema) {
+      whereTema.id = params.idEntidadTema;
+    }
 
-    // if (params.entidadesTema && !params.idEntidadTema) {
-    //   whereTema.id = {
-    //     [Op.in]: params.entidades
-    //   };
-    // }
+    if (params.entidadesTema && !params.idEntidadTema) {
+      whereTema.id = {
+        [Op.in]: params.entidades
+      };
+    }
 
-    // if (params.idEntidad) {
-    //   query.where.idEntidad = params.idEntidad;
-    // }
+    if (params.idEntidad) {
+      query.where.idEntidad = params.idEntidad;
+    }
 
-    // if (params.entidades && !params.idEntidad) {
-    //   whereTema.id = {
-    //     [Op.in]: params.idEntidad
-    //   };
-    // }
+    if (params.entidades && !params.idEntidad) {
+      query.where.idEntidad = {
+        [Op.in]: params.entidades
+      };
+    }
 
     query.include = [
       {
-        model   : tema,
-        as      : 'tema',
-        include : [
-          {
-            through    : { attributes: [] },
-            attributes : [
-              'id',
-              'nombre',
-              'sigla'
-            ],
-            model : entidad,
-            as    : 'entidades',
-            where : whereTema
-          }
-        ]
+        model : tema,
+        as    : 'tema'
       },
       {
         model : entidad,
