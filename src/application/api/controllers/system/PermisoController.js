@@ -47,6 +47,7 @@ module.exports = function setupPermisoController (services) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
   async function mostrar (req, res) {
     try {
       debug('Recuperando modulos');

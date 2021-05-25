@@ -7,7 +7,7 @@ const {
 // Datos de producción
 let items = [
   { id: 1, nombre: 'usuarios:crear', descripcion: 'Permiso para crear usuarios por entidad', estado: 'ACTIVO' },
-  { id: 2, nombre: 'usuarios:leer', descripcion: 'Permiso para leer usuarios por entidad', estado: 'ACTIVO' },
+  { id: 2, nombre: 'usuarios:listar', descripcion: 'Permiso para leer usuarios por entidad', estado: 'ACTIVO' },
   { id: 3, nombre: 'usuarios:actualizar', descripcion: 'Permiso para actualizar usuarios por entidad', estado: 'ACTIVO' },
   { id: 4, nombre: 'usuarios:eliminar', descripcion: 'Permiso para eliminar usuarios por entidad', estado: 'ACTIVO' },
 

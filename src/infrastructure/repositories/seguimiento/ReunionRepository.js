@@ -4,7 +4,7 @@ const { getQuery } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function reunionRepository (models, Sequelize) {
-  const { reunion, usuario, tarea, entidad } = models;
+  const { reunion, usuario, tarea, entidad, tema } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -43,7 +43,17 @@ module.exports = function reunionRepository (models, Sequelize) {
       {
         through : { attributes: [] },
         model   : tarea,
-        as      : 'tareas'
+        as      : 'tareas',
+        include : [
+          {
+            model : tema,
+            as    : 'tema'
+          },
+          {
+            model : entidad,
+            as    : 'entidad'
+          }
+        ]
       },
       {
         model : entidad,

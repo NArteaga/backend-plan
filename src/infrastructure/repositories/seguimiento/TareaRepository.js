@@ -28,6 +28,12 @@ module.exports = function tareaRepository (models, Sequelize) {
     query.where = {};
     query.include = [];
 
+    if (params.exclude) {
+      query.where.id = {
+        [Op.notIn]: Array.isArray(params.exclude) ? params.exclude : [params.exclude]
+      };
+    }
+
     if (params.idTema) {
       query.where.idTema = params.idTema;
     }

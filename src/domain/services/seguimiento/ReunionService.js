@@ -108,23 +108,26 @@ module.exports = function reunionService (repositories, helpers, res) {
     const rootPath = app.path;
     try {
       const _existeReunion = await ReunionRepository.findOne({ id });
+
       if (!_existeReunion) {
         throw new Error('La reunion no existe.');
       }
 
-      const fechaInicioConcluidos = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').subtract(8, 'days');
-      const fechaFinProgramados = moment(_existeReunion.fechaReunion, 'YYYY-MM-DD').add(7, 'days');
+      _existeReunion.tareasConcluidas = [];
+      _existeReunion.tareasProgramadas = [];
 
-      const tareasConcluidas = await TareaRepository.findAll({ finalizado: true, fechaIni: fechaInicioConcluidos, fechaFin: _existeReunion.fechaReunion });
-      const tareasProgramadas = await TareaRepository.findAll({ finalizado: false, fechaIni: _existeReunion.fechaReunion, fechaFin: fechaFinProgramados });
-      _existeReunion.tareasConcluidas = tareasConcluidas.rows;
-      for (const tareaProgramada of tareasProgramadas.rows) {
-        const fecha = moment(tareaProgramada.fechaFinalizacion, 'DD-MM-YYYY hh:mm:ss').format('DD-MM-YYYY');
-        tareaProgramada.fechaFinalizacion = fecha;
+      for (const tarea of _existeReunion.tareas) {
+        if (tarea.finalizado) {
+          _existeReunion.tareasConcluidas.push(tarea);
+        } else {
+          const fecha = moment(tarea.fechaFinalizacion, 'DD-MM-YYYY hh:mm:ss').format('DD-MM-YYYY');
+          tarea.fechaFinalizacion = fecha;
+          _existeReunion.tareasProgramadas.push(tarea);
+        }
       }
 
-      _existeReunion.tareasProgramadas = tareasProgramadas.rows;
       _existeReunion.fechaReunion = moment(_existeReunion.fechaReunion).format('DD-MM-YYYY');
+
       const html = await ejs.renderFile(`${rootPath}/../../views/reunion.ejs`, {
         reunion: _existeReunion
       });
@@ -141,6 +144,7 @@ module.exports = function reunionService (repositories, helpers, res) {
       transaccion = await transaction.create();
 
       const _existeReunion = await ReunionRepository.findOne({ id: data.idReunion });
+
       if (!_existeReunion) {
         throw new Error('La reunion no existe');
       }
