@@ -79,18 +79,18 @@ module.exports = function tareaRepository (models, Sequelize) {
       };
     }
 
-    if (params.searchTema) {
+    if (params.tema) {
       whereTema = {
         ...whereTema,
         [Op.or]: [
           {
             titulo: {
-              [Op.iLike]: `%${params.searchTema}%`
+              [Op.iLike]: `%${params.tema}%`
             }
           },
           {
             descripcion: {
-              [Op.iLike]: `%${params.descripcion}%`
+              [Op.iLike]: `%${params.tema}%`
             }
           }
         ]
@@ -111,7 +111,8 @@ module.exports = function tareaRepository (models, Sequelize) {
     query.include = [
       {
         model : tema,
-        as    : 'tema'
+        as    : 'tema',
+        where : whereTema
       },
       {
         model : entidad,
