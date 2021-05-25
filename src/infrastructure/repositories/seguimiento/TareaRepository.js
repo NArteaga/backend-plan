@@ -62,25 +62,25 @@ module.exports = function tareaRepository (models, Sequelize) {
     }
 
     const whereTema = {};
-    if (params.idEntidadTema) {
-      whereTema.id = params.idEntidadTema;
-    }
+    // if (params.idEntidadTema) {
+    //   whereTema.id = params.idEntidadTema;
+    // }
 
-    if (params.entidadesTema && !params.idEntidadTema) {
-      whereTema.id = {
-        [Op.in]: params.entidades
-      };
-    }
+    // if (params.entidadesTema && !params.idEntidadTema) {
+    //   whereTema.id = {
+    //     [Op.in]: params.entidades
+    //   };
+    // }
 
-    if (params.idEntidad) {
-      query.where.idEntidad = params.idEntidad;
-    }
+    // if (params.idEntidad) {
+    //   query.where.idEntidad = params.idEntidad;
+    // }
 
-    if (params.entidades && !params.idEntidad) {
-      whereTema.id = {
-        [Op.in]: params.idEntidad
-      };
-    }
+    // if (params.entidades && !params.idEntidad) {
+    //   whereTema.id = {
+    //     [Op.in]: params.idEntidad
+    //   };
+    // }
 
     query.include = [
       {
@@ -99,6 +99,10 @@ module.exports = function tareaRepository (models, Sequelize) {
             where : whereTema
           }
         ]
+      },
+      {
+        model : entidad,
+        as    : 'entidad'
       },
       {
         required : requiredTag,

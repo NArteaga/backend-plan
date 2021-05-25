@@ -64,6 +64,9 @@ module.exports = function associations (models) {
   comentario.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
   tema.hasMany(comentario,  { foreignKey: { name: 'idTema' }, as: 'comentarios' });
 
+  tarea.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(tarea,  { foreignKey: { name: 'idEntidad' }, as: 'tareas' });
+
   comentario.belongsTo(reunion, { foreignKey: { name: 'idReunion' }, as: 'reunion' });
   reunion.hasMany(comentario,  { foreignKey: { name: 'idReunion' }, as: 'comentarios' });
 
