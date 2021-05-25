@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function entidadService (repositories, helpers, res) {
-  const { EntidadRepository } = repositories;
+  const { EntidadRepository, CiteRepository } = repositories;
   const { FechaHelper } = helpers;
 
   async function findAll (params) {
@@ -30,7 +30,19 @@ module.exports = function entidadService (repositories, helpers, res) {
       }
 
       entidad = await EntidadRepository.createOrUpdate(data);
-
+      const existeCite = await CiteRepository.findOne({ idEntidad: entidad.id });
+      const datosCite = { idEntidad: data.idEntidad };
+      if (existeCite) {
+        datosCite.id = existeCite.id;
+        datosCite.prefijo = entidad.sigla;
+        datosCite.userUpdated = data.userUpdated;
+        await CiteRepository.createOrUpdate();
+      } else {
+        datosCite.prefijo = entidad.sigla;
+        datosCite.correlativo = 0;
+        datosCite.userCreated = data.userCreated;
+        await CiteRepository.createOrUpdate();
+      }
       return entidad;
     } catch (err) {
       throw new ErrorApp(err.message, 400);

@@ -131,6 +131,16 @@ module.exports = function reunionService (repositories, helpers, res) {
     try {
       transaccion = await transaction.create();
 
+      const _existeReunion = await ReunionRepository.findOne({ id: data.idReunion });
+      if (!_existeReunion) {
+        throw new Error('La reunion no existe');
+      }
+
+      const _existeTarea = await TareaRepository.findOne({ id: data.idTarea });
+      if (!_existeTarea) {
+        throw new Error('La tarea no existe');
+      }
+
       await ReunionTareaRepository.createOrUpdate(data, transaccion);
 
       await ComentarioRepository.createOrUpdate({
@@ -152,13 +162,19 @@ module.exports = function reunionService (repositories, helpers, res) {
     let transaccion;
     try {
       transaccion = await transaction.create();
-      await ReunionTareaRepository.deleteItemCond(data);
+
+      await ReunionTareaRepository.deleteItemCond({
+        idTarea   : data.idTarea,
+        idReunion : data.idReunion
+      }, transaccion);
+
       await ComentarioRepository.createOrUpdate({
         idUsuario   : data.userCreated || data.userUpdated,
         idReunion   : data.idreunion,
         descripcion : 'ha removido una tarea de la reunion.',
         userCreated : data.userCreated || data.userUpdated
       }, transaccion);
+
       await transaction.commit(transaccion);
       return true;
     } catch (error) {

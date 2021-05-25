@@ -47,7 +47,7 @@ const AuthMiddleware = function (services) {
         data = await verify(tokenRequest, config.auth.secret);
         req.user = data;
 
-        // verificarEntidad(req.params, req.user.entidadesDependientes);
+        // verificarEnti  dad(req.params, req.user.entidadesDependientes);
         // verificarEntidad(req.query, req.user.entidadesDependientes);
         // verificarEntidad(req.body, req.user.entidadesDependientes);
 
@@ -58,16 +58,12 @@ const AuthMiddleware = function (services) {
     };
   }
 
-  function verificarPermisos (permiso) {
+  function verificarPermisos (permisos) {
     return async function _middleware (req, res, next) {
       try {
-        let consulta = {};
-        const [ruta, acceso] = permiso.split(':');
-        consulta = {
-          idUsuario : req.user.idUsuario,
-          idRol     : req.user.idRol,
-          ruta      : ruta,
-          permiso   : { [acceso]: true }
+        const consulta = {
+          roles    : req.user.idRoles,
+          permisos : permisos
         };
         const tienePermiso = await AuthService.verificarPermisos(consulta);
         if (!tienePermiso) {

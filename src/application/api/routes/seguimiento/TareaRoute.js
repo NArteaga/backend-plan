@@ -2,13 +2,16 @@
 
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { TareaController } = controllers;
+  const { AuthMiddleware } = middlewares;
 
-  api.get('/tareas', TareaController.listar);
-  api.post('/tareas', TareaController.crear);
-  api.put('/tareas/:id', TareaController.actualizar);
-  api.delete('/tareas/:id', TareaController.eliminar);
+  // AuthMiddleware.verificarPermisos(['usuario:crear'])
 
-  api.patch('/tareas/:id/finalizado', TareaController.cambiarEstado);
+  api.get('/tareas', AuthMiddleware.verificarToken(), TareaController.listar);
+  api.post('/tareas', AuthMiddleware.verificarToken(), TareaController.crear);
+  api.put('/tareas/:id', AuthMiddleware.verificarToken(), TareaController.actualizar);
+  api.delete('/tareas/:id', AuthMiddleware.verificarToken(), TareaController.eliminar);
+
+  api.patch('/tareas/:id/finalizado', AuthMiddleware.verificarToken(), TareaController.cambiarEstado);
 
   return api;
 };

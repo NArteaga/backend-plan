@@ -7,10 +7,7 @@ module.exports = function associations (models) {
     auth,
     usuario,
     permiso,
-    modulos,
-    convenio,
     entidad,
-    servicio,
     rolPermiso,
     rolUsuario,
     rolMenu,
@@ -28,14 +25,14 @@ module.exports = function associations (models) {
     reunionTarea
   } = models;
 
-  tarea.belongsToMany(reunion, { through: { model: reunionTarea, unique: true }, as: 'reuniones', foreignKey: 'idTarea' });
-  reunion.belongsToMany(tarea, { through: { model: reunionTarea, unique: true }, as: 'tareas', foreignKey: 'idReunion' });
+  tarea.belongsToMany(reunion, { through: { model: reunionTarea, unique: false }, as: 'reuniones', foreignKey: 'idTarea' });
+  reunion.belongsToMany(tarea, { through: { model: reunionTarea, unique: false }, as: 'tareas', foreignKey: 'idReunion' });
 
-  usuario.belongsToMany(reunion, { through: { model: reunionParticipante, unique: true }, as: 'reuniones', foreignKey: 'idUsuario' });
-  reunion.belongsToMany(usuario, { through: { model: reunionParticipante, unique: true }, as: 'participantes', foreignKey: 'idReunion' });
+  usuario.belongsToMany(reunion, { through: { model: reunionParticipante, unique: false }, as: 'reuniones', foreignKey: 'idUsuario' });
+  reunion.belongsToMany(usuario, { through: { model: reunionParticipante, unique: false }, as: 'participantes', foreignKey: 'idReunion' });
 
-  etiqueta.belongsToMany(tarea, { through: { model: etiquetaTarea, unique: true }, as: 'tareas', foreignKey: 'idEtiqueta' });
-  tarea.belongsToMany(etiqueta, { through: { model: etiquetaTarea, unique: true }, as: 'etiquetas', foreignKey: 'idTarea' });
+  etiqueta.belongsToMany(tarea, { through: { model: etiquetaTarea, unique: false }, as: 'tareas', foreignKey: 'idEtiqueta' });
+  tarea.belongsToMany(etiqueta, { through: { model: etiquetaTarea, unique: false }, as: 'etiquetas', foreignKey: 'idTarea' });
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
   usuario.hasMany(auth,  { foreignKey: { name: 'idUsuario' }, as: 'sesiones' });
@@ -88,6 +85,9 @@ module.exports = function associations (models) {
 
   rol.belongsToMany(menu, { through: { model: rolMenu, unique: false }, as: 'menus', foreignKey: 'idRol' });
   menu.belongsToMany(rol, { through: { model: rolMenu, unique: false }, as: 'roles', foreignKey: 'idMenu' });
+
+  rol.belongsToMany(permiso, { through: { model: rolPermiso, unique: false }, as: 'permisos', foreignKey: 'idRol' });
+  permiso.belongsToMany(rol, { through: { model: rolPermiso, unique: false }, as: 'roles', foreignKey: 'idPermiso' });
 
   // Roles de usuario
   usuario.belongsToMany(rol,  { through: { model: rolUsuario, unique: false }, as: 'roles', foreignKey: 'idUsuario' });

@@ -3,7 +3,7 @@ const { config } = require('../../../../common');
 
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { RolController } = controllers;
-  const { PermisosMiddleware, SchemasMiddleware, EmpresaMiddleware } = middlewares;
+  const { PermisosMiddleware, SchemasMiddleware } = middlewares;
 
   api.get('/roles', RolController.listar);
   api.post('/roles', RolController.crear);

@@ -67,22 +67,62 @@ module.exports = function modulossRepository (models, Sequelize) {
     return toJSON(result);
   }
 
-  async function verificarpermiso (params) {
-    const query = {
-      attributes: ['id']
+  async function findByRoles (roles) {
+    const query = {};
+
+    query.where = {
+      estado: 'ACTIVO'
     };
-    query.where = params.permiso;
+
+    query.attributes = [
+      'id',
+      'nombre',
+      'descripcion',
+      'estado'
+    ];
 
     query.include = [
       {
-        model : rol,
-        as    : 'rol',
-        where : { id: params.idRol }
-      },
+        required   : true,
+        through    : { attributes: [] },
+        attributes : [],
+        model      : rol,
+        as         : 'roles',
+        where      : {
+          id: {
+            [Op.in]: roles
+          }
+        }
+      }
+    ];
+
+    const result = await permiso.findAndCountAll(query);
+    return toJSON(result);
+  }
+
+  async function verificarPermisos (params) {
+    const query = {
+      attributes: ['id']
+    };
+    query.where = {
+      nombre: {
+        [Op.in]: params.permisos
+      }
+
+    };
+
+    query.include = [
       {
-        model : modulos,
-        as    : 'modulo',
-        where : { ruta: params.ruta }
+        required   : true,
+        through    : { attributes: [] },
+        attributes : [],
+        model      : rol,
+        as         : 'roles',
+        where      : {
+          id: {
+            [Op.in]: params.roles
+          }
+        }
       }
     ];
 
@@ -91,7 +131,8 @@ module.exports = function modulossRepository (models, Sequelize) {
   }
 
   return {
-    verificarpermiso,
+    findByRoles,
+    verificarPermisos,
     findAll,
     findOne,
     findById       : (id) => Repository.findById(id, permiso),
