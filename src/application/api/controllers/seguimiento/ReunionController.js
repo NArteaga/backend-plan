@@ -68,7 +68,33 @@ module.exports = function setupEntidadController (services) {
     }
   }
 
+  async function asignarTarea (req, res) {
+    try {
+      const data = req.body;
+      data.userCreated = req.user.idUsuario; // corregir
+      data.idEntidad = req.user.idEntidad;
+      const respuesta = await ReunionService.asignarTarea(data);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
+  async function removerTarea (req, res) {
+    try {
+      const data = req.body;
+      data.userCreated = req.user.idUsuario; // corregir
+      data.idEntidad = req.user.idEntidad;
+      const respuesta = await ReunionService.removerTarea(data);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
   return {
+    asignarTarea,
+    removerTarea,
     reporteReunion,
     listar,
     eliminar,

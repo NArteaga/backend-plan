@@ -21,21 +21,21 @@ module.exports = function associations (models) {
     comentario,
     temaEntidad,
     reunion,
-    reunionTema,
     reunionParticipante,
     etiqueta,
     etiquetaTarea,
-    cite
+    cite,
+    reunionTarea
   } = models;
 
-  tema.belongsToMany(reunion, { through: { model: reunionTema, unique: false }, as: 'reuniones', foreignKey: 'idTema' });
-  reunion.belongsToMany(tema, { through: { model: reunionTema, unique: false }, as: 'temas', foreignKey: 'idReunion' });
+  tarea.belongsToMany(reunion, { through: { model: reunionTarea, unique: true }, as: 'reuniones', foreignKey: 'idTarea' });
+  reunion.belongsToMany(tarea, { through: { model: reunionTarea, unique: true }, as: 'tareas', foreignKey: 'idReunion' });
 
-  usuario.belongsToMany(reunion, { through: { model: reunionParticipante, unique: false }, as: 'reuniones', foreignKey: 'idUsuario' });
-  reunion.belongsToMany(usuario, { through: { model: reunionParticipante, unique: false }, as: 'participantes', foreignKey: 'idReunion' });
+  usuario.belongsToMany(reunion, { through: { model: reunionParticipante, unique: true }, as: 'reuniones', foreignKey: 'idUsuario' });
+  reunion.belongsToMany(usuario, { through: { model: reunionParticipante, unique: true }, as: 'participantes', foreignKey: 'idReunion' });
 
-  etiqueta.belongsToMany(tarea, { through: { model: etiquetaTarea, unique: false }, as: 'tareas', foreignKey: 'idEtiqueta' });
-  tarea.belongsToMany(etiqueta, { through: { model: etiquetaTarea, unique: false }, as: 'etiquetas', foreignKey: 'idTarea' });
+  etiqueta.belongsToMany(tarea, { through: { model: etiquetaTarea, unique: true }, as: 'tareas', foreignKey: 'idEtiqueta' });
+  tarea.belongsToMany(etiqueta, { through: { model: etiquetaTarea, unique: true }, as: 'etiquetas', foreignKey: 'idTarea' });
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
   usuario.hasMany(auth,  { foreignKey: { name: 'idUsuario' }, as: 'sesiones' });

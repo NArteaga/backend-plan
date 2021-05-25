@@ -10,5 +10,8 @@ module.exports = function setupSocio (api, controllers, middlewares) {
 
   api.post('/reuniones/reporte/:id', ReunionController.reporteReunion);
 
+  api.post('/reuniones/adicionar-tarea', ReunionController.asignarTarea);
+  api.delete('/reuniones/remover-tarea', ReunionController.removerTarea);
+
   return api;
 };

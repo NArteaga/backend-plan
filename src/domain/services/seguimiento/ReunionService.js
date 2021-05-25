@@ -8,7 +8,7 @@ const ejs = require('ejs');
 const pdf = require('html-pdf');
 
 module.exports = function reunionService (repositories, helpers, res) {
-  const { ReunionRepository, ReunionTemaRepository, ReunionParticipanteRepository, CiteRepository, TareaRepository, transaction } = repositories;
+  const { ReunionRepository, ComentarioRepository, ReunionTareaRepository, ReunionParticipanteRepository, CiteRepository, TareaRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function findAll (params) {
@@ -25,16 +25,9 @@ module.exports = function reunionService (repositories, helpers, res) {
     let reunion;
     let transaccion;
     try {
-      console.log('==============================_ANTES_==============================');
-      console.log(data);
-      console.log('==============================_ANTES_==============================');
       transaccion = await transaction.create();
 
       data.fechaReunion = FechaHelper.formatearFecha(data.fechaReunion);
-
-      console.log('==============================_DESPUES_==============================');
-      console.log(data, new Date());
-      console.log('==============================_DESPUES_==============================');
 
       const citeActual = await CiteRepository.findOne({ idEntidad: data.idEntidad });
       let cite = null;
@@ -133,7 +126,50 @@ module.exports = function reunionService (repositories, helpers, res) {
     }
   }
 
+  async function asignarTarea (data) {
+    let transaccion;
+    try {
+      transaccion = await transaction.create();
+
+      await ReunionTareaRepository.createOrUpdate(data, transaccion);
+
+      await ComentarioRepository.createOrUpdate({
+        idUsuario   : data.userCreated || data.userUpdated,
+        idReunion   : data.idreunion,
+        descripcion : 'ha adicionado una tarea a la reunion.',
+        userCreated : data.userCreated || data.userUpdated
+      }, transaccion);
+
+      await transaction.commit(transaccion);
+      return true;
+    } catch (error) {
+      await transaction.rollback(transaccion);
+      throw new ErrorApp(error.message, 400);
+    }
+  }
+
+  async function removerTarea (data) {
+    let transaccion;
+    try {
+      transaccion = await transaction.create();
+      await ReunionTareaRepository.deleteItemCond(data);
+      await ComentarioRepository.createOrUpdate({
+        idUsuario   : data.userCreated || data.userUpdated,
+        idReunion   : data.idreunion,
+        descripcion : 'ha removido una tarea de la reunion.',
+        userCreated : data.userCreated || data.userUpdated
+      }, transaccion);
+      await transaction.commit(transaccion);
+      return true;
+    } catch (error) {
+      await transaction.rollback(transaccion);
+      throw new ErrorApp(error.message, 400);
+    }
+  }
+
   return {
+    asignarTarea,
+    removerTarea,
     reporteReunion,
     findAll,
     createOrUpdate,

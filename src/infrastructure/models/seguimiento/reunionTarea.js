@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.idReunion'),
       field     : 'id_reunion'
     },
-    idTema: {
+    idTarea: {
       type      : DataTypes.INTEGER,
       allowNull : false,
-      xlabel    : lang.t('fields.idTema'),
-      field     : 'id_tema'
+      xlabel    : lang.t('fields.idTarea'),
+      field     : 'id_tarea'
     }
   };
 
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
   fields = util.setTimestamps(fields);
   // Agregando campos para el log fields = util.setTimestamps(fields);
 
-  const ReunionTema = sequelize.define('reunion_tema', fields, {
+  const ReunionTarea = sequelize.define('reunion_tarea', fields, {
     paranoid   : true,
     timestamps : true,
-    tableName  : 'reunion_tema'
+    tableName  : 'reunion_tarea'
   });
 
-  return ReunionTema;
+  return ReunionTarea;
 };
