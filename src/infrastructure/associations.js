@@ -80,11 +80,6 @@ module.exports = function associations (models) {
   entidad.hasMany(usuario,  { foreignKey: { name: 'idEntidad' }, as: 'usuarios' });
 
   // Asociaciones tablas permiso - roles
-  rolPermiso.belongsTo(permiso, { foreignKey: { name: 'idPermiso', allowNull: false }, as: 'permiso' });
-  permiso.hasMany(rolPermiso, { foreignKey: { name: 'idPermiso', allowNull: false }, as: 'rolPermisos' });
-
-  rolPermiso.belongsTo(rol, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rol' });
-  rol.hasMany(rolPermiso, { foreignKey: { name: 'idRol', allowNull: false }, as: 'rolPermisos' });
 
   rol.belongsToMany(menu, { through: { model: rolMenu, unique: false }, as: 'menus', foreignKey: 'idRol' });
   menu.belongsToMany(rol, { through: { model: rolMenu, unique: false }, as: 'roles', foreignKey: 'idMenu' });

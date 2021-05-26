@@ -10,15 +10,27 @@ module.exports = function modulossRepository (models, Sequelize) {
   async function findAll (params = {}) {
     const query = {};
     query.where = {};
-    // query.attributes = [];
+
+    query.attributes = [
+      'id',
+      'nombre',
+      'descripcion',
+      'estado',
+      [Sequelize.literal('(SELECT FALSE)'), 'permitido']
+    ];
+
+    const whereRol = {};
+
+    if (params.idRol) {
+      whereRol.id = params.idRol;
+    }
+
     query.include = [
       {
-        model : rol,
-        as    : 'rol'
-      },
-      {
-        model : modulos,
-        as    : 'modulo'
+        attributes : [],
+        model      : rol,
+        as         : 'roles',
+        where      : whereRol
       }
     ];
 

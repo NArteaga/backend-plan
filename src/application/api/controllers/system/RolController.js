@@ -18,6 +18,16 @@ module.exports = function setupRolController (services) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
+  async function listarPermisos (req, res) {
+    try {
+      const respuesta = await RolService.listarPermisos(req.query.idRol);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
   async function recuperarPorId (req, res) {
     try {
       const { id } = req.params;
@@ -63,6 +73,7 @@ module.exports = function setupRolController (services) {
     }
   }
   return {
+    listarPermisos,
     listar,
     recuperarPorId,
     eliminar,

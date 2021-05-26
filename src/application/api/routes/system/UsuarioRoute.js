@@ -10,7 +10,7 @@ module.exports = function setupUsuario (api, controllers, middlewares) {
   api.put('/usuarios/:id', AuthMiddleware.verificarToken(), AuthMiddleware.verificarPermisos(['usuarios:actualizar']), UsuarioController.actualizar);
   api.delete('/usuarios/:id', AuthMiddleware.verificarToken(), AuthMiddleware.verificarPermisos(['usuarios:eliminar']), UsuarioController.eliminar);
 
-  api.put('/usuarios/cambiar-contrasena/:id', AuthMiddleware.verificarToken(), AuthMiddleware.verificarPermisos(['usuarios:actualizar']), UsuarioController.cambiarContrasena);
+  api.put('/usuarios/cambiar-contrasena/:id', AuthMiddleware.verificarToken(), UsuarioController.cambiarContrasena);
 
   return api;
 };

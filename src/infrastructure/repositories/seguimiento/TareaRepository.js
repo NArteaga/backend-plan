@@ -22,6 +22,7 @@ module.exports = function tareaRepository (models, Sequelize) {
       'finalizado',
       'createdAt',
       'updatedAt',
+      'comunicacion',
       [Sequelize.literal('(SELECT COUNT(*) FROM comentario WHERE comentario.id_tarea = tarea.id)'), 'numeroComentarios']
     ];
 
@@ -41,6 +42,10 @@ module.exports = function tareaRepository (models, Sequelize) {
 
     if (params.finalizado) {
       query.where.finalizado = params.finalizado;
+    }
+
+    if (params.comunicacion) {
+      query.where.comunicacion = params.comunicacion;
     }
 
     if (params.fechaIni || params.fechaFin) {

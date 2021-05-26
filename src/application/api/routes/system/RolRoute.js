@@ -10,5 +10,7 @@ module.exports = function setupSocio (api, controllers, middlewares) {
   api.put('/roles/:id', RolController.actualizar);
   api.delete('/roles/:id', RolController.eliminar);
 
+  api.get('/roles/permisos', RolController.listarPermisos);
+
   return api;
 };

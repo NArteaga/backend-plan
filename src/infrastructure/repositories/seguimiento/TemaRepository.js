@@ -115,6 +115,7 @@ module.exports = function temaRepository (models, Sequelize) {
       'finalizado',
       'createdAt',
       'updatedAt',
+      'comunicacion',
       [Sequelize.literal('(SELECT COUNT(*) FROM comentario WHERE comentario.id_tarea = tarea.id)'), 'numeroComentarios']
     ];
 

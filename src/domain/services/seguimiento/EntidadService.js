@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function entidadService (repositories, helpers, res) {
-  const { EntidadRepository, CiteRepository } = repositories;
+  const { EntidadRepository, CiteRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function findAll (params) {
@@ -20,7 +20,9 @@ module.exports = function entidadService (repositories, helpers, res) {
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
     let entidad;
+    let transaccion;
     try {
+      transaccion = await transaction.create();
       if (data.idEntidad) {
         const existeEntidad = await EntidadRepository.findOne({ id: data.idEntidad });
         if (!existeEntidad) {
@@ -29,23 +31,24 @@ module.exports = function entidadService (repositories, helpers, res) {
         data.nivel = existeEntidad.nivel + 1;
       }
 
-      entidad = await EntidadRepository.createOrUpdate(data);
+      entidad = await EntidadRepository.createOrUpdate(data, transaccion);
       const existeCite = await CiteRepository.findOne({ idEntidad: entidad.id });
-      const datosCite = { idEntidad: data.idEntidad };
+      const datosCite = { idEntidad: entidad.id };
       if (existeCite) {
         datosCite.id = existeCite.id;
         datosCite.prefijo = entidad.sigla;
         datosCite.userUpdated = data.userUpdated;
-        await CiteRepository.createOrUpdate();
       } else {
         datosCite.prefijo = entidad.sigla;
         datosCite.correlativo = 0;
         datosCite.userCreated = data.userCreated;
-        await CiteRepository.createOrUpdate();
       }
+      await CiteRepository.createOrUpdate(datosCite, transaccion);
+      await transaction.commit(transaccion);
       return entidad;
-    } catch (err) {
-      throw new ErrorApp(err.message, 400);
+    } catch (error) {
+      await transaction.rollback(transaccion);
+      throw new ErrorApp(error.message, 400);
     }
   }
 

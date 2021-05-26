@@ -4,13 +4,34 @@ const debug = require('debug')('app:service:rol');
 const Service = require('../Service');
 const { ErrorApp } = require('../../lib/error');
 module.exports = function rolService (repositories, helpers, res) {
-  const { RolRepository, RolRutaRepository, RolMenuRepository, RolPermisoRepository, transaction } = repositories;
+  const { RolRepository, RolRutaRepository, RolMenuRepository, RolPermisoRepository, transaction, PermisoRepository } = repositories;
 
   async function findAll (params = {}) {
     debug('Lista de roles|filtros');
     try {
       const resultado = await RolRepository.findAll(params);
       return resultado;
+    } catch (err) {
+      debug(err);
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
+  async function listarPermisos (idRol) {
+    debug('Lista de roles|filtros');
+    try {
+      const permisos = await PermisoRepository.findAll();
+      let permisosRol = [];
+      if (idRol) {
+        permisosRol = await PermisoRepository.findAll({ idRol });
+        for (const permiso of permisos.rows) {
+          const existe = permisosRol.rows.find(x => x.id === permiso.id);
+          if (existe) {
+            permiso.permitido = true;
+          }
+        }
+      }
+      return permisos.rows;
     } catch (err) {
       debug(err);
       throw new ErrorApp(err.message, 400);
@@ -131,6 +152,7 @@ module.exports = function rolService (repositories, helpers, res) {
     }
   }
   return {
+    listarPermisos,
     findAll,
     findById,
     createOrUpdate,
