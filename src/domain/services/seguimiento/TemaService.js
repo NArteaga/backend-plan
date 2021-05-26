@@ -89,7 +89,21 @@ module.exports = function temaService (repositories, helpers, res) {
     }
   }
 
+  async function verficarDependencia (entidadesDependientes, idTema) {
+    try {
+      const resultado = await TemaRepository.findOne({ id: idTema, entidades: entidadesDependientes });
+      if (!resultado) {
+        return false;
+      }
+      return true;
+    } catch (err) {
+      debug(err);
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   return {
+    verficarDependencia,
     listar,
     createOrUpdate,
     deleteItem,

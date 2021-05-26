@@ -53,6 +53,7 @@ module.exports = function setupEntidadController (services) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
   return {
     listar,
     eliminar,

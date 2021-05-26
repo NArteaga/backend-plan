@@ -113,19 +113,24 @@ module.exports = function reunionService (repositories, helpers, res) {
         throw new Error('La reunion no existe.');
       }
 
-      _existeReunion.tareasConcluidas = [];
-      _existeReunion.tareasProgramadas = [];
-
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(_existeReunion.entidades);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      _existeReunion.tareasAgrupadas = [];
       for (const tarea of _existeReunion.tareas) {
-        if (tarea.finalizado) {
-          _existeReunion.tareasConcluidas.push(tarea);
-        } else {
-          const fecha = moment(tarea.fechaFinalizacion, 'DD-MM-YYYY hh:mm:ss').format('DD-MM-YYYY');
-          tarea.fechaFinalizacion = fecha;
-          _existeReunion.tareasProgramadas.push(tarea);
+        const yaExiste = _existeReunion.tareasAgrupadas.find(x => x.id === tarea.entidad.id);
+        if (!yaExiste) {
+          tarea.entidad.tareasConcluidas = [];
+          tarea.entidad.tareasProgramadas = [];
+          for (const tareaSecundaria of _existeReunion.tareas) {
+            if (tareaSecundaria.entidad.id === tarea.entidad.id) {
+              if (tareaSecundaria.finalizado) {
+                tarea.entidad.tareasConcluidas.push(tareaSecundaria);
+              } else {
+                const fecha = moment(tareaSecundaria.fechaFinalizacion, 'DD-MM-YYYY hh:mm:ss').format('DD-MM-YYYY');
+                tareaSecundaria.fechaFinalizacion = fecha;
+                tarea.entidad.tareasProgramadas.push(tareaSecundaria);
+              }
+            }
+          }
+          _existeReunion.tareasAgrupadas.push(tarea.entidad);
         }
       }
 

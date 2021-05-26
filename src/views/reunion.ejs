@@ -31,6 +31,12 @@
       text-align: center;
     }
 
+    .background-subtitulo {
+      background-color: #B0BEC5;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
     .text-h6 {
       font-size: 20px;
       font-weight: bold;
@@ -53,7 +59,7 @@
     .no-margin {
       margin: 0px;
     }
-    
+
     .text-bold {
       font-weight: bold;
     }
@@ -61,7 +67,6 @@
     .text-center {
       text-align: center;
     }
-
   </style>
 </head>
 
@@ -79,7 +84,7 @@
 
       <table style="width: 100%;border:none !important;margin:0 auto;" cellspacing="0" cellpadding="0">
         <tbody>
-           <tr>
+          <tr>
             <td>
               <p class="text-h7 text-center no-padding no-margin">
                 <%= reunion.cite %>
@@ -95,7 +100,7 @@
           </tr>
           <tr>
             <td>
-               <span style="text-align: justify;">
+              <span style="text-align: justify;">
                 <%= reunion.titulo %>
               </span>
             </td>
@@ -104,7 +109,7 @@
             <td>
               <p class="text-h6 no-padding no-margin">
                 Fecha reunion:
-              </p>   
+              </p>
             </td>
           </tr>
           <tr>
@@ -137,20 +142,28 @@
             <td class="background-titulo">Concluidas</td>
             <td class="background-titulo">Programadas</td>
           </tr>
+          <% reunion.tareasAgrupadas.forEach(function(entidad, index){ %>
+          <tr>
+            <td class="background-subtitulo" colspan="2">
+              <p style="text-align: center;"><%= entidad.nombre %></p>
+            </td>
+          </tr>
           <tr>
             <td>
-              <% reunion.tareasConcluidas.forEach(function(tareaConcluida, index){ %>
-                <p><input type="checkbox" value="true" checked> <%= tareaConcluida.titulo %></p>
+              <% entidad.tareasConcluidas.forEach(function(tareaConcluida, index){ %>
+              <p><input type="checkbox" value="true" checked> <%= tareaConcluida.titulo %></p>
               <p style="font-size: 14px; margin-top: -15px; color: grey;"><%= tareaConcluida.tema.titulo %></p>
               <% }); %>
             </td>
             <td>
-              <% reunion.tareasProgramadas.forEach(function(tareaProgramada, index){ %>
+              <% entidad.tareasProgramadas.forEach(function(tareaProgramada, index){ %>
               <p><%= tareaProgramada.titulo %></p>
-              <p style="font-size: 14px; margin-top: -15px; color: grey;"><%= tareaProgramada.tema.titulo %>  -  <%= tareaProgramada.fechaFinalizacion %> </p>
+              <p style="font-size: 14px; margin-top: -15px; color: grey;"><%= tareaProgramada.tema.titulo %> -
+                <%= tareaProgramada.fechaFinalizacion %> </p>
               <% }); %>
             </td>
           </tr>
+          <% }); %>
 
         </tbody>
       </table>
@@ -168,13 +181,13 @@
             <td class="background-titulo">Cargo</td>
             <td class="background-titulo">Firma</td>
           </tr>
-            <% reunion.participantes.forEach(function(participante, index){ %>
-            <tr>
-              <td><%= participante.nombres %> <%= participante.primerApellido %> <%= participante.segundoApellido %></td>
-              <td><%= participante.cargo %></td>
-              <td></td>
-            </tr>
-            <% }); %>
+          <% reunion.participantes.forEach(function(participante, index){ %>
+          <tr>
+            <td><%= participante.nombres %> <%= participante.primerApellido %> <%= participante.segundoApellido %></td>
+            <td><%= participante.cargo %></td>
+            <td></td>
+          </tr>
+          <% }); %>
         </tbody>
       </table>
     </div>

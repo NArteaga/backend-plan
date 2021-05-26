@@ -36,10 +36,6 @@ module.exports = function setupEntidadController (services) {
       debug('creando entidad');
       data.userCreated = req.user.idUsuario;
 
-      if (!data.entidades.includes(req.user.idEntidad)) {
-        data.entidades.push(req.user.idEntidad);
-      }
-
       const respuesta = await TemaService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
@@ -54,8 +50,9 @@ module.exports = function setupEntidadController (services) {
       data.id = req.params.id;
       data.userUpdated = req.user.idUsuario;
 
-      if (!data.entidades.includes(req.user.idEntidad)) {
-        data.entidades.push(req.user.idEntidad);
+      const respuestaVerificacion = await TemaService.verficarDependencia(req.user.entidadesDependientes, req.params.id);
+      if (!respuestaVerificacion) {
+        throw new Error('No tiene permisos para editar este tema.');
       }
 
       const respuesta = await TemaService.createOrUpdate(data);
