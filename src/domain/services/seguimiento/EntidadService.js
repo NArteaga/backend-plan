@@ -60,7 +60,22 @@ module.exports = function entidadService (repositories, helpers, res) {
     }
   }
 
+  async function getSuperiores (id, entidadesSuperiores) {
+    try {
+      const resultado = await EntidadRepository.getAreaSuperior(id);
+      entidadesSuperiores.push(resultado.id);
+      if (resultado.entidad) {
+        return getSuperiores(resultado.entidad.id, entidadesSuperiores);
+      }
+      return entidadesSuperiores;
+    } catch (err) {
+      debug(err);
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   return {
+    getSuperiores,
     findAll,
     createOrUpdate,
     deleteItem

@@ -45,6 +45,11 @@ module.exports = function authService (repositories, helpers, res) {
     return permisos;
   }
 
+  async function getEntidadesSuperiores (idEntidad) {
+    const respuesta = await EntidadRepository.getSuperiores(idEntidad, []);
+    return respuesta;
+  }
+
   async function getEntidadesDependientes (entidades, nivel) {
     let entidadesDependientes = [];
     if (entidades.length > 0) {
@@ -63,7 +68,10 @@ module.exports = function authService (repositories, helpers, res) {
         roles    : usuario.roles.map(x => x.id),
         permisos : ['entidades:sinFiltros']
       });
+
       let entidadesDependientes = [];
+      const entidadesSuperiores = await getEntidadesSuperiores(usuario.entidad.id);
+
       if (entidadesSinFiltros) {
         entidadesDependientes = await EntidadRepository.findAll({});
         entidadesDependientes = entidadesDependientes.rows;
@@ -71,7 +79,9 @@ module.exports = function authService (repositories, helpers, res) {
         entidadesDependientes = await getEntidadesDependientes([usuario.entidad], usuario.entidad.nivel + 1);
       }
 
-      usuario.entidades = entidadesDependientes;
+      usuario.entidadesDependientes = entidadesDependientes;
+      usuario.entidadesSuperiores = [...entidadesSuperiores, usuario.entidad];
+
       usuario.token = await generateToken(ParametroRepository, {
         idRoles               : usuario.roles.map(x => x.id),
         idUsuario             : usuario.id,
@@ -79,7 +89,8 @@ module.exports = function authService (repositories, helpers, res) {
         correoElectronico     : usuario.correoElectronico,
         usuario               : usuario.usuario,
         idEntidad             : usuario.entidad.id,
-        entidadesDependientes : entidadesDependientes.map(x => x.id)
+        entidadesDependientes : entidadesDependientes.map(x => x.id),
+        entidadesSuperiores   : entidadesSuperiores.map(x => x.id)
       });
       return usuario;
     } catch (error) {

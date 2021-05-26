@@ -10,12 +10,20 @@ module.exports = function setupEntidadController (services) {
   async function listar (req, res) {
     try {
       debug('Recuperando entidades');
-      req = await PermisoService.buscarFiltros(req);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(req.query);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      // req = await PermisoService.buscarFiltros(req);
       req.query.entidades = req.user.entidadesDependientes;
       const respuesta = await TemaService.listar(req.query);
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
+  async function listarTareas (req, res) {
+    try {
+      req.query.idTema = req.params.id;
+      req.query.entidades = req.user.entidadesDependientes;
+      const respuesta = await TemaService.listarTareas(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -69,6 +77,7 @@ module.exports = function setupEntidadController (services) {
     }
   }
   return {
+    listarTareas,
     listar,
     eliminar,
     actualizar,

@@ -26,6 +26,7 @@ module.exports = function tareaRepository (models, Sequelize) {
     ];
 
     query.where = {};
+
     query.include = [];
 
     if (params.exclude) {
@@ -131,7 +132,29 @@ module.exports = function tareaRepository (models, Sequelize) {
     return toJSON(result);
   }
 
+  async function findByEntidad (params = {}) {
+    const query = {};
+    query.where = {};
+
+    if (params.id) {
+      query.where.id = params.id;
+    }
+
+    if (params.entidades) {
+      query.where.idEntidad = {
+        [Op.in]: params.entidades
+      };
+    }
+
+    const result = await tarea.findOne(query);
+    if (result) {
+      return result.toJSON();
+    }
+    return null;
+  }
+
   return {
+    findByEntidad,
     findAll,
     findOne        : params => Repository.findOne(params, tarea),
     findById       : id => Repository.findById(id, tarea),

@@ -116,6 +116,9 @@ module.exports = function reunionService (repositories, helpers, res) {
       _existeReunion.tareasConcluidas = [];
       _existeReunion.tareasProgramadas = [];
 
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      console.log(_existeReunion.entidades);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       for (const tarea of _existeReunion.tareas) {
         if (tarea.finalizado) {
           _existeReunion.tareasConcluidas.push(tarea);
@@ -127,7 +130,6 @@ module.exports = function reunionService (repositories, helpers, res) {
       }
 
       _existeReunion.fechaReunion = moment(_existeReunion.fechaReunion).format('DD-MM-YYYY');
-
       const html = await ejs.renderFile(`${rootPath}/../../views/reunion.ejs`, {
         reunion: _existeReunion
       });

@@ -17,6 +17,20 @@ module.exports = function temaService (repositories, helpers, res) {
     }
   }
 
+  async function listarTareas (params) {
+    try {
+      const _existeTema = await TemaRepository.findOne({ id: params.idTema, entidades: params.entidades });
+      if (!_existeTema) {
+        throw new Error('El tema no existe o no tiene permisos para verlo');
+      }
+      delete params.entidades;
+      const tareas = await TemaRepository.findAllTareas(params);
+      return tareas;
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   async function createOrUpdate (data) {
     debug('Crear o actualizar rol');
     let tema;
@@ -78,6 +92,7 @@ module.exports = function temaService (repositories, helpers, res) {
   return {
     listar,
     createOrUpdate,
-    deleteItem
+    deleteItem,
+    listarTareas
   };
 };

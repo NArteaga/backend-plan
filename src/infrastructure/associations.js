@@ -43,7 +43,7 @@ module.exports = function associations (models) {
   etiqueta.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
   tema.hasMany(etiqueta,  { foreignKey: { name: 'idTema' }, as: 'etiquetas' });
 
-  entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidadPadre' });
   entidad.hasMany(entidad,  { foreignKey: { name: 'idEntidad' }, as: 'entidades' });
 
   tarea.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
@@ -72,6 +72,9 @@ module.exports = function associations (models) {
 
   entidad.belongsToMany(tema, { through: { model: temaEntidad, unique: false }, as: 'temas', foreignKey: 'idEntidad' });
   tema.belongsToMany(entidad, { through: { model: temaEntidad, unique: false }, as: 'entidades', foreignKey: 'idTema' });
+
+  temaEntidad.belongsTo(tema, { foreignKey: { name: 'idTema' }, as: 'tema' });
+  tema.hasMany(temaEntidad,  { foreignKey: { name: 'idTema' }, as: 'temaEntidades' });
 
   usuario.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(usuario,  { foreignKey: { name: 'idEntidad' }, as: 'usuarios' });

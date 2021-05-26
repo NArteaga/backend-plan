@@ -6,6 +6,9 @@ module.exports = function setupSocio (api, controllers, middlewares) {
   const { SchemaMiddleware } = middlewares;
 
   api.get('/temas', TemaController.listar);
+
+  api.get('/temas/:id/tareas', TemaController.listarTareas);
+
   api.post('/temas', SchemaMiddleware.validarSchema(temaSchema), TemaController.crear);
   api.put('/temas/:id', SchemaMiddleware.validarSchema(temaSchema), TemaController.actualizar);
   api.delete('/temas/:id', TemaController.eliminar);

@@ -47,15 +47,15 @@ module.exports = function entidadRepository (models, Sequelize) {
       query.where.nivel = params.nivel;
     }
 
-    if (params.idEntidad) {
-      query.where.id = params.idEntidad;
-    }
+    // if (params.idEntidad) {
+    //   query.where.id = params.idEntidad;
+    // }
 
-    if (params.entidades && !params.idEntidad) {
-      query.where.id = {
-        [Op.in]: params.entidades
-      };
-    }
+    // if (params.entidades && !params.idEntidad) {
+    //   query.where.id = {
+    //     [Op.in]: params.entidades
+    //   };
+    // }
 
     query.include = [];
 
@@ -86,7 +86,37 @@ module.exports = function entidadRepository (models, Sequelize) {
     return toJSON(result);
   }
 
+  async function getSuperiores (id, entidadesSuperiores) {
+    const query = {};
+
+    query.where = { id };
+    query.include  = [
+      {
+        attributes: [
+          'id',
+          'idEntidad',
+          'nivel',
+          'nombre',
+          'sigla'
+        ],
+        model : entidad,
+        as    : 'entidadPadre'
+      }
+    ];
+
+    let resultado = await entidad.findOne(query);
+    if (resultado) {
+      resultado =  resultado.toJSON();
+      if (resultado.entidadPadre) {
+        entidadesSuperiores.push(resultado.entidadPadre);
+        return getSuperiores(resultado.entidadPadre.id, entidadesSuperiores);
+      }
+    }
+    return entidadesSuperiores;
+  }
+
   return {
+    getSuperiores,
     findDependientes,
     findAll,
     findOne        : (params) => Repository.findOne(params, entidad),
