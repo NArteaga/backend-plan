@@ -39,6 +39,7 @@ module.exports = function temaService (repositories, helpers, res) {
       transaccion = await transaction.create();
 
       tema = await TemaRepository.createOrUpdate(data, transaccion);
+
       await TemaEntidadRepository.deleteItemCond({ idTema: tema.id }, transaccion);
 
       for (const idEntidad of data.entidades) {
