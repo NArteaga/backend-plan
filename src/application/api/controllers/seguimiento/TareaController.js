@@ -9,6 +9,13 @@ module.exports = function setupEntidadController (services) {
 
   async function listar (req, res) {
     try {
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      console.log(req.user);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      const tienePermiso = await PermisoService.verificarPermisos(req.user.idRoles, ['tareas:eliminadas']);
+      if (!req.query.eliminados || !tienePermiso) {
+        delete req.query.eliminados;
+      }
       req.query.entidades = req.user.entidadesDependientes;
       const respuesta = await TareaService.listar(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));

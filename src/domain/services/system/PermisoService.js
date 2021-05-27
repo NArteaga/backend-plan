@@ -63,7 +63,23 @@ module.exports = function permisoService (repositories, helpers, res) {
     }
   }
 
+  async function verificarPermisos (roles, nombresPermisos = ['tareas:eliminadas']) {
+    try {
+      const permisos = await PermisoRepository.verificarPermisos({
+        roles    : roles,
+        permisos : nombresPermisos
+      });
+      if (permisos) {
+        return true;
+      }
+      return false;
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   return {
+    verificarPermisos,
     buscarFiltros,
     createOrUpdate,
     findOne,

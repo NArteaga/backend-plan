@@ -2,6 +2,7 @@
 
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { EtiquetaController } = controllers;
+  const { AuthMiddleware } = middlewares;
 
   api.get('/etiquetas', EtiquetaController.listar);
   api.post('/etiquetas', EtiquetaController.crear);

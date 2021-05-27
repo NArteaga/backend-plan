@@ -54,7 +54,9 @@ let items = [
   { id: 38, nombre: 'acciones:crear', descripcion: 'Permiso para crear acciones', estado: 'ACTIVO' },
   { id: 39, nombre: 'acciones:actualizar', descripcion: 'Permiso para actualizar acciones', estado: 'ACTIVO' },
   { id: 40, nombre: 'acciones:eliminar', descripcion: 'Permiso para eliminar acciones', estado: 'ACTIVO' },
-  { id: 41, nombre: 'acciones:sinFiltros', descripcion: 'Permiso para listar sin filtros acciones', estado: 'ACTIVO' }
+  { id: 41, nombre: 'acciones:sinFiltros', descripcion: 'Permiso para listar sin filtros acciones', estado: 'ACTIVO' },
+
+  { id: 42, nombre: 'tareas:eliminadas', descripcion: 'Permiso para listar las acciones eliminadas', estado: 'ACTIVO' }
 
 ];
 

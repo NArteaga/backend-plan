@@ -11,7 +11,7 @@ let items = [
     id_entidad         : 1,
     cargo              : 'CARGO',
     usuario            : 'admin',
-    contrasena         : bcrypt.hashSync('Developer', saltRounds),
+    contrasena         : bcrypt.hashSync('ContrasenaDevCegura', saltRounds),
     nombres            : 'Ivan',
     primer_apellido    : 'Ticona',
     segundo_apellido   : 'Castillo',

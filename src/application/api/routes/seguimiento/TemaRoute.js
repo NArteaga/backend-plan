@@ -3,15 +3,15 @@ const temaSchema = require('../../../schemas/TemaSchema');
 
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { TemaController } = controllers;
-  const { SchemaMiddleware } = middlewares;
+  const { AuthMiddleware } = middlewares;
 
-  api.get('/temas', TemaController.listar);
+  api.get('/temas', AuthMiddleware.verificarPermisos(['temas:listar']), TemaController.listar);
 
-  api.get('/temas/:id/tareas', TemaController.listarTareas);
+  api.get('/temas/:id/tareas', AuthMiddleware.verificarPermisos(['temas:listar', 'tareas:listar']), TemaController.listarTareas);
 
-  api.post('/temas', SchemaMiddleware.validarSchema(temaSchema), TemaController.crear);
-  api.put('/temas/:id', SchemaMiddleware.validarSchema(temaSchema), TemaController.actualizar);
-  api.delete('/temas/:id', TemaController.eliminar);
+  api.post('/temas', AuthMiddleware.verificarPermisos(['temas:crear']), TemaController.crear);
+  api.put('/temas/:id', AuthMiddleware.verificarPermisos(['temas:actualizar']), TemaController.actualizar);
+  api.delete('/temas/:id', AuthMiddleware.verificarPermisos(['temas:eliminar']), TemaController.eliminar);
 
   return api;
 };

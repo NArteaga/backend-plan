@@ -5,7 +5,7 @@ const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
 module.exports = function tareaService (repositories, helpers, res) {
-  const { TareaRepository, TemaRepository, EtiquetaTareaRepository, ComentarioRepository, transaction } = repositories;
+  const { TareaRepository, PermisoRepository, TemaRepository, EtiquetaTareaRepository, ComentarioRepository, transaction } = repositories;
   const { FechaHelper } = helpers;
 
   async function listar (params) {

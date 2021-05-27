@@ -145,7 +145,9 @@ let items = [
   { id: 131, id_rol: 6, id_permiso: 19 },
   { id: 132, id_rol: 6, id_permiso: 20 },
   { id: 133, id_rol: 6, id_permiso: 21 },
-  { id: 134, id_rol: 6, id_permiso: 2 }
+  { id: 134, id_rol: 6, id_permiso: 2 },
+
+  { id: 135, id_rol: 1, id_permiso: 42 }
 
 ];
 

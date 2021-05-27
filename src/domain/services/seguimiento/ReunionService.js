@@ -36,11 +36,7 @@ module.exports = function reunionService (repositories, helpers, res) {
     try {
       transaccion = await transaction.create();
 
-      console.log('==============================_DESDE_CREACION_REUNION_==============================');
-      console.log(data.fechaReunion);
       data.fechaReunion = FechaHelper.formatearFecha(data.fechaReunion);
-      console.log(data.fechaReunion);
-      console.log('==============================_DESDE_CREACION_REUNION_==============================');
 
       const citeActual = await CiteRepository.findOne({ idEntidad: data.idEntidad });
       let cite = null;
@@ -51,9 +47,7 @@ module.exports = function reunionService (repositories, helpers, res) {
         data.cite = cite.codigo;
         await CiteRepository.createOrUpdate({ id: citeActual.id, correlativo: siguienteCorrelativo }, transaccion);
       }
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(data);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+
       reunion = await ReunionRepository.createOrUpdate(data, transaccion);
 
       await ReunionParticipanteRepository.deleteItemCond({ idReunion: reunion.id }, transaccion);
@@ -140,7 +134,7 @@ module.exports = function reunionService (repositories, helpers, res) {
         }
       }
 
-      _existeReunion.fechaReunion = moment(_existeReunion.fechaReunion).format('DD-MM-YYYY');
+      // _existeReunion.fechaReunion = moment(_existeReunion.fechaReunion).format('DD-MM-YYYY');
       const html = await ejs.renderFile(`${rootPath}/../../views/reunion.ejs`, {
         reunion: _existeReunion
       });

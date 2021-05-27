@@ -22,11 +22,19 @@ module.exports = function tareaRepository (models, Sequelize) {
       'finalizado',
       'createdAt',
       'updatedAt',
+      'deletedAt',
       'comunicacion',
       [Sequelize.literal('(SELECT COUNT(*) FROM comentario WHERE comentario.id_tarea = tarea.id)'), 'numeroComentarios']
     ];
 
     query.where = {};
+
+    if (params.eliminados) {
+      query.paranoid = false;
+      query.where.deletedAt = {
+        [Op.not]: null
+      };
+    }
 
     query.include = [];
 
