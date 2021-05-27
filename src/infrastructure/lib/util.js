@@ -127,7 +127,7 @@ const timestamps = {
     field        : '_created_at',
     get          : function () {
       if (this.getDataValue('createdAt')) {
-        return moment.utc(this.getDataValue('createdAt')).format('DD-MM-YYYY HH:mm:ss');
+        return moment(this.getDataValue('createdAt')).format('DD-MM-YYYY HH:mm:ss');
       }
       return null;
     }
@@ -138,7 +138,7 @@ const timestamps = {
     field  : '_updated_at',
     get    : function () {
       if (this.getDataValue('updatedAt')) {
-        return moment.utc(this.getDataValue('updatedAt')).format('DD-MM-YYYY HH:mm:ss');
+        return moment(this.getDataValue('updatedAt')).format('DD-MM-YYYY HH:mm:ss');
       }
       return null;
     }
@@ -149,7 +149,7 @@ const timestamps = {
     field  : '_deleted_at',
     get    : function () {
       if (this.getDataValue('deletedAt')) {
-        return moment.utc(this.getDataValue('deletedAt')).format('DD-MM-YYYY HH:mm:ss');
+        return moment(this.getDataValue('deletedAt')).format('DD-MM-YYYY HH:mm:ss');
       }
       return null;
     }

@@ -84,7 +84,7 @@ module.exports = function tareaService (repositories, helpers, res) {
           await ComentarioRepository.createOrUpdate({
             idUsuario   : data.userCreated || data.userUpdated,
             idTarea     : tarea.id,
-            descripcion : 'ha modificado esta tarea.',
+            descripcion : 'ha modificado esta acción.',
             userCreated : data.userCreated || data.userUpdated
           }, transaccion);
           await EtiquetaTareaRepository.deleteItemCond({ idTarea: tarea.id }, transaccion);
@@ -92,7 +92,7 @@ module.exports = function tareaService (repositories, helpers, res) {
           await ComentarioRepository.createOrUpdate({
             idUsuario   : data.userCreated || data.userUpdated,
             idTarea     : tarea.id,
-            descripcion : 'ha creado esta tarea.',
+            descripcion : 'ha creado esta acción.',
             userCreated : data.userCreated || data.userUpdated
           }, transaccion);
         }
