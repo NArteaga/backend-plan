@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       field     : 'fecha_finalizacion',
       get       : function () {
         if (this.getDataValue('fechaFinalizacion')) {
-          return moment.utc(this.getDataValue('fechaFinalizacion')).format('DD-MM-YYYY HH:mm:ss');
+          return moment(this.getDataValue('fechaFinalizacion')).format('DD-MM-YYYY HH:mm:ss');
         }
         return null;
       }

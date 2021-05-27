@@ -2,6 +2,7 @@
 
 const lang = require('../../lang');
 const util = require('../../lib/util');
+const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {
   let fields = {
@@ -16,7 +17,17 @@ module.exports = (sequelize, DataTypes) => {
       type      : DataTypes.DATE,
       allowNull : false,
       xlabel    : lang.t('fields.fechaReunion'),
-      field     : 'fecha_reunion'
+      field     : 'fecha_reunion',
+      set       : function (value) {
+        const fechaParseada = moment(value).format('YYYY-MM-DD HH:mm:ss');
+        this.setDataValue('fechaReunion', fechaParseada);
+      },
+      get: function () {
+        if (this.getDataValue('fechaReunion')) {
+          return moment(this.getDataValue('fechaReunion')).format('DD-MM-YYYY');
+        }
+        return null;
+      }
     },
     cite: {
       type      : DataTypes.STRING(150),
