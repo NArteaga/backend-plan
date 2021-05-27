@@ -238,9 +238,6 @@ module.exports = function usuariosRepository (models, Sequelize) {
         if (t) {
           cond.transaction = t;
         }
-        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-        console.log(cond, usuarioParam);
-        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
         updated = await usuario.update(usuarioParam, cond);
       } catch (e) {
         errorHandler(e);
