@@ -19,8 +19,8 @@ module.exports = function temaRepository (models, Sequelize) {
       'estado',
       'createdAt',
       'updatedAt',
-      [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = FALSE)'), 'tareasPendientes'],
-      [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = TRUE)'), 'tareasCompletadas']
+      [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = FALSE AND _deleted_at IS NULL)'), 'tareasPendientes'],
+      [Sequelize.literal('(SELECT COUNT(*) FROM tarea WHERE tarea.id_tema = tema.id AND finalizado = TRUE AND _deleted_at IS NULL)'), 'tareasCompletadas']
       // [Sequelize.literal('(SELECT se.id  FROM sys_entidad se INNER JOIN tema_entidad AS te ON te.id_entidad = se.id WHERE te.id_tema = tema.id)'), 'entidadesCompletas']
     ];
 
