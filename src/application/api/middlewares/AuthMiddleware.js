@@ -9,28 +9,12 @@ const HTTP_CODES = {
   FORBIDDEN    : 403
 };
 
-function mensajeExito (res, code, mensaje, datos) {
-  return res.status(code || HTTP_CODES.OK).json({
-    finalizado : true,
-    mensaje    : mensaje || 'OK',
-    datos      : datos || null
-  });
-}
-
 function mensajeError (res, code, mensaje, datos) {
   return res.status(code || HTTP_CODES.BAD_REQUEST).json({
     finalizado : false,
     mensaje    : mensaje || 'ERROR',
     datos      : datos || null
   });
-}
-
-function verificarEntidad (objeto, entidadesPermitidas) {
-  if (objeto.idEntidad) {
-    if (!entidadesPermitidas.includes(parseInt(objeto.idEntidad))) {
-      throw new Error('No tiene permitido ver datos de esta entidad.');
-    }
-  }
 }
 
 const AuthMiddleware = function (services) {
@@ -46,11 +30,6 @@ const AuthMiddleware = function (services) {
         tokenRequest = req.headers.authorization.replace('Bearer ', '');
         data = await verify(tokenRequest, config.auth.secret);
         req.user = data;
-
-        // verificarEnti  dad(req.params, req.user.entidadesDependientes);
-        // verificarEntidad(req.query, req.user.entidadesDependientes);
-        // verificarEntidad(req.body, req.user.entidadesDependientes);
-
         next();
       } catch (error) {
         mensajeError(res, HTTP_CODES.UNAUTHORIZED, error.message);

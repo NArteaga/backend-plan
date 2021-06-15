@@ -5,7 +5,7 @@ const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
 
 module.exports = function setupUsuarioController (services) {
-  const { UsuarioService, PersonaService } = services;
+  const { UsuarioService } = services;
 
   async function listar (req, res) {
     try {

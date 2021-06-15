@@ -1,6 +1,4 @@
 'use strict';
-const { config } = require('../../../../common');
-
 module.exports = function setupSocio (api, controllers, middlewares) {
   const { RolController } = controllers;
   const { AuthMiddleware } = middlewares;

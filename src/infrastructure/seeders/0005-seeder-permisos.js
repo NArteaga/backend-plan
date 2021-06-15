@@ -26,38 +26,10 @@ let items = [
   { id: 15, nombre: 'permisos:actualizar', descripcion: 'Permiso para actualizar permisos', estado: 'ACTIVO' },
   { id: 16, nombre: 'permisos:eliminar', descripcion: 'Permiso para eliminar permisos', estado: 'ACTIVO' },
 
-  { id: 17, nombre: 'reuniones:listar', descripcion: 'Permiso para listar reuniones', estado: 'ACTIVO' },
-  { id: 18, nombre: 'reuniones:crear', descripcion: 'Permiso para crear reuniones', estado: 'ACTIVO' },
-  { id: 19, nombre: 'reuniones:actualizar', descripcion: 'Permiso para actualizar reuniones', estado: 'ACTIVO' },
-  { id: 20, nombre: 'reuniones:eliminar', descripcion: 'Permiso para eliminar reuniones', estado: 'ACTIVO' },
-  { id: 21, nombre: 'reuniones:generarPdf', descripcion: 'Permiso para generar el pdf de una reuniones', estado: 'ACTIVO' },
-
-  { id: 22, nombre: 'entidades:listar', descripcion: 'Permiso para listar entidades', estado: 'ACTIVO' },
-  { id: 23, nombre: 'entidades:crear', descripcion: 'Permiso para crear entidades', estado: 'ACTIVO' },
-  { id: 24, nombre: 'entidades:actualizar', descripcion: 'Permiso para actualizar entidades', estado: 'ACTIVO' },
-  { id: 25, nombre: 'entidades:eliminar', descripcion: 'Permiso para eliminar entidades', estado: 'ACTIVO' },
-  { id: 26, nombre: 'entidades:sinFiltros', descripcion: 'Permiso para listar sin filtros entidades', estado: 'ACTIVO' },
-
-  { id: 27, nombre: 'temas:listar', descripcion: 'Permiso para listar temas', estado: 'ACTIVO' },
-  { id: 28, nombre: 'temas:crear', descripcion: 'Permiso para crear temas', estado: 'ACTIVO' },
-  { id: 29, nombre: 'temas:actualizar', descripcion: 'Permiso para actualizar temas', estado: 'ACTIVO' },
-  { id: 30, nombre: 'temas:eliminar', descripcion: 'Permiso para eliminar temas', estado: 'ACTIVO' },
-  { id: 31, nombre: 'temas:sinFiltros', descripcion: 'Permiso para listar sin filtros temas', estado: 'ACTIVO' },
-
-  { id: 32, nombre: 'etiquetas:listar', descripcion: 'Permiso para listar etiquetas', estado: 'ACTIVO' },
-  { id: 33, nombre: 'etiquetas:crear', descripcion: 'Permiso para crear etiquetas', estado: 'ACTIVO' },
-  { id: 34, nombre: 'etiquetas:actualizar', descripcion: 'Permiso para actualizar etiquetas', estado: 'ACTIVO' },
-  { id: 35, nombre: 'etiquetas:eliminar', descripcion: 'Permiso para eliminar etiquetas', estado: 'ACTIVO' },
-  { id: 36, nombre: 'etiquetas:sinFiltros', descripcion: 'Permiso para listar sin filtros etiquetas', estado: 'ACTIVO' },
-
-  { id: 37, nombre: 'acciones:listar', descripcion: 'Permiso para listar acciones', estado: 'ACTIVO' },
-  { id: 38, nombre: 'acciones:crear', descripcion: 'Permiso para crear acciones', estado: 'ACTIVO' },
-  { id: 39, nombre: 'acciones:actualizar', descripcion: 'Permiso para actualizar acciones', estado: 'ACTIVO' },
-  { id: 40, nombre: 'acciones:eliminar', descripcion: 'Permiso para eliminar acciones', estado: 'ACTIVO' },
-  { id: 41, nombre: 'acciones:sinFiltros', descripcion: 'Permiso para listar sin filtros acciones', estado: 'ACTIVO' },
-
-  { id: 42, nombre: 'tareas:eliminadas', descripcion: 'Permiso para listar las acciones eliminadas', estado: 'ACTIVO' }
-
+  { id: 17, nombre: 'entidades:listar', descripcion: 'Permiso para listar entidades', estado: 'ACTIVO' },
+  { id: 18, nombre: 'entidades:crear', descripcion: 'Permiso para crear entidades', estado: 'ACTIVO' },
+  { id: 19, nombre: 'entidades:actualizar', descripcion: 'Permiso para actualizar entidades', estado: 'ACTIVO' },
+  { id: 20, nombre: 'entidades:eliminar', descripcion: 'Permiso para eliminar entidades', estado: 'ACTIVO' }
 ];
 
 items = setTimestampsSeeder(items);

@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
   fields = util.setTimestamps(fields);
 
   const Permiso = sequelize.define('permiso', fields, {
-    paranoid: true,
-timestamps : true,
+    paranoid   : true,
+    timestamps : true,
     tableName  : 'sys_permiso'
   });
 

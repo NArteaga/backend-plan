@@ -46,7 +46,7 @@ module.exports = function permisoService (repositories, helpers, res) {
     }
   }
 
-  async function buscarFiltros (req = {}, nombresPermisos = ['entidades:sinFiltros']) {
+  async function buscarFiltros (req = {}, nombresPermisos = []) {
     try {
       const permisos = await PermisoRepository.verificarPermisos({
         roles    : req.user.idRoles,
@@ -63,7 +63,7 @@ module.exports = function permisoService (repositories, helpers, res) {
     }
   }
 
-  async function verificarPermisos (roles, nombresPermisos = ['tareas:eliminadas']) {
+  async function verificarPermisos (roles, nombresPermisos = []) {
     try {
       const permisos = await PermisoRepository.verificarPermisos({
         roles    : roles,

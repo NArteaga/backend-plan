@@ -4,20 +4,14 @@ const debug = require('debug')('app:service:auth');
 const crypto = require('crypto');
 const Issuer = require('openid-client').Issuer;
 const { ErrorApp } = require('../../lib/error');
-const url = require('url');
 const { config } = require('../../../common');
 const { iss } = require('../../lib/util');
 const { generateToken } = require('../../../application/lib/auth');
-const moment = require('moment');
 
-// Métodos para CIUDADANÍA DIGITAL
 module.exports = function authService (repositories, helpers, res) {
-  const UsuarioService = require('./UsuarioService')(repositories, helpers, res);
   const { AuthRepository, UsuarioRepository, SuscripcionRepository, EntidadRepository, ParametroRepository, MenuRepository, PermisoRepository } = repositories;
   const issuer = new Issuer(iss);
-  const { FechaHelper } = helpers;
-  // console.log('---------------------------- issuer', issuer);
-  // const keystore = jose.JWK.createKeyStore();
+
   const cliente = new issuer.Client(config.openid.client);
   cliente.CLOCK_TOLERANCE = 5;
 
@@ -45,53 +39,20 @@ module.exports = function authService (repositories, helpers, res) {
     return permisos;
   }
 
-  async function getEntidadesSuperiores (idEntidad) {
-    const respuesta = await EntidadRepository.getSuperiores(idEntidad, []);
-    return respuesta;
-  }
-
-  async function getEntidadesDependientes (entidades, nivel) {
-    let entidadesDependientes = [];
-    if (entidades.length > 0) {
-      const idEntidades = entidades.map(x => x.id);
-      entidadesDependientes = await EntidadRepository.findDependientes(idEntidades, nivel);
-      return entidades.concat(await getEntidadesDependientes(entidadesDependientes.rows, nivel + 1));
-    }
-    return [...entidades];
-  }
-
   async function getResponse (usuario) {
     try {
       usuario.menu = await getMenusRoles(usuario.roles);
       usuario.permisos = await getPermisos(usuario.roles);
-      const entidadesSinFiltros = await PermisoRepository.verificarPermisos({
-        roles    : usuario.roles.map(x => x.id),
-        permisos : ['entidades:sinFiltros']
-      });
-
-      let entidadesDependientes = [];
-      const entidadesSuperiores = await getEntidadesSuperiores(usuario.entidad.id);
-
-      if (entidadesSinFiltros) {
-        entidadesDependientes = await EntidadRepository.findAll({});
-        entidadesDependientes = entidadesDependientes.rows;
-      } else {
-        entidadesDependientes = await getEntidadesDependientes([usuario.entidad], usuario.entidad.nivel + 1);
-      }
-
-      usuario.entidadesDependientes = entidadesDependientes;
-      usuario.entidadesSuperiores = [...entidadesSuperiores, usuario.entidad];
 
       usuario.token = await generateToken(ParametroRepository, {
-        idRoles               : usuario.roles.map(x => x.id),
-        idUsuario             : usuario.id,
-        celular               : usuario.celular,
-        correoElectronico     : usuario.correoElectronico,
-        usuario               : usuario.usuario,
-        idEntidad             : usuario.entidad.id,
-        entidadesDependientes : entidadesDependientes.map(x => x.id),
-        entidadesSuperiores   : entidadesSuperiores.map(x => x.id)
+        idRoles           : usuario.roles.map(x => x.id),
+        idUsuario         : usuario.id,
+        celular           : usuario.celular,
+        correoElectronico : usuario.correoElectronico,
+        usuario           : usuario.usuario,
+        idEntidad         : usuario.entidad.id
       });
+
       return usuario;
     } catch (error) {
       throw new ErrorApp(error.message, 400);
