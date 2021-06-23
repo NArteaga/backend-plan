@@ -82,12 +82,6 @@ module.exports = function authService (repositories, helpers, res) {
         idEntidad   : existeUsuario.entidad.id,
         userCreated : existeUsuario.id
       });
-      await SuscripcionRepository.deleteItemCond({ idUsuario: existeUsuario.id });
-      await SuscripcionRepository.createOrUpdate({
-        idUsuario   : existeUsuario.id,
-        suscripcion : request.body.subscription,
-        userCreated : existeUsuario.id
-      });
       return respuesta;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
