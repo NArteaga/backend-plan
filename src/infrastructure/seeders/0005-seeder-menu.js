@@ -6,7 +6,7 @@ const {
 
 // Datos de producción
 let items = [
-  { id: 1, nombre: 'Inicio', ruta: 'inicio', icono: 'home', orden: 1, id_menu: null, estado: 'ACTIVO'  },
+  { id: 1, nombre: 'Dashboard', ruta: 'dashboard', icono: 'home', orden: 1, id_menu: null, estado: 'ACTIVO'  },
   { id: 2, nombre: 'Roles', ruta: 'roles', icono: 'shield', orden: 4, id_menu: null, estado: 'ACTIVO'  },
   { id: 3, nombre: 'Usuarios', ruta: 'usuarios', icono: 'people', orden: 5, id_menu: null, estado: 'ACTIVO'  },
   { id: 4, nombre: 'Menus', ruta: 'menus', icono: 'menu', orden: 6, id_menu: null, estado: 'ACTIVO'  }
