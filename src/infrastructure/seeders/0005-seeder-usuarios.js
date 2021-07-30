@@ -10,7 +10,7 @@ let items = [
     id                 : 1,
     id_entidad         : 1,
     cargo              : 'CARGO',
-    usuario            : 'admin@yopmail.com',
+    usuario            : 'admin',
     contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Admin',
     primer_apellido    : 'Admin',

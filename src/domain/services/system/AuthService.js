@@ -70,7 +70,7 @@ module.exports = function authService (repositories, helpers, res) {
         throw new Error('Error en su usuario o su contraseña.');
       }
       delete existeUsuario.contrasena;
-      const respuesta = await  getResponse(existeUsuario);
+      const respuesta = await getResponse(existeUsuario);
       await AuthRepository.deleteItemCond({ idUsuario: existeUsuario.id });
       await AuthRepository.createOrUpdate({
         ip          : request.ipInfo.ip,

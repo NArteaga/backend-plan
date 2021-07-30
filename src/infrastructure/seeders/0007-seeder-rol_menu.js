@@ -9,7 +9,8 @@ let items = [
   { id: 1, id_rol: 1, id_menu: 1 },
   { id: 2, id_rol: 1, id_menu: 2 },
   { id: 3, id_rol: 1, id_menu: 3 },
-  { id: 4, id_rol: 1, id_menu: 4 }
+  { id: 4, id_rol: 1, id_menu: 4 },
+  { id: 5, id_rol: 1, id_menu: 5 }
 ];
 
 items = setTimestampsSeeder(items);
