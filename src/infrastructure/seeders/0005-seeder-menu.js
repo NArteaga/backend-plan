@@ -8,9 +8,10 @@ const {
 let items = [
   { id: 1, nombre: 'Dashboard', ruta: 'dashboard', icono: 'dashboard', orden: 1, id_menu: null, estado: 'ACTIVO'  },
   { id: 2, nombre: 'Entidades', ruta: 'entidades', icono: 'business', orden: 2, id_menu: null, estado: 'ACTIVO'  },
-  { id: 3, nombre: 'Roles', ruta: 'roles', icono: 'shield', orden: 3, id_menu: null, estado: 'ACTIVO'  },
-  { id: 4, nombre: 'Usuarios', ruta: 'usuarios', icono: 'people', orden: 4, id_menu: null, estado: 'ACTIVO'  },
-  { id: 5, nombre: 'Menus', ruta: 'menus', icono: 'menu', orden: 5, id_menu: null, estado: 'ACTIVO'  }
+  { id: 3, nombre: 'Roles', ruta: 'roles', icono: 'group', orden: 3, id_menu: null, estado: 'ACTIVO'  },
+  { id: 4, nombre: 'Menus', ruta: 'menus', icono: 'menu', orden: 4, id_menu: null, estado: 'ACTIVO'  },
+  { id: 5, nombre: 'Usuarios', ruta: 'usuarios', icono: 'people', orden: 5, id_menu: null, estado: 'ACTIVO'  },
+  { id: 6, nombre: 'Parametros', ruta: 'parametros', icono: 'settings', orden: 6, id_menu: null, estado: 'ACTIVO'  }
 
 ];
 

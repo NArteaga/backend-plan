@@ -11,14 +11,36 @@ module.exports = (sequelize, DataTypes) => {
       xlabel : lang.t('fields.idEntidad'),
       field  : 'id_entidad'
     },
+    tipoDocumento: {
+      type   : DataTypes.STRING(15),
+      xlabel : lang.t('fields.tipoDocumento'),
+      field  : 'tipo_documento'
+    },
+    numeroDocumento: {
+      type   : DataTypes.STRING(15),
+      xlabel : lang.t('fields.numeroDocumento'),
+      field  : 'numero_documento'
+    },
+    complemento: {
+      type         : DataTypes.STRING(3),
+      defaultValue : null,
+      xlabel       : lang.t('fields.complemento'),
+      field        : 'complemento'
+    },
+    fechaNacimiento: {
+      type   : DataTypes.DATEONLY,
+      xlabel : lang.t('fields.fechaNacimiento'),
+      field  : 'fecha_nacimiento'
+    },
     usuario: {
       type   : DataTypes.STRING(100),
       unique : true,
       xlabel : lang.t('fields.usuario')
     },
     contrasena: {
-      type   : DataTypes.STRING(500),
-      xlabel : lang.t('fields.contrasena')
+      type      : DataTypes.STRING(500),
+      allowNull : true,
+      xlabel    : lang.t('fields.contrasena')
     },
     nombres: {
       type      : DataTypes.STRING(100),
@@ -36,12 +58,6 @@ module.exports = (sequelize, DataTypes) => {
       type   : DataTypes.STRING(100),
       xlabel : lang.t('fields.segundoApellido'),
       field  : 'segundo_apellido'
-    },
-    numeroDocumento: {
-      type      : DataTypes.STRING(50),
-      allowNull : true,
-      xlabel    : lang.t('fields.numeroDocumento'),
-      field     : 'numero_documento'
     },
     telefono: {
       type      : DataTypes.STRING(50),

@@ -11,6 +11,21 @@ module.exports = (sequelize, DataTypes) => {
       xlabel : lang.t('fields.ip'),
       field  : 'ip'
     },
+    state: {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.state'),
+      field  : 'state'
+    },
+    estado: {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.estado'),
+      field  : 'estado'
+    },
+    parametros: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.parametros'),
+      field  : 'parametros'
+    },
     navegador: {
       type   : DataTypes.TEXT,
       xlabel : lang.t('fields.navegador'),

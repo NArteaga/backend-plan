@@ -1,9 +1,11 @@
 'use strict';
 
 const { ErrorApp } = require('../../lib/error');
+const moment = require('moment');
+const { generateToken } = require('../../../application/lib/auth');
 
 module.exports = function userService (repositories, helpers, res) {
-  const { UsuarioRepository, RolUsuarioRepository, AuthRepository, transaction } = repositories;
+  const { UsuarioRepository, RolUsuarioRepository, AuthRepository, RolRepository, transaction, ParametroRepository } = repositories;
 
   async function listarUsuarios (params) {
     try {
@@ -18,6 +20,107 @@ module.exports = function userService (repositories, helpers, res) {
       return UsuarioRepository.findOne({ id });
     } catch (error) {
       throw new ErrorApp(error.message, 400);
+    }
+  }
+
+  async function getResponse (user, seleccionarRol, info = {}) {
+    let respuesta;
+    try {
+      const usuario = user.usuario;
+      // Actualizando el último login
+      const now = moment().format('YYYY-MM-DD HH:mm:ss');
+      let text = '';
+      if (info.location) {
+        text += `Location: ${info.location.country} -- ${info.location.city} <br />`;
+      }
+      if (info.navigator) {
+        text += `Navigator: ${info.navigator}`;
+      }
+
+      const where = {};
+      if (seleccionarRol) {
+        where.id = seleccionarRol;
+      } else {
+        // where.ciudadano = true; No existe la columna ciudadano en el tabla rol
+        where.id = 1;
+      }
+      let idRolSeleccionado = await RolRepository.findOne(where);
+      if (!idRolSeleccionado) {
+        throw new Error('El rol seleccionado no existe.');
+      }
+      idRolSeleccionado = idRolSeleccionado.id;
+      const rolSeleccionado = user.roles.find(x => x.id === idRolSeleccionado);
+      if (!rolSeleccionado) {
+        throw new Error('No tiene asignado el rol que selecciono.');
+      }
+      const menu = rolSeleccionado.menus;
+      const listaRoles = user.roles.map(x => {
+        return {
+          id          : x.id,
+          nombre      : x.nombre,
+          descripcion : x.descripcion,
+          // ciudadano   : x.ciudadano,
+          // admin       : x.admin
+        }
+        ;
+      });
+      // menu = menu.data.menu;
+      // Generando token
+      const token = await generateToken(ParametroRepository, {
+        id        : user.id,
+        user      : user.usuario,
+        rol       : rolSeleccionado.id,
+        state     : info.state,
+        idPersona : user.idPersona,
+        idEmpresa : user.idEmpresa ? user.idEmpresa : null
+      });
+      respuesta = {
+        roles   : listaRoles,
+        menu,
+        token,
+        usuario : {
+          usuario          : user.usuario,
+          nombres          : user.nombres,
+          primer_apellido  : user.primerApellido,
+          segundo_apellido : user.segundoApellido,
+          email            : user.email,
+          rol              : rolSeleccionado.nombre,
+          idEmpresa        : user.idEmpresa ? user.idEmpresa : null,
+          lang             : 'es'
+        },
+        redirect: rolSeleccionado.path
+      };
+      return respuesta;
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+
+  async function userExist (usuario, contrasena, nit) {
+    let result;
+    let t;
+    try {
+      result = await UsuarioRepository.login({ usuario });
+      if (!nit && !result) {
+        throw new ErrorApp(`No existe el usuario ${usuario}`, 400);
+      }
+
+      const respuestaVerificacion = await AuthRepository.verificarContrasena(contrasena, result.contrasena);
+      if (!nit && !respuestaVerificacion) {
+        throw new ErrorApp(`La contraseña del usuario ${usuario} es incorrecta`, 400);
+      }
+
+      if (result.estado === 'INACTIVO') {
+        throw new ErrorApp(`El usuario ${usuario} se encuentra deshabilitado. Consulte con el administrador del sistema.`, 400);
+      }
+
+      return result;
+    } catch (e) {
+      if (t) {
+        await transaction.rollback(t);
+      }
+
+      throw new ErrorApp(e.message, 400);
     }
   }
 
@@ -112,11 +215,13 @@ module.exports = function userService (repositories, helpers, res) {
   }
 
   return {
+    getResponse,
     cambiarContrasena,
     asignarRoles,
     listarUsuarios,
     mostrar,
     createOrUpdate,
-    eliminar
+    eliminar,
+    userExist
   };
 };

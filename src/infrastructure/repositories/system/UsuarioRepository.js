@@ -161,6 +161,39 @@ module.exports = function usuariosRepository (models, Sequelize) {
     return null;
   }
 
+  async function findByCi (params = {}) {
+    const query = {};
+
+    query.where = params;
+
+    query.include = [
+      {
+        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        model      : entidad,
+        as         : 'entidad'
+      },
+      {
+        required   : true,
+        through    : { attributes: [] },
+        attributes : [
+          'id',
+          'idEntidad',
+          'nombre',
+          'descripcion',
+          'estado'
+        ],
+        model : rol,
+        as    : 'roles'
+      }
+    ];
+
+    const result = await usuario.findOne(query);
+    if (result) {
+      return result.toJSON();
+    }
+    return null;
+  }
+
   async function login (params = {}) {
     const query = {};
     query.attributes = [
@@ -298,6 +331,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
   }
 
   return {
+    findByCi,
     login,
     findById,
     verificarCorreoElectronico,

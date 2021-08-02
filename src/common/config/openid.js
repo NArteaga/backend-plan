@@ -1,49 +1,46 @@
 'use strict';
 
 const openid = {
-  // issuer server openid connect
   issuer : 'https://account-idetest.agetic.gob.bo',
-  // response registry client
   client : {
     application_type : 'web',
     grant_types      : [
       'authorization_code'
     ],
     id_token_signed_response_alg : 'RS256',
-    require_auth_time            : false,
-    response_types               : [
+    post_logout_redirect_uris    : [
+      'http://localhost:8080/statics/oauth/logout.html'
+    ],
+    require_auth_time : false,
+    response_types    : [
       'code'
     ],
-    subject_type                      : 'public',
-    token_endpoint_auth_method        : 'client_secret_basic',
-    introspection_signed_response_alg : 'RS256',
-    post_logout_redirect_uris         : [
-      'http://localhost:8080/oauth/logout.html'
-    ],
+    subject_type                         : 'public',
+    token_endpoint_auth_method           : 'client_secret_basic',
+    introspection_endpoint_auth_method   : 'client_secret_basic',
+    introspection_signed_response_alg    : 'RS256',
+    revocation_endpoint_auth_method      : 'client_secret_basic',
     backchannel_logout_session_required  : false,
     frontchannel_logout_session_required : false,
+    request_uris                         : [],
     authorization_signed_response_alg    : 'RS256',
     web_message_uris                     : [],
-    client_id_issued_at                  : 1577742983,
-    client_id                            : '7a096b2e-edb1-42d5-92ce-b1a9455873f2',
-    client_name                          : 'frontend_base_vue',
+    client_id_issued_at                  : 1625749055,
+    client_id                            : 'vWfCvd-mRiu-AInwmbTRl',
+    client_name                          : 'Pruebas',
     client_secret_expires_at             : 0,
-    client_secret                        : '6RHumL3QbbuUzfaX1jrSsn2oMSldbCIcwpFeTukU7sunDwzNnsFLYL3ei2YSB7CE',
+    client_secret                        : 'mRFcTeSQbYvJeYyyUFYbSlD95ycAGABohUMUPOf4-BLi5NEv7KA5LjHPFgbnyYp0aCzTJw03v2FrhsSdiQ728A',
     contacts                             : [
-      'dbarra@agetic.gob.bo'
+      'itancara@yopmail.com'
     ],
     redirect_uris: [
-      'http://localhost:8080/oauth/login.html'
+      'http://localhost:8080/statics/oauth/login.html'
     ],
-    introspection_endpoint_auth_method : 'client_secret_basic',
-    revocation_endpoint_auth_method    : 'client_secret_basic',
-    registration_client_uri            : 'https://account-idetest.agetic.gob.bo/reg/7a096b2e-edb1-42d5-92ce-b1a9455873f2',
-    registration_access_token          : 'V6JE7_ZPuMdsWsLYYMe1VKm5Z_GTZpc~KeVKCvruPqZ'
+    registration_client_uri   : 'https://account-idetest.agetic.gob.bo/reg/vWfCvd-mRiu-AInwmbTRl',
+    registration_access_token : 'G4DZvZP7mgwRWR1SLwQ9xZ4rjT8joAyun3WktcY3Eco'
   },
-  // parameters registry client
   client_params: {
-    scope: ['openid nombre email documento_identidad fecha_nacimiento celular']
-    // prompt: 'consent',
+    scope: ['openid profile fecha_nacimiento email adress celular']
   }
 };
 

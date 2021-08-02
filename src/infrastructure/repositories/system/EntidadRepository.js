@@ -11,15 +11,16 @@ module.exports = function entidadRepository (models, Sequelize) {
     const query = getQuery(params);
     query.attributes = [
       'id',
-      'sigla',
       'nombre',
-      'idEntidad',
-      'nivel',
+      'descripcion',
+      'sigla',
+      'web',
+      'email',
       'direccion',
       'telefono',
-      'urlLogo',
       'estado',
-      [Sequelize.literal('(SELECT TRUE)'), 'lazy']
+      'nivel',
+      'idEntidad'
     ];
     query.where = {};
 
@@ -42,20 +43,15 @@ module.exports = function entidadRepository (models, Sequelize) {
         }
       };
     }
-
+         
     if (params.nivel) {
       query.where.nivel = params.nivel;
     }
 
-    // if (params.idEntidad) {
-    //   query.where.id = params.idEntidad;
-    // }
-
-    // if (params.entidades && !params.idEntidad) {
-    //   query.where.id = {
-    //     [Op.in]: params.entidades
-    //   };
-    // }
+         
+    if (params.id) {
+      query.where.id = params.id;
+    }
 
     query.include = [];
 
@@ -66,14 +62,16 @@ module.exports = function entidadRepository (models, Sequelize) {
     const query = {
       attributes: [
         'id',
-        'sigla',
         'nombre',
-        'idEntidad',
-        'nivel',
+        'descripcion',
+        'sigla',
+        'web',
+        'email',
         'direccion',
         'telefono',
-        'urlLogo',
-        'estado'
+        'estado',
+        'nivel',
+        'idEntidad'
       ],
       where: {
         idEntidad: {
@@ -114,11 +112,32 @@ module.exports = function entidadRepository (models, Sequelize) {
     }
     return entidadesSuperiores;
   }
-
+  function findOne (params = {}) {
+    const query = getQuery(params);
+    query.attributes = [
+      'id',
+      'nombre',
+      'descripcion',
+      'sigla',
+      'web',
+      'email',
+      'direccion',
+      'telefono',
+      'estado',
+      'nivel',
+      'idEntidad'
+    ];
+    query.where = {};
+    if (params.id) {
+      query.where.id = params.id;
+    }
+    return entidad.findAndCountAll(query);
+  }
   return {
     getSuperiores,
     findDependientes,
     findAll,
+    findOne,  
     findOne        : (params) => Repository.findOne(params, entidad),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, entidad, t),
     deleteItem     : (id, t) => Repository.deleteItem(id, entidad, t)

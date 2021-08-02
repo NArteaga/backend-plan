@@ -3,17 +3,17 @@
 module.exports = function setupResponse (logs) {
   function success (data, message) {
     return {
-      code: 1,
+      code    : 1,
       data,
-      message: message || 'OK'
+      message : message || 'OK'
     };
   }
 
   async function error (error) {
-    let data = {
-      code: -1,
-      data: process.env.NODE_ENV !== 'production' ? error : '',
-      message: error.message || 'ERROR DESCONOCIDO'
+    const data = {
+      code    : -1,
+      data    : process.env.NODE_ENV !== 'production' ? error : '',
+      message : error.message || 'ERROR DESCONOCIDO'
     };
 
     let tipo = 'ERROR DOMINIO';
@@ -26,15 +26,15 @@ module.exports = function setupResponse (logs) {
       tipo = 'ERROR BD';
     }
 
-    await logs.error(data.message, tipo, error);
+    // await logs.error(data.message, tipo, error);
     return data;
   }
 
   function warning (error) {
     return {
-      code: 0,
-      data: error,
-      message: error.message || 'ADVERTENCIA'
+      code    : 0,
+      data    : error,
+      message : error.message || 'ADVERTENCIA'
     };
   }
 

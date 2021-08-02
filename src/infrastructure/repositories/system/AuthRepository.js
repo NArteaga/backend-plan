@@ -15,10 +15,38 @@ module.exports = function authRepository (models) {
     return bcrypt.compare(password, hash);
   }
 
+  async function findOne (params = {}) {
+    const query = {};
+    query.attributes = [
+      'id',
+      'ip',
+      'state',
+      'estado',
+      'parametros',
+      'navegador',
+      'userAgent',
+      'token',
+      'idEntidad',
+      'idRol',
+      'idUsuario',
+      'userCreated',
+      'userUpdated',
+      'userDeleted',
+      'token'
+    ];
+    query.where = params;
+    query.include = [];
+    const result = await auth.findOne(query);
+    if (!result) {
+      return null;
+    }
+    return result.toJSON();
+  }
+
   return {
     codificarContrasena,
     verificarContrasena,
-    findOne        : (params) => Repository.findOne(params, auth),
+    findOne,
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, auth, t),
     deleteItemCond : (params, t) => Repository.deleteItemCond(params, auth, t)
   };

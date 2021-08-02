@@ -43,6 +43,14 @@ module.exports = async function setupApi (app, services) {
 
   app.post('/auth/login', controllers.AuthController.login);
 
+  console.log('🚀  ' + chalk.yellow('RUTAS: ') + chalk.redBright('AUTH'));
+
+  app.get('/autorizar', controllers.AuthController.autorizar);
+  app.get('/codigo', controllers.AuthController.codigo);
+  app.post('/logout', controllers.AuthController.logout);
+
+  app.post('/auth/login', controllers.AuthController.login);
+
   app.get('/public/status', (req, res, next) => {
     const date = new Date();
     return res.status(200).send({
@@ -60,7 +68,6 @@ module.exports = async function setupApi (app, services) {
   console.log(' -', { method: 'GET', url: '/public/status' });
   console.log(' -', { method: 'POST', url: '/auth/login' });
   console.log(' -', { method: 'POST', url: '/auth/refresh-token' });
-  console.log(' -', { method: 'POST', url: '/save-subscription' });
 
   return app;
 };

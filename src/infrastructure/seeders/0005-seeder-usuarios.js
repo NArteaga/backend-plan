@@ -9,13 +9,16 @@ let items = [
   {
     id                 : 1,
     id_entidad         : 1,
+    numero_documento   : '9248643',
+    complemento        : '',
+    tipo_documento     : 'CI',
+    fecha_nacimiento   : '1993-08-15',
     cargo              : 'CARGO',
     usuario            : 'admin',
     contrasena         : bcrypt.hashSync('Developer', saltRounds),
     nombres            : 'Admin',
     primer_apellido    : 'Admin',
     segundo_apellido   : 'Admin',
-    numero_documento   : '',
     correo_electronico : 'admin@yopmail.com',
     celular            : '',
     estado             : 'ACTIVO'
