@@ -36,11 +36,9 @@ module.exports = (sequelize, DataTypes) => {
       xlabel : lang.t('fields.userAgent'),
       field  : 'user_agent'
     },
-    token: {
-      type      : DataTypes.TEXT,
-      allowNull : false,
-      xlabel    : lang.t('fields.token'),
-      field     : 'token'
+    tokens: { // id_token, access_token, refresh_token
+      type      : DataTypes.JSONB,
+      allowNull : true
     },
     idEntidad: {
       type   : DataTypes.INTEGER,

@@ -98,11 +98,9 @@ module.exports = function authService (repositories, helpers, res) {
           user = await UsuarioRepository.findOne({ usuario: data.usuario });
           if (user.estado === 'ACTIVO') {
             respuesta = await getResponse(user);
-            console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-            console.log(respuesta);
-            console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-            resultadoState.id_usuario = user.id;
+            resultadoState.idUsuario = user.id;
             resultadoState.estado = 'ACTIVO';
+            // resultadoState.token = respuesta.token;
             await AuthRepository.createOrUpdate(resultadoState);
           } else { // usuario inactivo
             respuesta = {
@@ -159,9 +157,6 @@ module.exports = function authService (repositories, helpers, res) {
           estado    : 'ACTIVO'
         };
         const result = await AuthRepository.findOne(parametros);
-        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-        console.log(result);
-        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
         if (result) {
           resultUrl = getUrl(result);
         } else {
@@ -172,9 +167,6 @@ module.exports = function authService (repositories, helpers, res) {
       }
       return res.success({ url: resultUrl });
     } catch (e) {
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(e);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       return res.error(e);
     }
   }

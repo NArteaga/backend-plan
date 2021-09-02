@@ -25,14 +25,13 @@ module.exports = function authRepository (models) {
       'parametros',
       'navegador',
       'userAgent',
-      'token',
+      'tokens',
       'idEntidad',
       'idRol',
       'idUsuario',
       'userCreated',
       'userUpdated',
-      'userDeleted',
-      'token'
+      'userDeleted'
     ];
     query.where = params;
     query.include = [];

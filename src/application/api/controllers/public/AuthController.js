@@ -63,7 +63,7 @@ module.exports = function setupAuthController (services) {
 
     const { codigo, usuario } = req.body;
     try {
-      const result = await AuthService.logout(codigo, usuario);
+      const result = await AuthService.logout(codigo, usuario.usuario);
       if (result.code === 1) {
         res.send(result.data);
       } else {
