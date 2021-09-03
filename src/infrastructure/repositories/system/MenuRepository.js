@@ -36,7 +36,7 @@ module.exports = function menusRepository (models, Sequelize) {
   }
 
   function findOne (params = {}) {
-    const query = getQuery(params);
+    const query = {};
     query.where = params;
     query.include = [];
     return menu.findOne(query);

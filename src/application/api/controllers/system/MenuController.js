@@ -50,7 +50,7 @@ module.exports = function setupMenuController (services) {
   async function mostrar (req, res) {
     try {
       debug('Recuperando modulos');
-      const respuesta = await MenuService.mostrar(req.params.id);
+      const respuesta = await MenuService.findOne({ id: req.params.id });
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
