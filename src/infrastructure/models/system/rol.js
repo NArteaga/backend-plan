@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   let fields = {
     id        : util.pk,
     idEntidad : {
-      type      : DataTypes.INTEGER,
+      type      : DataTypes.UUID,
       allowNull : false,
       xlabel    : lang.t('fields.idEntidad'),
       field     : 'id_entidad'

@@ -7,7 +7,6 @@
     "db": "npm run setup && npm run seeders",
     "start": "node src/application/server",
     "start:dev": "nodemon src/application/server",
-    "dev": "nodemon src/application/server",
     "secure": "NODE_ENV=secure nodemon src/application/server",
     "test": "NODE_ENV=test npm run setup && NODE_ENV=test npm run seeders && npm run test-db && npm run test-domain",
     "test-db": "NODE_ENV=test ava src/infrastructure/tests/ --verbose",

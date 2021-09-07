@@ -41,17 +41,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : true
     },
     idEntidad: {
-      type   : DataTypes.INTEGER,
+      type   : DataTypes.UUID,
       xlabel : lang.t('fields.idEntidad'),
       field  : 'id_entidad'
     },
     idRol: {
-      type   : DataTypes.TEXT,
+      type   : DataTypes.UUID,
       xlabel : lang.t('fields.idRol'),
       field  : 'id_rol'
     },
     idUsuario: {
-      type   : DataTypes.INTEGER,
+      type   : DataTypes.UUID,
       xlabel : lang.t('fields.idUsuario'),
       field  : 'id_usuario'
     }

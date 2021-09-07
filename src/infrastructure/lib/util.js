@@ -96,28 +96,31 @@ function loadRepositories (PATH, models, Sequelize, opts = {}) {
 }
 
 const pk = {
-  primaryKey    : true,
-  autoIncrement : true,
-  type          : Sequelize.INTEGER,
-  xlabel        : 'ID'
+  primaryKey   : true,
+  type         : Sequelize.UUID,
+  defaultValue : Sequelize.UUIDV4,
+  xlabel       : 'ID'
 };
 
 const timestamps = {
   userCreated: {
-    type      : Sequelize.INTEGER,
-    allowNull : false,
-    label     : lang.t('fields.userCreated'),
-    field     : '_user_created'
+    type         : Sequelize.UUID,
+    defaultValue : Sequelize.UUIDV4,
+    allowNull    : false,
+    label        : lang.t('fields.userCreated'),
+    field        : '_user_created'
   },
   userUpdated: {
-    type  : Sequelize.INTEGER,
-    label : lang.t('fields.userUpdated'),
-    field : '_user_updated'
+    type         : Sequelize.UUID,
+    defaultValue : Sequelize.UUIDV4,
+    label        : lang.t('fields.userUpdated'),
+    field        : '_user_updated'
   },
   userDeleted: {
-    type  : Sequelize.INTEGER,
-    label : lang.t('fields.userDeleted'),
-    field : '_user_deleted'
+    type         : Sequelize.UUID,
+    defaultValue : Sequelize.UUIDV4,
+    label        : lang.t('fields.userDeleted'),
+    field        : '_user_deleted'
   },
   createdAt: {
     type         : Sequelize.DATE,
@@ -160,7 +163,7 @@ function setTimestamps (fields) {
   return Object.assign(fields, timestamps);
 }
 
-function setTimestampsSeeder (arr, idUser = 1) {
+function setTimestampsSeeder (arr, idUser = '7171272e-b31b-4c34-9220-9f535c958c5c') {
   arr.map((el, index) => {
     arr[index] = Object.assign(el, {
       _user_created : idUser,

@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       field  : 'icono'
     },
     idMenu: {
-      type      : DataTypes.INTEGER,
+      type      : DataTypes.UUID,
       allowNull : true,
       xlabel    : lang.t('fields.idMenu'),
       field     : 'id_menu'

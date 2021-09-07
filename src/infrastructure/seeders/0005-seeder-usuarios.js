@@ -7,8 +7,8 @@ const bcrypt = require('bcrypt');
 // Datos de producción
 let items = [
   {
-    id                 : 1,
-    id_entidad         : 1,
+    id                 : '7171272e-b31b-4c34-9220-9f535c958c5c',
+    id_entidad         : '745034da-06cb-4d98-8fee-4c982adfbb22',
     numero_documento   : '9248643',
     complemento        : '',
     tipo_documento     : 'CI',
@@ -30,7 +30,7 @@ items = setTimestampsSeeder(items);
 module.exports = {
   up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('sys_usuario', items, {})
-      .then(async () => queryInterface.sequelize.query(`ALTER SEQUENCE "sys_usuario_id_seq" RESTART WITH ${items.length + 1}`))
+      .then(async () => {})
       .catch(error => {
         if (error.message.indexOf('already exists') > -1) return;
         console.error(error);

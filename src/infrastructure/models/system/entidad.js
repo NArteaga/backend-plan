@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       field        : 'estado'
     },
     idEntidad: {
-      type      : DataTypes.INTEGER,
+      type      : DataTypes.UUID,
       allowNull : true,
       xlabel    : lang.t('fields.idEntidad'),
       field     : 'id_entidad'
