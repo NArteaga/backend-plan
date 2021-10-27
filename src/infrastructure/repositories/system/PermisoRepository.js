@@ -8,7 +8,7 @@ module.exports = function modulossRepository (models, Sequelize) {
   const Op = Sequelize.Op;
 
   async function findAll (params = {}) {
-    const query = {};
+    const query = getQuery(params);
     query.where = {};
 
     query.attributes = [

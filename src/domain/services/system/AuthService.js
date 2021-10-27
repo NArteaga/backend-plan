@@ -31,20 +31,23 @@ module.exports = function authService (repositories, helpers, res) {
       }, config.openid.client_params);
 
       const authorizeUrl = cliente.authorizationUrl(authorizationRequest);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      console.log(authorizeUrl);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
 
       const data = {
         state,
         parametros: {
           nonce
         },
-        userCreated: 1
+        userCreated: '7171272e-b31b-4c34-9220-9f535c958c5c'
       };
       data.token = 'dsa';
       data.estado = 'INICIO';
       await AuthRepository.createOrUpdate(data);
 
       return res.success({
-        url    : authorizeUrl,
+        url    : authorizeUrl + '&prompt=consent',
         codigo : state
       });
     } catch (e) {
@@ -75,6 +78,9 @@ module.exports = function authService (repositories, helpers, res) {
           nonce : resultadoState.parametros.nonce,
           state : resultadoState.state
         });
+        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+        console.log(respuestaCode);
+        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
         resultadoState.tokens = respuestaCode;
 
         const claims = await cliente.userinfo(respuestaCode.access_token);
@@ -119,9 +125,6 @@ module.exports = function authService (repositories, helpers, res) {
         return res.warning(new Error('Los códigos de verificacion no coenciden. Intente nuevamente.'));
       }
     } catch (e) {
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(e);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       return res.error(e);
     }
   }

@@ -5,7 +5,9 @@ const openid = {
   client : {
     application_type : 'web',
     grant_types      : [
-      'authorization_code'
+      'authorization_code',
+      'refresh_token',
+      'client_credentials'
     ],
     id_token_signed_response_alg : 'RS256',
     post_logout_redirect_uris    : [
@@ -40,7 +42,7 @@ const openid = {
     registration_access_token : 'G4DZvZP7mgwRWR1SLwQ9xZ4rjT8joAyun3WktcY3Eco'
   },
   client_params: {
-    scope: ['openid profile fecha_nacimiento email adress celular']
+    scope: ['openid profile fecha_nacimiento email celular offline_access']
   }
 };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const { getQuery } = require('../../lib/util');
+const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function rolesRepository (models, Sequelize) {
@@ -9,7 +9,7 @@ module.exports = function rolesRepository (models, Sequelize) {
 
   const attributes = ['id', 'idEntidad', 'nombre', 'descripcion', 'estado', 'createdAt'];
 
-  function findAll (params = {}) {
+  async function findAll (params = {}) {
     const query = getQuery(params);
     query.attributes = attributes;
     query.where = {};
@@ -68,12 +68,53 @@ module.exports = function rolesRepository (models, Sequelize) {
       };
     }
 
-    return rol.findAndCountAll(query);
+    const result = await rol.findAndCountAll(query);
+    return toJSON(result);
+  }
+
+  async function findOne (params = {}) {
+    const query = {
+      attributes : ['id', 'idEntidad', 'nombre', 'descripcion', 'estado'],
+      where      : params
+    };
+
+    query.include = [
+      {
+        attributes: [
+          'id',
+          'sigla',
+          'nombre',
+          'idEntidad',
+          'nivel'
+        ],
+        model : entidad,
+        as    : 'entidad'
+      },
+      {
+        attributes: [
+          'id',
+          'nombre',
+          'ruta',
+          'icono',
+          'idMenu',
+          'orden',
+          'estado'
+        ],
+        through : { attributes: [] },
+        model   : menu,
+        as      : 'menus'
+      }
+    ];
+    const result = await rol.findOne(query);
+    if (!result) {
+      return null;
+    }
+    return result.toJSON();
   }
 
   return {
     findAll,
-    findOne        : params => Repository.findOne(params, rol),
+    findOne,
     findById       : id => Repository.findById(id, rol, attributes),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, rol, t),
     deleteItem     : (id, t) => Repository.deleteItem(id, rol, t)

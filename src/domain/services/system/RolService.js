@@ -22,6 +22,9 @@ module.exports = function rolService (repositories, helpers, res) {
     try {
       const permisos = await PermisoRepository.findAll();
       let permisosRol = [];
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      console.log(idRol);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       if (idRol) {
         permisosRol = await PermisoRepository.findAll({ idRol });
         for (const permiso of permisos.rows) {
@@ -34,6 +37,18 @@ module.exports = function rolService (repositories, helpers, res) {
       return permisos.rows;
     } catch (err) {
       debug(err);
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
+  async function findOne (params) {
+    try {
+      const entidad = await RolRepository.findOne(params);
+      if (!entidad) {
+        throw new Error('La entidad no existe');
+      }
+      return entidad;
+    } catch (err) {
       throw new ErrorApp(err.message, 400);
     }
   }
@@ -152,6 +167,7 @@ module.exports = function rolService (repositories, helpers, res) {
     }
   }
   return {
+    findOne,
     listarPermisos,
     findAll,
     findById,

@@ -15,17 +15,16 @@ module.exports = function setupEntidadController (services) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
-  async function listarPor (req, res) {
+  async function findOne (req, res) {
     try {
-      debug('listar por');
-      const data = req.body;
-      data.id = req.params.id;
+      const data = { id: req.params.id };
       const respuesta = await EntidadService.findOne(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
   async function crear (req, res) {
     try {
       const data = req.body;
@@ -64,7 +63,7 @@ module.exports = function setupEntidadController (services) {
 
   return {
     listar,
-    listarPor,
+    findOne,
     eliminar,
     actualizar,
     crear

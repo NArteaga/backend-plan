@@ -43,12 +43,11 @@ module.exports = function entidadRepository (models, Sequelize) {
         }
       };
     }
-         
+
     if (params.nivel) {
       query.where.nivel = params.nivel;
     }
 
-         
     if (params.id) {
       query.where.id = params.id;
     }
@@ -112,33 +111,36 @@ module.exports = function entidadRepository (models, Sequelize) {
     }
     return entidadesSuperiores;
   }
-  function findOne (params = {}) {
-    const query = getQuery(params);
+  async function findOne (params = {}) {
+    const query = {};
     query.attributes = [
-      'id',
-      'nombre',
       'descripcion',
-      'sigla',
-      'web',
-      'email',
       'direccion',
-      'telefono',
+      'email',
       'estado',
+      'id',
+      'idEntidad',
       'nivel',
-      'idEntidad'
+      'nombre',
+      'sigla',
+      'telefono',
+      'web'
     ];
     query.where = {};
     if (params.id) {
       query.where.id = params.id;
     }
-    return entidad.findAndCountAll(query);
+    const result = await entidad.findOne(query);
+    if (!result) {
+      return null;
+    }
+    return result.toJSON();
   }
   return {
     getSuperiores,
     findDependientes,
     findAll,
-    findOne,  
-    findOne        : (params) => Repository.findOne(params, entidad),
+    findOne,
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, entidad, t),
     deleteItem     : (id, t) => Repository.deleteItem(id, entidad, t)
   };

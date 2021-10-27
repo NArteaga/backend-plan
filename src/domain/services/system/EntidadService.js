@@ -9,7 +9,6 @@ module.exports = function entidadService (repositories, helpers, res) {
 
   async function listar (params) {
     try {
-       
       const comentarios = await EntidadRepository.findAll(params);
       return comentarios;
     } catch (err) {
@@ -19,11 +18,11 @@ module.exports = function entidadService (repositories, helpers, res) {
 
   async function findOne (params) {
     try {
-      const comentario = await EntidadRepository.findOne(params);
-      if (!comentario) {
-        throw new Error('El comentario no existe');
+      const entidad = await EntidadRepository.findOne(params);
+      if (!entidad) {
+        throw new Error('La entidad no existe');
       }
-      return comentario;
+      return entidad;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
     }
@@ -33,7 +32,7 @@ module.exports = function entidadService (repositories, helpers, res) {
     debug('Crear o actualizar Entidad');
     let entidad;
     try {
-        entidad = await EntidadRepository.createOrUpdate(data);
+      entidad = await EntidadRepository.createOrUpdate(data);
       return entidad;
     } catch (err) {
       throw new ErrorApp(err.message, 400);
