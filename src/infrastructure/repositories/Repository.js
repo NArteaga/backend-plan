@@ -18,6 +18,9 @@ async function createOrUpdate (object, model, t) {
       if (t) {
         cond.transaction = t;
       }
+      delete object.createdAt;
+      delete object.userCreated;
+
       updated = await model.update(object, cond);
     } catch (e) {
       if (t) {

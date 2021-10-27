@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     estado: {
       type         : DataTypes.ENUM,
       values       : ['ACTIVO', 'INACTIVO'],
-      defaultValue : 'ACTIVO',
       allowNull    : false,
+      defaultValue : 'ACTIVO',
       xlabel       : lang.t('fields.estado'),
       field        : 'estado'
     }

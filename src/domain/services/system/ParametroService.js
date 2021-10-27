@@ -15,6 +15,18 @@ module.exports = function parametroService (repositories, helpers, res) {
     }
   }
 
+  async function findOne (params) {
+    try {
+      const entidad = await ParametroRepository.findOne(params);
+      if (!entidad) {
+        throw new Error('La entidad no existe');
+      }
+      return entidad;
+    } catch (err) {
+      throw new ErrorApp(err.message, 400);
+    }
+  }
+
   async function createOrUpdate (datos) {
     try {
       const parametros = await ParametroRepository.createOrUpdate(datos);
@@ -35,6 +47,7 @@ module.exports = function parametroService (repositories, helpers, res) {
 
   return {
     eliminar,
+    findOne,
     createOrUpdate,
     findAll
   };

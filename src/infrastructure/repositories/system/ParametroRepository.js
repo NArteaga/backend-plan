@@ -6,10 +6,11 @@ const Repository = require('../Repository');
 module.exports = function ParametroRepository (models, Sequelize) {
   const { parametro } = models;
   const Op = Sequelize.Op;
-  const attributes = ['id', 'codigo', 'grupo', 'nombre', 'descripcion', 'otroe', 'estado'];
+  const attributes = ['id', 'codigo', 'grupo', 'nombre', 'descripcion', 'otros', 'estado'];
 
   function findAll (params = {}) {
     const query = getQuery(params);
+    query.attributes = attributes;
     query.where = {};
 
     if (params.estado) {
@@ -39,7 +40,7 @@ module.exports = function ParametroRepository (models, Sequelize) {
 
   return {
     findAll,
-    findOne        : params => Repository.findOne(params, parametro),
+    findOne        : params => Repository.findOne(params, parametro, attributes),
     findById       : (id) => Repository.findById(id, parametro, attributes),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, parametro, t),
     deleteItem     : (id, t) => Repository.deleteItem(id, parametro, t)
