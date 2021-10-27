@@ -26,6 +26,8 @@ module.exports = function associations (models) {
   usuario.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(usuario,  { foreignKey: { name: 'idEntidad' }, as: 'usuarios' });
 
+  menu.belongsTo(menu, { foreignKey: { name: 'idMenu' }, as: 'menuSuperior' });
+
   rol.belongsToMany(menu, { through: { model: rolMenu, unique: false }, as: 'menus', foreignKey: 'idRol' });
   menu.belongsToMany(rol, { through: { model: rolMenu, unique: false }, as: 'roles', foreignKey: 'idMenu' });
 

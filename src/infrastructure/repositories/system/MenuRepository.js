@@ -4,7 +4,7 @@ const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function menusRepository (models, Sequelize) {
-  const { menu, rol, permisos, rolMenu } = models;
+  const { menu, rol } = models;
   const Op = Sequelize.Op;
 
   function findAll (params = {}) {
@@ -20,7 +20,12 @@ module.exports = function menusRepository (models, Sequelize) {
     ];
 
     query.where = {};
-    query.include = [];
+    query.include = [
+      {
+        model : menu,
+        as    : 'menuSuperior'
+      }
+    ];
 
     if (params.estado) {
       query.where.estado = params.estado;
@@ -85,6 +90,7 @@ module.exports = function menusRepository (models, Sequelize) {
     findOne,
     findById       : (id) => Repository.findById(id, menu),
     createOrUpdate : (item, t) => Repository.createOrUpdate(item, menu, t),
-    deleteItem     : (id, t) => Repository.deleteItem(id, menu, t)
+    deleteItem     : (id, t) => Repository.deleteItem(id, menu, t),
+    deleteItemCond : (params, t) => Repository.deleteItemCond(params, menu, t)
   };
 };

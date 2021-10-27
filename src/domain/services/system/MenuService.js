@@ -33,6 +33,9 @@ module.exports = function menuService (repositories, helpers, res) {
     debug('Crear o actualizar rol');
     let menu;
     try {
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+      console.log(data);
+      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       menu = await MenuRepository.createOrUpdate(data);
       return menu;
     } catch (err) {
@@ -40,10 +43,9 @@ module.exports = function menuService (repositories, helpers, res) {
     }
   }
 
-  async function deleteItem (id) {
-    debug('Eliminando rol', id);
+  async function eliminar (params) {
     try {
-      const resultado = await MenuRepository.deleteItem(id);
+      const resultado = await MenuRepository.deleteItemCond(params);
       return resultado;
     } catch (err) {
       debug(err);
@@ -55,6 +57,6 @@ module.exports = function menuService (repositories, helpers, res) {
     findOne,
     listar,
     createOrUpdate,
-    deleteItem
+    eliminar
   };
 };

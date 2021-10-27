@@ -105,6 +105,11 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     query.include = [
       {
+        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        model      : entidad,
+        as         : 'entidad'
+      },
+      {
         through : { attributes: [] },
         model   : rol,
         as      : 'roles'
@@ -125,6 +130,8 @@ module.exports = function usuariosRepository (models, Sequelize) {
       'segundoApellido',
       'numeroDocumento',
       'telefono',
+      'idEntidad',
+      'cargo',
       'celular',
       'correoElectronico',
       'foto',

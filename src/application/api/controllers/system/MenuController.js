@@ -41,12 +41,16 @@ module.exports = function setupMenuController (services) {
 
   async function eliminar (req, res) {
     try {
-      const respuesta = await MenuService.eliminar(req.params.id);
+      const respuesta = await MenuService.eliminar({
+        id          : req.params.id,
+        userDeleted : req.user.idUsuario
+      });
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
+
   async function mostrar (req, res) {
     try {
       debug('Recuperando modulos');

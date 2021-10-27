@@ -130,15 +130,23 @@ async function inactivateItem (id, model, object) {
 }
 
 async function deleteItemCond (params, model, t) {
+  const actualizacion = {
+    userDeleted : params.userDeleted,
+    deletedAt   : new Date()
+  };
+
+  delete params.userDeleted;
+
   const cond = {
     where: params
   };
+
   if (t) {
     cond.transaction = t;
   }
   try {
-    const deleted = await model.destroy(cond);
-    return +!!deleted; //  Devuelve 1 si se eliminó correctamente y 0 si no se pudo eliminar
+    const deleted = await model.update(actualizacion, cond);
+    return deleted; //  Devuelve 1 si se eliminó correctamente y 0 si no se pudo eliminar
   } catch (e) {
     if (t) {
       await t.rollback();
@@ -146,7 +154,6 @@ async function deleteItemCond (params, model, t) {
     throw new Error(e);
   }
 }
-
 module.exports = {
   deleteItemCond,
   findOne,
