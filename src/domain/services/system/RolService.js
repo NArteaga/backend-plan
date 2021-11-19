@@ -20,13 +20,10 @@ module.exports = function rolService (repositories, helpers, res) {
   async function listarPermisos (idRol) {
     debug('Lista de roles|filtros');
     try {
-      const permisos = await PermisoRepository.findAll();
+      const permisos = await PermisoRepository.findAll({ tipo: 'SISTEMA' });
       let permisosRol = [];
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(idRol);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
       if (idRol) {
-        permisosRol = await PermisoRepository.findAll({ idRol });
+        permisosRol = await PermisoRepository.findAll({ idRol, tipo: 'SISTEMA' });
         for (const permiso of permisos.rows) {
           const existe = permisosRol.rows.find(x => x.id === permiso.id);
           if (existe) {

@@ -16,6 +16,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : true,
       xlabel    : lang.t('fields.descripcion')
     },
+    tipo: {
+      type         : DataTypes.ENUM,
+      values       : ['SISTEMA', 'INTEROPERABILIDAD'],
+      defaultValue : 'SISTEMA',
+      allowNull    : false,
+      xlabel       : lang.t('fields.tipo')
+    },
     estado: {
       type   : DataTypes.ENUM,
       values : ['ACTIVO', 'INACTIVO'],

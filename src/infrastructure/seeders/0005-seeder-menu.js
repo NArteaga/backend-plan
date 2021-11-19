@@ -11,7 +11,8 @@ let items = [
   { id: '61d6d53b-ac65-41ac-bc54-3228f548f40a', nombre: 'Roles', ruta: 'roles', icono: 'group', orden: 3, id_menu: null, estado: 'ACTIVO'  },
   { id: 'ef6b99d0-0834-4d1e-86b0-207111744f98', nombre: 'Menus', ruta: 'menus', icono: 'menu', orden: 4, id_menu: null, estado: 'ACTIVO'  },
   { id: '6dc27435-bb49-48c8-b98d-ed9024d10ec5', nombre: 'Usuarios', ruta: 'usuarios', icono: 'people', orden: 5, id_menu: null, estado: 'ACTIVO'  },
-  { id: 'a0882ff9-0d95-4d60-835d-85624f7a3469', nombre: 'Parametros', ruta: 'parametros', icono: 'settings', orden: 6, id_menu: null, estado: 'ACTIVO'  }
+  { id: 'a0882ff9-0d95-4d60-835d-85624f7a3469', nombre: 'Parametros', ruta: 'parametros', icono: 'settings', orden: 6, id_menu: null, estado: 'ACTIVO'  },
+  { id: 'a0882ff9-0d95-4d60-835d-85624f7a3411', nombre: 'Interoperabilidad', ruta: 'interoperabilidad', icono: 'cloud_sync', orden: 8, id_menu: null, estado: 'ACTIVO'  }
 
 ];
 

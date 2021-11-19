@@ -4,7 +4,7 @@ const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function modulossRepository (models, Sequelize) {
-  const { permiso, modulos, rol } = models;
+  const { permiso, modulos, rol, aplicacion } = models;
   const Op = Sequelize.Op;
 
   async function findAll (params = {}) {
@@ -15,24 +15,41 @@ module.exports = function modulossRepository (models, Sequelize) {
       'id',
       'nombre',
       'descripcion',
+      'tipo',
       'estado',
       [Sequelize.literal('(SELECT FALSE)'), 'permitido']
     ];
 
-    const whereRol = {};
-
-    if (params.idRol) {
-      whereRol.id = params.idRol;
+    if (params.tipo) {
+      query.where.tipo = params.tipo;
     }
 
     query.include = [
       {
         attributes : [],
         model      : rol,
-        as         : 'roles',
-        where      : whereRol
+        as         : 'roles'
+      },
+      {
+        attributes : [],
+        model      : aplicacion,
+        as         : 'aplicaciones'
       }
     ];
+
+    if (params.idRol) {
+      query.include[0].required = true;
+      query.include[0].where = {
+        id: params.idRol
+      };
+    }
+
+    if (params.idAplicacion) {
+      query.include[1].required = true;
+      query.include[1].where = {
+        id: params.idAplicacion
+      };
+    }
 
     const result = await permiso.findAndCountAll(query);
     return toJSON(result);
@@ -44,7 +61,8 @@ module.exports = function modulossRepository (models, Sequelize) {
     query.attributes =  [
       'id',
       'nombre',
-      'descripcion'
+      'descripcion',
+      'tipo'
     ];
     if (params.idRol) {
       query.where.id = params.idRol;
@@ -90,7 +108,8 @@ module.exports = function modulossRepository (models, Sequelize) {
       'id',
       'nombre',
       'descripcion',
-      'estado'
+      'estado',
+      'tipo'
     ];
 
     query.include = [
@@ -100,6 +119,40 @@ module.exports = function modulossRepository (models, Sequelize) {
         attributes : [],
         model      : rol,
         as         : 'roles',
+        where      : {
+          id: {
+            [Op.in]: roles
+          }
+        }
+      }
+    ];
+
+    const result = await permiso.findAndCountAll(query);
+    return toJSON(result);
+  }
+
+  async function findByAplicaciones (roles) {
+    const query = {};
+
+    query.where = {
+      estado: 'ACTIVO'
+    };
+
+    query.attributes = [
+      'id',
+      'nombre',
+      'descripcion',
+      'estado',
+      'tipo'
+    ];
+
+    query.include = [
+      {
+        required   : true,
+        through    : { attributes: [] },
+        attributes : [],
+        model      : aplicacion,
+        as         : 'aplicaciones',
         where      : {
           id: {
             [Op.in]: roles
@@ -147,6 +200,7 @@ module.exports = function modulossRepository (models, Sequelize) {
 
   return {
     findByRoles,
+    findByAplicaciones,
     verificarPermisos,
     findAll,
     findOne,

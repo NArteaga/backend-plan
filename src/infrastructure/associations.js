@@ -11,7 +11,9 @@ module.exports = function associations (models) {
     rolPermiso,
     rolUsuario,
     rolMenu,
-    menu
+    menu,
+    aplicacion,
+    aplicacionPermiso
   } = models;
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
@@ -19,6 +21,9 @@ module.exports = function associations (models) {
 
   rol.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(rol,  { foreignKey: { name: 'idEntidad' }, as: 'roles' });
+
+  aplicacion.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(aplicacion,  { foreignKey: { name: 'idEntidad' }, as: 'aplicaciones' });
 
   entidad.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidadPadre' });
   entidad.hasMany(entidad,  { foreignKey: { name: 'idEntidad' }, as: 'entidades' });
@@ -33,6 +38,9 @@ module.exports = function associations (models) {
 
   rol.belongsToMany(permiso, { through: { model: rolPermiso, unique: false }, as: 'permisos', foreignKey: 'idRol' });
   permiso.belongsToMany(rol, { through: { model: rolPermiso, unique: false }, as: 'roles', foreignKey: 'idPermiso' });
+
+  aplicacion.belongsToMany(permiso, { through: { model: aplicacionPermiso, unique: false }, as: 'permisos', foreignKey: 'idAplicacion' });
+  permiso.belongsToMany(aplicacion, { through: { model: aplicacionPermiso, unique: false }, as: 'aplicaciones', foreignKey: 'idPermiso' });
 
   // Roles de usuario
   usuario.belongsToMany(rol,  { through: { model: rolUsuario, unique: false }, as: 'roles', foreignKey: 'idUsuario' });

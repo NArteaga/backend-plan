@@ -31,9 +31,6 @@ module.exports = function authService (repositories, helpers, res) {
       }, config.openid.client_params);
 
       const authorizeUrl = cliente.authorizationUrl(authorizationRequest);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-      console.log(authorizeUrl);
-      console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
 
       const data = {
         state,
@@ -78,9 +75,7 @@ module.exports = function authService (repositories, helpers, res) {
           nonce : resultadoState.parametros.nonce,
           state : resultadoState.state
         });
-        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
-        console.log(respuestaCode);
-        console.log('==============================_MENSAJE_A_MOSTRARSE_==============================');
+
         resultadoState.tokens = respuestaCode;
 
         const claims = await cliente.userinfo(respuestaCode.access_token);
