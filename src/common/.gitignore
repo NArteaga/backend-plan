@@ -3,8 +3,9 @@ node_modules/
 yarn-error.log
 npm-debug.log
 alias.sh
-src/common/config/app.js
-src/common/config/constants.js
-src/common/config/db.js
-src/common/config/mail.js
-src/common/config/openid.js
+
+/src/common/config/app.js
+/src/common/config/constants.js
+/src/common/config/db.js
+/src/common/config/mail.js
+/src/common/config/openid.js
