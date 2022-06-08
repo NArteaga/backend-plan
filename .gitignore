@@ -4,8 +4,11 @@ node_modules/
 yarn-error.log
 npm-debug.log
 alias.sh
+
 src/common/config/db.js
 src/common/config/app.js
+src/common/config/openid.js
+
 src/common/lib/event-bus
 reportes/
 deploy/roles/backend/files/base-backend
