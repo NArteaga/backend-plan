@@ -89,6 +89,11 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.foto'),
       field     : 'foto'
     },
+    documento: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.documento'),
+      field  : 'documento'
+    },
     estado: {
       type         : DataTypes.ENUM,
       values       : ['ACTIVO', 'INACTIVO'],

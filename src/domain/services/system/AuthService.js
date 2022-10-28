@@ -11,8 +11,7 @@ const { generateToken } = require('../../../application/lib/auth');
 const moment = require('moment');
 
 module.exports = function authService (repositories, helpers, res) {
-  const { AuthRepository, UsuarioRepository, SuscripcionRepository, EntidadRepository, ParametroRepository, MenuRepository, PermisoRepository } = repositories;
-  const UsuarioService = require('./UsuarioService')(repositories, helpers, res);
+  const { AuthRepository, UsuarioRepository, SuscripcionRepository, ParametroRepository, MenuRepository, PermisoRepository } = repositories;
   const issuer = new Issuer(iss);
 
   const cliente = new issuer.Client(config.openid.client);
@@ -20,31 +19,33 @@ module.exports = function authService (repositories, helpers, res) {
 
   async function getCode (data) {
     debug('Obtener código state');
+    const { ciudadaniaDigital } = config.app;
     const state = crypto.randomBytes(16).toString('hex');
     const nonce = crypto.randomBytes(16).toString('hex');
 
     try {
-      const authorizationRequest = Object.assign({
-        redirect_uri: config.openid.client.redirect_uris[0],
-        state,
-        nonce
-      }, config.openid.client_params);
-
-      const authorizeUrl = cliente.authorizationUrl(authorizationRequest);
-
-      const data = {
-        state,
-        parametros: {
+      let authorizeUrl = ciudadaniaDigital.login.url;
+      if (ciudadaniaDigital.login.estado) {
+        const authorizationRequest = Object.assign({
+          redirect_uri: config.openid.client.redirect_uris[0],
+          state,
           nonce
-        },
-        userCreated: '7171272e-b31b-4c34-9220-9f535c958c5c'
-      };
-      data.token = 'dsa';
-      data.estado = 'INICIO';
-      await AuthRepository.createOrUpdate(data);
+        }, config.openid.client_params);
+
+        authorizeUrl = cliente.authorizationUrl(authorizationRequest);
+        authorizeUrl += '&prompt=consent';
+        const data = {
+          state,
+          parametros  : { nonce },
+          userCreated : '7171272e-b31b-4c34-9220-9f535c958c5c'
+        };
+        data.estado = 'INICIO';
+        console.log(data);
+        await AuthRepository.createOrUpdate(data);
+      }
 
       return res.success({
-        url    : authorizeUrl + '&prompt=consent',
+        url    : authorizeUrl,
         codigo : state
       });
     } catch (e) {
@@ -92,7 +93,7 @@ module.exports = function authService (repositories, helpers, res) {
           fechaNacimiento : claims.fecha_nacimiento
         };
 
-        if (claims.profile.documento_identidad.complemento) dataPersona.complemento = claims.profile.documento_identidad.complemento;
+        if (claims.profile.documento_.complemento) dataPersona.complemento = claims.profile.documento_identidad.complemento;
 
         const data = await UsuarioRepository.findByCi(dataPersona);
         if (data) {
@@ -122,16 +123,6 @@ module.exports = function authService (repositories, helpers, res) {
     } catch (e) {
       return res.error(e);
     }
-  }
-
-  async function registrarLogin (user, info, resultadoState) {
-    info.state = resultadoState.state;
-    const respuesta = await UsuarioService.getResponse(user, null, info);
-    resultadoState.id_usuario = user.id;
-    resultadoState.estado = config.constants.ESTADO_ACTIVO;
-    resultadoState._user_created = user.id;
-    await AuthRepository.createOrUpdate(resultadoState);
-    return respuesta;
   }
 
   async function refreshToken (idRol, idUsuario) {
@@ -170,6 +161,7 @@ module.exports = function authService (repositories, helpers, res) {
   }
 
   function getUrl (data) {
+    // eslint-disable-next-line node/no-deprecated-api
     return url.format(Object.assign(url.parse(issuer.end_session_endpoint), {
       search : null,
       query  : {

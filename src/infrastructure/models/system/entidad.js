@@ -11,38 +11,61 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : false,
       xlabel    : lang.t('fields.nombre')
     },
-    descripcion: {
-      type      : DataTypes.STRING(400),
-      allowNull : false,
-      xlabel    : lang.t('fields.descripcion')
+    departamento: {
+      type      : DataTypes.STRING(100),
+      allowNull : true,
+      xlabel    : lang.t('fields.departamento')
     },
-    sigla: {
-      type      : DataTypes.STRING(50),
-      allowNull : false,
-      xlabel    : lang.t('fields.sigla')
+    provincia: {
+      type      : DataTypes.STRING(100),
+      allowNull : true,
+      xlabel    : lang.t('fields.provincia')
     },
-
-    email: {
-      type      : DataTypes.TEXT,
-      allowNull : false,
-      xlabel    : lang.t('fields.email'),
-      field     : 'email'
-    },
-    web: {
-      type      : DataTypes.TEXT,
-      allowNull : false,
-      xlabel    : lang.t('fields.web'),
-      field     : 'web'
+    municipio: {
+      type      : DataTypes.STRING(100),
+      allowNull : true,
+      xlabel    : lang.t('fields.municipio')
     },
     direccion: {
       type   : DataTypes.TEXT,
       xlabel : lang.t('fields.direccion'),
       field  : 'direccion'
     },
+    horario: {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.horario'),
+      field  : 'horario'
+    },
+    servicio: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.servicio'),
+      field  : 'servicio'
+    },
+    email: {
+      type      : DataTypes.TEXT,
+      allowNull : false,
+      xlabel    : lang.t('fields.email'),
+      field     : 'email'
+    },
     telefono: {
       type   : DataTypes.STRING(15),
       xlabel : lang.t('fields.telefono'),
       field  : 'telefono'
+    },
+    lenguas: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.lenguas'),
+      field  : 'lenguas'
+    },
+    latitud: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.latitud'),
+      field  : 'latitud'
+    },
+    longitud: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.longitud'),
+      field  : 'longitud'
     },
     estado: {
       type         : DataTypes.ENUM,
@@ -51,19 +74,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull    : false,
       xlabel       : lang.t('fields.estado'),
       field        : 'estado'
-    },
-    idEntidad: {
-      type      : DataTypes.UUID,
-      allowNull : true,
-      xlabel    : lang.t('fields.idEntidad'),
-      field     : 'id_entidad'
-    },
-    nivel: {
-      type         : DataTypes.INTEGER,
-      allowNull    : false,
-      defaultValue : 0,
-      xlabel       : lang.t('fields.nivel'),
-      field        : 'nivel'
     }
   };
 

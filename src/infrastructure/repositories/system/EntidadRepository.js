@@ -12,15 +12,18 @@ module.exports = function entidadRepository (models, Sequelize) {
     query.attributes = [
       'id',
       'nombre',
-      'descripcion',
-      'sigla',
-      'web',
-      'email',
+      'departamento',
+      'provincia',
+      'municipio',
       'direccion',
+      'horario',
+      'servicio',
+      'email',
       'telefono',
-      'estado',
-      'nivel',
-      'idEntidad'
+      'lenguas',
+      'latitud',
+      'longitud',
+      'estado'
     ];
     query.where = {};
 
@@ -33,19 +36,14 @@ module.exports = function entidadRepository (models, Sequelize) {
               nombre: {
                 [Op.iLike]: `%${params.search}%`
               }
-            },
-            {
-              sigla: {
-                [Op.iLike]: `%${params.search}%`
-              }
             }
           ]
         }
       };
     }
 
-    if (params.nivel) {
-      query.where.nivel = params.nivel;
+    if (params.departamento) {
+      query.where.departamento = params.departamento;
     }
 
     if (params.id) {
@@ -62,22 +60,19 @@ module.exports = function entidadRepository (models, Sequelize) {
       attributes: [
         'id',
         'nombre',
-        'descripcion',
-        'sigla',
-        'web',
-        'email',
+        'departamento',
+        'provincia',
+        'municipio',
         'direccion',
+        'horario',
+        'servicio',
+        'email',
         'telefono',
-        'estado',
-        'nivel',
-        'idEntidad'
-      ],
-      where: {
-        idEntidad: {
-          [Op.in]: entidades
-        },
-        nivel
-      }
+        'lenguas',
+        'latitud',
+        'longitud',
+        'estado'
+      ]
     };
     const result = await entidad.findAndCountAll(query);
     return toJSON(result);
@@ -91,10 +86,19 @@ module.exports = function entidadRepository (models, Sequelize) {
       {
         attributes: [
           'id',
-          'idEntidad',
-          'nivel',
           'nombre',
-          'sigla'
+          'departamento',
+          'provincia',
+          'municipio',
+          'direccion',
+          'horario',
+          'servicio',
+          'email',
+          'telefono',
+          'lenguas',
+          'latitud',
+          'longitud',
+          'estado'
         ],
         model : entidad,
         as    : 'entidadPadre'
@@ -114,17 +118,20 @@ module.exports = function entidadRepository (models, Sequelize) {
   async function findOne (params = {}) {
     const query = {};
     query.attributes = [
-      'descripcion',
-      'direccion',
-      'email',
-      'estado',
       'id',
-      'idEntidad',
-      'nivel',
       'nombre',
-      'sigla',
+      'departamento',
+      'provincia',
+      'municipio',
+      'direccion',
+      'horario',
+      'servicio',
+      'email',
       'telefono',
-      'web'
+      'lenguas',
+      'latitud',
+      'longitud',
+      'estado'
     ];
     query.where = {};
     if (params.id) {

@@ -2,6 +2,7 @@
 
 // Definiendo asociaciones de las tablas
 module.exports = function associations (models) {
+  // system
   const {
     rol,
     auth,
@@ -13,14 +14,22 @@ module.exports = function associations (models) {
     rolMenu,
     menu,
     aplicacion,
-    aplicacionPermiso
+    aplicacionPermiso,
+    divisionPoliticaAdministrativa
   } = models;
+  // planificacion
+  const {
+    gestion,
+    estructura,
+    operacion,
+    formulacion,
+    cronograma
+  } = models;
+
+  // system
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
   usuario.hasMany(auth,  { foreignKey: { name: 'idUsuario' }, as: 'sesiones' });
-
-  rol.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
-  entidad.hasMany(rol,  { foreignKey: { name: 'idEntidad' }, as: 'roles' });
 
   aplicacion.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
   entidad.hasMany(aplicacion,  { foreignKey: { name: 'idEntidad' }, as: 'aplicaciones' });
@@ -51,6 +60,30 @@ module.exports = function associations (models) {
 
   auth.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidadSesion' });
   entidad.hasMany(auth,  { foreignKey: { name: 'idEntidad' }, as: 'sesionesEntidad' });
+
+  divisionPoliticaAdministrativa.belongsTo(divisionPoliticaAdministrativa, { foreignKey: { name: 'idDpa'  }, as: 'divisionPoliticaPadre' });
+  // planificacion
+
+  estructura.belongsTo(gestion, { foreignKey: { name: 'idGestion' }, as: 'gestion' });
+  gestion.hasMany(estructura, { foreignKey: { name: 'idGestion' }, as: 'estructuras' });
+
+  formulacion.belongsTo(gestion, { foreignKey: { name: 'idGestion' }, as: 'gestion' });
+  gestion.hasMany(formulacion, { foreignKey: { name: 'idGestion' }, as: 'formulaciones' });
+
+  formulacion.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(formulacion, { foreignKey: { name: 'idEntidad' }, as: 'formulaciones' });
+
+  operacion.belongsTo(formulacion, { foreignKey: { name: 'idFormulacion' }, as: 'formulacion' });
+  formulacion.hasMany(operacion, { foreignKey: { name: 'idFormulacion' }, as: 'operaciones' });
+
+  operacion.belongsTo(estructura, { foreignKey: { name: 'idEstructura' }, as: 'estructura' });
+  estructura.hasMany(operacion, { foreignKey: { name: 'idEstructura' }, as: 'operaciones' });
+
+  operacion.belongsTo(entidad, { foreignKey: { name: 'idEntidad' }, as: 'entidad' });
+  entidad.hasMany(operacion, { foreignKey: { name: 'idEntidad' }, as: 'operaciones' });
+
+  cronograma.belongsTo(operacion, { foreignKey: { name: 'idOperacion' }, as: 'operacion' });
+  operacion.hasMany(cronograma, { foreignKey: { name: 'idOperacion' }, as: 'cronograma' });
 
   return models;
 };

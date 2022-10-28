@@ -3,16 +3,15 @@
 const debug = require('debug')('app:controller:auth');
 const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
+const uuid = require('uuid');
 const { config } = require('../../../../common');
-const fs = require('fs');
-const path = require('path');
 
-module.exports = function setupUsuarioController (services) {
-  const { UsuarioService } = services;
+module.exports = function setupCronogramaController (services) {
+  const { CronogramaService } = services;
 
-  async function listar (req, res) {
+  async function findAll (req, res) {
     try {
-      const respuesta = await UsuarioService.listarUsuarios(req.query);
+      const respuesta = await CronogramaService.findAll(req.query);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -21,8 +20,8 @@ module.exports = function setupUsuarioController (services) {
 
   async function mostrar (req, res) {
     try {
-      const { id } = req.params;
-      const respuesta = await UsuarioService.mostrar(id);
+      debug('Recuperando modulos');
+      const respuesta = await CronogramaService.findOne({ id: req.params.id });
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -31,9 +30,9 @@ module.exports = function setupUsuarioController (services) {
 
   async function crear (req, res) {
     try {
-      const data = req.body;
-      data.userCreated = req.user.idUsuario;
-      const respuesta = await UsuarioService.createOrUpdate(data);
+      const datos = req.body;
+      datos.userCreated = req.user.idUsuario;
+      const respuesta = await CronogramaService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -42,25 +41,10 @@ module.exports = function setupUsuarioController (services) {
 
   async function actualizar (req, res) {
     try {
-      const data = req.body;
-      data.userUpdated = req.user.idUsuario;
-      data.id = req.params.id;
-      console.log(data);
-      const respuesta = await UsuarioService.createOrUpdate(data);
-      return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
-    } catch (error) {
-      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
-    }
-  }
-
-  async function cambiarContrasena (req, res) {
-    try {
-      const data = req.body;
-      data.id = req.params.id;
-      if (data.id.toString() !== req.user.idUsuario.toString()) {
-        throw new Error('El identificacdor del usuario no corresponde al token de autenticación.');
-      }
-      const respuesta = await UsuarioService.cambiarContrasena(data);
+      const datos = req.body;
+      datos._user_updated = req.user.idUsuario;
+      datos.id = req.params.id;
+      const respuesta = await CronogramaService.createOrUpdate(datos);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
@@ -69,58 +53,65 @@ module.exports = function setupUsuarioController (services) {
 
   async function eliminar (req, res) {
     try {
-      const { id } = req.params;
-      const respuesta = await UsuarioService.eliminar(id);
+      const respuesta = await CronogramaService.eliminar(req.params.id);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
 
-  async function asignarRoles (req, res) {
+  async function adicionarDocumento (req, res) {
     try {
-      const respuesta = await UsuarioService.asignarRoles(req.body);
+      const respuesta = await CronogramaService.adicionarDocumento(req.params.id, req.body);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
 
-  async function uploadDocumento (req, res) {
+  async function actualizarDocumentos (req, res) {
     try {
-      const dir = 'public/documento';
+      const datos = {};
+      datos.documentos = req.body;
+      datos._user_updated = req.user.idUsuario;
+      await CronogramaService.actualizarDocumentos(req.params.id, datos);
+      const documentos = await CronogramaService.findOne({ id: req.params.id });
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, documentos));
+    } catch (error) {
+      return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
+    }
+  }
+
+  async function upload (req, res) {
+    try {
+      const dir = 'public/adjuntos';
       const { backendUrl } = config.app;
       const archivos = req.files;
       let fileName = null;
-      console.log(req.query);
-      if (archivos.documento) {
-        const ext = (archivos.documento.name.split('.').pop()).toLowerCase();
-        fileName = `${req.query.idEntidad}/${req.params.id}.${ext}`;
+      if (archivos.adjunto) {
+        const ext = (archivos.adjunto.name.split('.').pop()).toLowerCase();
+        fileName = `${uuid.v4()}.${ext}`;
         const pathFile = `${dir}/${fileName}`;
-        let outPath = path.resolve(`${dir}`);
-        if (!fs.existsSync(outPath)) fs.mkdirSync(outPath);
-        outPath += `/${req.query.idEntidad}`;
-        if (!fs.existsSync(outPath)) fs.mkdirSync(outPath);
-        await archivos.documento.mv(pathFile);
+        await archivos.adjunto.mv(pathFile);
       } else {
         return res.status(404).json(new Respuesta(
           'faltan parametros', Finalizado.FAIL));
       }
 
-      return res.status(200).send(new Respuesta('OK', Finalizado.OK, `${backendUrl}documento/${fileName}`));
+      return res.status(200).send(new Respuesta('OK', Finalizado.OK, `${backendUrl}adjuntos/${fileName}`));
     } catch (error) {
       return res.status(error.httpCode || HttpCodes.userError).json(new Respuesta(error.message, Finalizado.FAIL));
     }
   }
 
   return {
-    cambiarContrasena,
-    asignarRoles,
-    listar,
     mostrar,
     crear,
     actualizar,
-    uploadDocumento,
-    eliminar
+    findAll,
+    eliminar,
+    adicionarDocumento,
+    actualizarDocumentos,
+    upload
   };
 };

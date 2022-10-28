@@ -1,11 +1,9 @@
 'use strict';
 
-const { getQuery, errorHandler, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function rolUsuarioRepository (models, Sequelize) {
-  const { rol, rolUsuario } = models;
-  const Op = Sequelize.Op;
+  const { rolUsuario } = models;
 
   async function findOne (params = {}) {
     const query = {};

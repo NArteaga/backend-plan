@@ -4,7 +4,7 @@ const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function rolesRepository (models, Sequelize) {
-  const { aplicacion, menu, entidad } = models;
+  const { aplicacion, entidad } = models;
   const Op = Sequelize.Op;
 
   const attributes = ['id', 'idEntidad', 'nombre', 'descripcion', 'estado', 'createdAt'];
@@ -17,10 +17,8 @@ module.exports = function rolesRepository (models, Sequelize) {
       {
         attributes: [
           'id',
-          'sigla',
           'nombre',
-          'idEntidad',
-          'nivel'
+          'idEntidad'
         ],
         model : entidad,
         as    : 'entidad'
@@ -66,10 +64,8 @@ module.exports = function rolesRepository (models, Sequelize) {
       {
         attributes: [
           'id',
-          'sigla',
           'nombre',
-          'idEntidad',
-          'nivel'
+          'idEntidad'
         ],
         model : entidad,
         as    : 'entidad'

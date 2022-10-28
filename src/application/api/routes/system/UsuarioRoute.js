@@ -7,6 +7,7 @@ module.exports = function setupUsuario (api, controllers, middlewares) {
   api.get('/usuarios', AuthMiddleware.verificarPermisos(['usuarios:listar']), UsuarioController.listar);
   api.get('/usuarios/:id', AuthMiddleware.verificarPermisos(['usuarios:listar']), UsuarioController.mostrar);
   api.post('/usuarios', AuthMiddleware.verificarPermisos(['usuarios:crear']), UsuarioController.crear);
+  api.post('/usuarios/:id/documento/upload', AuthMiddleware.verificarPermisos(['usuarios:crear']), UsuarioController.uploadDocumento);
   api.put('/usuarios/:id', AuthMiddleware.verificarPermisos(['usuarios:actualizar']), UsuarioController.actualizar);
   api.delete('/usuarios/:id', AuthMiddleware.verificarPermisos(['usuarios:eliminar']), UsuarioController.eliminar);
 

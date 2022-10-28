@@ -11,6 +11,8 @@ src/common/config/openid.js
 
 src/common/lib/event-bus
 reportes/
+public/adjuntos/*
+public/documento/*
 deploy/roles/backend/files/base-backend
 deploy/roles/frontend/files/base-backend
 

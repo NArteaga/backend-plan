@@ -4,10 +4,10 @@ const { getQuery, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function rolesRepository (models, Sequelize) {
-  const { rol, ruta, menu, entidad } = models;
+  const { rol, menu } = models;
   const Op = Sequelize.Op;
 
-  const attributes = ['id', 'idEntidad', 'nombre', 'descripcion', 'estado', 'createdAt'];
+  const attributes = ['id', 'nombre', 'descripcion', 'estado', 'createdAt'];
 
   async function findAll (params = {}) {
     const query = getQuery(params);
@@ -15,17 +15,6 @@ module.exports = function rolesRepository (models, Sequelize) {
     query.where = {};
 
     query.include = [
-      {
-        attributes: [
-          'id',
-          'sigla',
-          'nombre',
-          'idEntidad',
-          'nivel'
-        ],
-        model : entidad,
-        as    : 'entidad'
-      },
       {
         attributes: [
           'id',
@@ -41,16 +30,6 @@ module.exports = function rolesRepository (models, Sequelize) {
         as      : 'menus'
       }
     ];
-
-    if (params.idEntidad) {
-      query.where.idEntidad = params.idEntidad;
-    }
-
-    if (params.entidades && !params.idEntidad) {
-      query.where.idEntidad = {
-        [Op.in]: params.entidades
-      };
-    }
 
     if (params.estado) {
       query.where.estado = params.estado;
@@ -74,22 +53,11 @@ module.exports = function rolesRepository (models, Sequelize) {
 
   async function findOne (params = {}) {
     const query = {
-      attributes : ['id', 'idEntidad', 'nombre', 'descripcion', 'estado'],
+      attributes : ['id', 'nombre', 'descripcion', 'estado'],
       where      : params
     };
 
     query.include = [
-      {
-        attributes: [
-          'id',
-          'sigla',
-          'nombre',
-          'idEntidad',
-          'nivel'
-        ],
-        model : entidad,
-        as    : 'entidad'
-      },
       {
         attributes: [
           'id',

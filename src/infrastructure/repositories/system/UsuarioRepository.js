@@ -1,12 +1,11 @@
 'use strict';
 
-const { query } = require('express');
 const { getQuery, errorHandler, toJSON } = require('../../lib/util');
 const Repository = require('../Repository');
 
 module.exports = function usuariosRepository (models, Sequelize) {
   const Op = Sequelize.Op;
-  const { usuario, rol, entidad, menu } = models;
+  const { usuario, rol, entidad } = models;
 
   async function findAll (params = {}) {
     const query = getQuery(params);
@@ -24,7 +23,8 @@ module.exports = function usuariosRepository (models, Sequelize) {
       'segundoApellido',
       'telefono',
       'usuario',
-      'createdAt'
+      'createdAt',
+      'documento'
     ];
     query.where = {};
 
@@ -79,6 +79,10 @@ module.exports = function usuariosRepository (models, Sequelize) {
       };
     }
 
+    if (params.idEntidad) {
+      query.where.idEntidad = params.idEntidad;
+    }
+
     if (params.segundoApellido) {
       query.where.segundoApellido = {
         [Op.iLike]: `%${params.segundoApellido}%`
@@ -105,7 +109,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     query.include = [
       {
-        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        attributes : ['id', 'nombre', 'idEntidad'],
         model      : entidad,
         as         : 'entidad'
       },
@@ -142,7 +146,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     query.include = [
       {
-        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        attributes : ['id', 'nombre'],
         model      : entidad,
         as         : 'entidad'
       },
@@ -151,7 +155,6 @@ module.exports = function usuariosRepository (models, Sequelize) {
         through    : { attributes: [] },
         attributes : [
           'id',
-          'idEntidad',
           'nombre',
           'descripcion',
           'estado'
@@ -175,7 +178,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     query.include = [
       {
-        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        attributes : ['id', 'nombre'],
         model      : entidad,
         as         : 'entidad'
       },
@@ -184,7 +187,6 @@ module.exports = function usuariosRepository (models, Sequelize) {
         through    : { attributes: [] },
         attributes : [
           'id',
-          'idEntidad',
           'nombre',
           'descripcion',
           'estado'
@@ -222,7 +224,7 @@ module.exports = function usuariosRepository (models, Sequelize) {
 
     query.include = [
       {
-        attributes : ['id', 'nombre', 'sigla', 'nivel', 'idEntidad'],
+        attributes : ['id', 'nombre'],
         model      : entidad,
         as         : 'entidad'
       },
@@ -231,7 +233,6 @@ module.exports = function usuariosRepository (models, Sequelize) {
         through    : { attributes: [] },
         attributes : [
           'id',
-          'idEntidad',
           'nombre',
           'descripcion',
           'estado'
