@@ -64,9 +64,6 @@ module.exports = function associations (models) {
   divisionPoliticaAdministrativa.belongsTo(divisionPoliticaAdministrativa, { foreignKey: { name: 'idDpa'  }, as: 'divisionPoliticaPadre' });
   // planificacion
 
-  estructura.belongsTo(gestion, { foreignKey: { name: 'idGestion' }, as: 'gestion' });
-  gestion.hasMany(estructura, { foreignKey: { name: 'idGestion' }, as: 'estructuras' });
-
   formulacion.belongsTo(gestion, { foreignKey: { name: 'idGestion' }, as: 'gestion' });
   gestion.hasMany(formulacion, { foreignKey: { name: 'idGestion' }, as: 'formulaciones' });
 
