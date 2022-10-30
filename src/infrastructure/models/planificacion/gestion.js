@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     etapa: {
       type      : DataTypes.ENUM,
-      values    : ['FORMULACION', 'SEGUIMIENTO', 'EJECUCION'],
+      values    : ['FORMULACION', 'EJECUCION', 'SEGUIMIENTO', 'EVALUCION'],
       xlabel    : lang.t('fields.etapa'),
       field     : 'etapa',
       allowNull : true

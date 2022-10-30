@@ -12,18 +12,20 @@ module.exports = function estructuraRepository (models, Sequelize) {
     query.attributes = [
       'id',
       'idEstructuraPadre',
-      'idGestion',
       'nombre',
       'nivel',
       'sigla',
-      'nombreIndicador',
-      'estado',
       'editable',
       'codigo',
       'cronograma',
       'codigoManual',
       'areaRequerida',
-      'created'
+      'created',
+      'eje',
+      'pilar',
+      'lineamientos',
+      'objetivo',
+      'accion'
     ];
     query.where = {};
     query.where.idEstructuraPadre = idEstructuraPadre;
@@ -38,18 +40,19 @@ module.exports = function estructuraRepository (models, Sequelize) {
       'nombre',
       'nivel',
       'sigla',
-      'idGestion',
-      'nombreIndicador',
-      'estado',
       'codigo',
       'cronograma',
       'codigoManual',
       'areaRequerida',
       'editable',
-      'created'
+      'created',
+      'eje',
+      'pilar',
+      'lineamientos',
+      'objetivo',
+      'accion'
     ];
     query.where = {};
-    query.where.idGestion = params.idGestion;
     query.order = [['nivel', 'DESC']];
     const result = await estructura.findOne(query);
     if (result) {
@@ -66,33 +69,28 @@ module.exports = function estructuraRepository (models, Sequelize) {
       'nombre',
       'nivel',
       'sigla',
-      'nombreIndicador',
-      'estado',
       'codigo',
       'cronograma',
       'codigoManual',
       'areaRequerida',
       'editable',
-      'created'
+      'created',
+      'eje',
+      'pilar',
+      'lineamientos',
+      'objetivo',
+      'accion'
     ];
     query.where = {};
     if (params.id) {
       query.where.id = params.id;
     }
     if (params.idEstructuraPadre) {
-      query.where.idEstructuraPadre = params.idEstructuraPadre;
-    }
-    if (params.estado) {
-      query.where.estado = params.estado;
-    }
-    if (params.nombreIndicador) {
-      query.where.nombreIndicador = {
-        [Op.iLike]: `%${params.nombreIndicador}%`
+      query.where.idEstructuraPadre = {
+        [Op.contains]: params.idEstructuraPadre
       };
     }
-    if (params.idGestion) {
-      query.where.idGestion = params.idGestion;
-    }
+    console.log(query.where);
     if (params.sigla) {
       query.where.sigla = {
         [Op.iLike]: `%${params.sigla}%`
@@ -116,17 +114,19 @@ module.exports = function estructuraRepository (models, Sequelize) {
       'id',
       'idEstructuraPadre',
       'nombre',
-      'idGestion',
       'nivel',
       'sigla',
-      'nombreIndicador',
-      'estado',
       'codigo',
       'cronograma',
       'codigoManual',
       'areaRequerida',
       'editable',
-      'created'
+      'created',
+      'eje',
+      'pilar',
+      'lineamientos',
+      'objetivo',
+      'accion'
     ];
     query.where = {};
     if (params.id) {

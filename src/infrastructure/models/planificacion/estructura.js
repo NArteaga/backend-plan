@@ -6,7 +6,7 @@ const util = require('../../lib/util');
 module.exports = (sequelize, DataTypes) => {
   let fields = {
     id                : util.pk,
-    idEstructuraPadre : { // llave foranea de la tabla (estructura)
+    idEstructuraPadre : {
       type      : DataTypes.JSONB,
       allowNull : true,
       xlabel    : lang.t('fields.idEstructuraPadre'),
@@ -17,12 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : false,
       xlabel    : lang.t('fields.nombre'),
       field     : 'nombre'
-    },
-    idGestion: {
-      type      : DataTypes.UUID,
-      allowNull : false,
-      xlabel    : lang.t('fields.idGestion'),
-      field     : 'id_gestion'
     },
     nivel: {
       type      : DataTypes.INTEGER,
@@ -35,18 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull : false,
       xlabel    : lang.t('fields.sigla'),
       field     : 'sigla'
-    },
-    nombreIndicador: {
-      type      : DataTypes.STRING(200),
-      allowNull : true,
-      xlabel    : lang.t('fields.nombreIndicador'),
-      field     : 'nombre_indicador'
-    },
-    estado: {
-      type   : DataTypes.ENUM,
-      values : ['ACTIVO', 'INACTIVO'],
-      xlabel : lang.t('fields.estado'),
-      field  : 'estado'
     },
     created: {
       type         : DataTypes.BOOLEAN,
@@ -68,6 +50,41 @@ module.exports = (sequelize, DataTypes) => {
       allowNull    : false,
       defaultValue : false,
       field        : 'crononograma'
+    },
+    eje: {
+      type         : DataTypes.BOOLEAN,
+      xlabel       : lang.t('fields.eje'),
+      allowNull    : false,
+      defaultValue : false,
+      field        : 'eje'
+    },
+    pilar: {
+      type         : DataTypes.BOOLEAN,
+      xlabel       : lang.t('fields.pilar'),
+      allowNull    : false,
+      defaultValue : false,
+      field        : 'pilar'
+    },
+    lineamientos: {
+      type         : DataTypes.BOOLEAN,
+      xlabel       : lang.t('fields.lineamientos'),
+      allowNull    : false,
+      defaultValue : false,
+      field        : 'lineamientos'
+    },
+    objetivo: {
+      type         : DataTypes.BOOLEAN,
+      xlabel       : lang.t('fields.objetivo'),
+      allowNull    : false,
+      defaultValue : false,
+      field        : 'objetivo'
+    },
+    accion: {
+      type         : DataTypes.BOOLEAN,
+      xlabel       : lang.t('fields.accion'),
+      allowNull    : false,
+      defaultValue : false,
+      field        : 'accion'
     },
     codigo: {
       type         : DataTypes.BOOLEAN,
