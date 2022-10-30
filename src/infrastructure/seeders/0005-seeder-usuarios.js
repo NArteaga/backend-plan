@@ -22,7 +22,24 @@ let items = [
     correo_electronico : 'admin@yopmail.com',
     celular            : '',
     estado             : 'ACTIVO'
-  }
+  },
+  {
+    id: "67814739-4c21-4ab9-83b9-6d3ebfa0c7ef",
+    id_entidad: "3f5faa14-cd56-465e-afd4-f81415859982",
+    numero_documento: "7039950",
+    complemento: "",
+    tipo_documento: "CI",
+    fecha_nacimiento: "1993-10-12",
+    cargo: "CARGO",
+    usuario: "ivallejos",
+    contrasena: bcrypt.hashSync("Developer", saltRounds),
+    nombres: "IVAN",
+    primer_apellido: "VALLEJOS",
+    segundo_apellido: "DE LAS CASAS",
+    correo_electronico: "ivallejos@gmail.com",
+    celular: "75880747",
+    estado: "ACTIVO",
+  },
 ];
 
 items = setTimestampsSeeder(items);
