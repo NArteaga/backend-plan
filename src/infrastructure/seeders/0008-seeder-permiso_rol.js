@@ -58,7 +58,13 @@ let items = [
   { id: '05654e95-9bc0-48a2-996c-aac1ab49535c', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_permiso: '4cc343eb-0782-4739-8509-db79be8e416e' },
   { id: '13275ded-b1f5-4005-b278-c5b5a6f8395b', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_permiso: 'c5720a83-15c4-4641-8164-a0a4da7c3d8e' },
   { id: 'd0186309-a306-41fd-9ac0-e2b7ab779c2e', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_permiso: 'dcf487a4-7639-4073-b4f4-dff8530ff284' },
-  { id: '07be651f-a45f-4208-96e8-0ae889037754', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_permiso: '66ffb4c4-bec3-4ad0-a1b3-f3bea8fe62da' }
+  { id: '07be651f-a45f-4208-96e8-0ae889037754', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_permiso: '66ffb4c4-bec3-4ad0-a1b3-f3bea8fe62da' },
+
+  // RED FUNCIONAL
+  { id: 'd710e5fc-690a-44c7-bdd9-a219693cf3b6', id_rol: 'b262ea52-ff10-4a86-8476-a910c25b079e', id_permiso: '22067709-ce42-4926-89e6-8ce2dc52e193' },
+  { id: '194b501a-b76c-431d-9a7b-e2be47163485', id_rol: 'b262ea52-ff10-4a86-8476-a910c25b079e', id_permiso: 'a6aec23e-bdbf-4cf7-a97e-fceb3a0c782d' },
+  { id: 'd31ad4f3-78e4-44c8-ae58-b854fa152a45', id_rol: 'b262ea52-ff10-4a86-8476-a910c25b079e', id_permiso: '56c2756b-63c4-4c1f-bf1d-d3b5c604eca6' },
+  { id: '189e98d2-90ec-44b7-a9de-ff5431e22e20', id_rol: 'b262ea52-ff10-4a86-8476-a910c25b079e', id_permiso: '3ee48c68-fb87-4a22-a4cc-47ce4b2bc6c6' },
 ];
 
 items = setTimestampsSeeder(items);

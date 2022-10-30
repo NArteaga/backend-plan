@@ -13,7 +13,14 @@ let items = [
   { id: '72a9a41e-998b-4ada-80b3-354dc0dccd0e', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: 'ef6b99d0-0834-4d1e-86b0-207111744f98' },
   { id: '67fcd676-938d-4c86-9b7f-e79508243c0c', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: '6dc27435-bb49-48c8-b98d-ed9024d10ec5' },
   { id: '49dc495f-8594-4c30-9308-5769f2067b66', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: 'a0882ff9-0d95-4d60-835d-85624f7a3469' },
-  { id: '49dc495f-8594-4c30-9308-5769f2067b67', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: 'a0882ff9-0d95-4d60-835d-85624f7a3411' }
+  { id: '49dc495f-8594-4c30-9308-5769f2067b67', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: 'a0882ff9-0d95-4d60-835d-85624f7a3411' },
+
+  // RED FUNCIONAL in SUPER ADMIN
+  { id: '84ecb2ae-7e21-4f09-82e2-c156b4037455', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: '598a59b5-e1a3-4438-b4c4-b62506722eff' },
+
+  // ROL RED FUNCIONAL
+  { id: 'dff8c182-80ba-474f-acdd-9ff1cd1366a1', id_rol: 'b262ea52-ff10-4a86-8476-a910c25b079e', id_menu: '6190597f-7fa6-4c39-bcc9-7a1441ba566a' },
+  { id: '92232c0f-bb30-410d-ab26-9293f82d1f09', id_rol: 'b262ea52-ff10-4a86-8476-a910c25b079e', id_menu: 'bc1d7658-2a0c-4216-9400-ad33d2487bb2' },
 ];
 
 items = setTimestampsSeeder(items);

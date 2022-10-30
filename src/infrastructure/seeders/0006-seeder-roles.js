@@ -3,7 +3,14 @@
 const { setTimestampsSeeder } = require('../lib/util');
 
 let items = [
-  { id: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', nombre: 'ROL SUPER ADMIN', descripcion: 'Rol administrador.', estado: 'ACTIVO' }
+  { id: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', nombre: 'ROL SUPER ADMIN', descripcion: 'Rol administrador.', estado: 'ACTIVO' },
+  // Red Funcional
+  {
+    id: "b262ea52-ff10-4a86-8476-a910c25b079e",
+    nombre: "RED FUNCIONAL",
+    descripcion: "MIEMBROS DE LA RED FUNCIONAL",
+    estado: "ACTIVO",
+  },
 ];
 
 // Asignando datos de log y timestamps a los datos

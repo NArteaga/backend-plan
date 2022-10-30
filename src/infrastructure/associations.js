@@ -26,6 +26,24 @@ module.exports = function associations (models) {
     cronograma
   } = models;
 
+  // red-funcional
+  const {
+    RFSolicitud,
+    RFSolicitudHistorial,
+    RFDocumento,
+  } = models;
+
+  RFSolicitud.belongsTo(entidad);
+  entidad.hasMany(RFSolicitud);
+
+  RFSolicitudHistorial.belongsTo(RFSolicitud);
+  RFSolicitud.hasMany(RFSolicitudHistorial);
+
+  RFDocumento.belongsTo(RFSolicitud);
+  RFSolicitud.hasMany(RFDocumento);
+
+
+
   // system
 
   auth.belongsTo(usuario, { foreignKey: { name: 'idUsuario' }, as: 'usuario' });
