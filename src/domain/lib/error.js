@@ -1,7 +1,15 @@
 // const Logs = require('app-logs');
+const log4js = require('log4js');
 const { config, errors } = require('../../common');
+const { logsConfig } = config.app;
+log4js.configure({
+  appenders: {
+    app: { type: 'file', filename: logsConfig.path }
+  },
+  categories: { default: { appenders: ['app'], level: logsConfig.level } }
+});
 class ErrorApp extends Error {
-  constructor (errorMessage, httpCode = 400, name = 'ErrorAplicacion', log = false, errorCode = 1) {
+  constructor (errorMessage, httpCode = 400, name = 'ErrorAplicacion', log = true, errorCode = 1) {
     super(errorMessage);
     this.name = name;
     this.message = errorMessage || 'Ha ocurrido un error';
@@ -14,13 +22,14 @@ class ErrorApp extends Error {
   }
 
   async guardarLogs () {
+    const logger = log4js.getLogger();
     // const logs = await Logs(config.db).catch(errors.handleFatalError);
     switch (this.httpCode) {
       case 400:
-        // logs.warning(this.message, this.name, this.httpCode);
+        logger.warn(this.message, this.name, `${this.httpCode} ${this.stack}`);
         break;
       case 500:
-        // logs.error(this.message, this.name, ` ${this.httpCode} ${this.stack}`);
+        logger.error(this.message, this.name, `${this.httpCode} ${this.stack}`);
         break;
     }
   }
