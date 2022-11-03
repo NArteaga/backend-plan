@@ -1,12 +1,10 @@
 'use strict';
 
 const debug = require('debug')('app:service:auth');
-const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
 
-module.exports = function menuService (repositories, helpers, res) {
+module.exports = function menuService (repositories) {
   const { RFSolicitudHistorialRepository, RFSolicitudRepository } = repositories;
-  const { FechaHelper } = helpers;
 
   async function listar (params) {
     try {
@@ -33,12 +31,11 @@ module.exports = function menuService (repositories, helpers, res) {
     debug('Crear o actualizar rol');
     let menu;
     try {
-      console.log(data);
       menu = await RFSolicitudHistorialRepository.createOrUpdate(data);
-      const _ = await RFSolicitudRepository.createOrUpdate({
-        id: menu.rfuncionalSolicitudId,
-        estado: menu.estado,
-      })
+      await RFSolicitudRepository.createOrUpdate({
+        id     : menu.rfuncionalSolicitudId,
+        estado : menu.estado
+      });
       return menu;
     } catch (err) {
       throw new ErrorApp(err.message, 400);

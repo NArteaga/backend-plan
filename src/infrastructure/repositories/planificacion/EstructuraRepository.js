@@ -90,7 +90,6 @@ module.exports = function estructuraRepository (models, Sequelize) {
         [Op.contains]: params.idEstructuraPadre
       };
     }
-    console.log(query.where);
     if (params.sigla) {
       query.where.sigla = {
         [Op.iLike]: `%${params.sigla}%`

@@ -13,6 +13,7 @@ src/common/lib/event-bus
 reportes/
 public/adjuntos/*
 public/documento/*
+logs/
 deploy/roles/backend/files/base-backend
 deploy/roles/frontend/files/base-backend
 

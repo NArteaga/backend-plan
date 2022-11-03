@@ -54,7 +54,7 @@ module.exports = function gestionRepository (models, Sequelize) {
     if (params.idSeguimiento) {
       query.where.idSeguimiento = params.idSeguimiento;
     }
-    if (params.tipo) {
+    if (params.tipo && params.tipo !== 'null') {
       query.where.tipo = params.tipo;
     }
     if (params.etapa) {

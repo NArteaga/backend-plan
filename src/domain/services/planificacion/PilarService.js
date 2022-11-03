@@ -2,15 +2,12 @@
 
 const { ErrorApp } = require('../../lib/error');
 
-module.exports = function gestionService (repositories, helpers, res) {
+module.exports = function gestionService (repositories) {
   const { PilarRepository } = repositories;
 
   async function findAll (params) {
     try {
       const pilar = await PilarRepository.findAll(params);
-      if (params.idEje) {
-        pilar.rows = pilar.rows.filter(item => item.idEje.includes(params.idEje));
-      }
       return pilar;
     } catch (err) {
       throw new ErrorApp(err.message, 400);

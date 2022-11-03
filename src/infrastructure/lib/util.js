@@ -231,7 +231,6 @@ function errorHandler (error) {
         }
         oError[key].label = lang.t(`fields.${key}`);
       } else {
-        console.log('Error de Validación desconocida');
         throw new Error(error.message);
       }
     }

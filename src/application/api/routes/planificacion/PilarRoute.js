@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function setupGestion (api, controllers, middlewares) {
+module.exports = function setupGestion (api, controllers) {
   const { PilarController } = controllers;
 
   api.get('/pilar', PilarController.findAll);

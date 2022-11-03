@@ -65,7 +65,34 @@ let items = [
   { id: '9010197e-5edb-4736-bf6c-ab83f8d14041', grupo: '_EJE_10_', codigo: '10.2', nombre: 'Promover la industria cultural, el arte individual y colectivo de las bolivianas y bolivianos.', estado: 'ACTIVO' },
   { id: '9010197e-5edb-4736-bf6c-ab83f8d14042', grupo: '_EJE_10_', codigo: '10.3', nombre: 'Proteger, restaurar, recuperar, revitalizar, promover y difundir el patrimonio material e inmaterial del Estado Plurinacional de Bolivia.', estado: 'ACTIVO' },
   { id: '9010197e-5edb-4736-bf6c-ab83f8d14043', grupo: '_EJE_10_', codigo: '10.4', nombre: 'Impulsar la descolonización y despatriarcalización hacia la consolidación del Estado Plurinacional y el paradigma del Vivir Bien.', estado: 'ACTIVO' },
-  { id: '9010197e-5edb-4736-bf6c-ab83f8d14044', grupo: '_EJE_10_', codigo: '10.5', nombre: 'Implementar acciones de revalorización, protección y promoción de los saberes y conocimientos ancestrales de las Naciones Pueblos Indígenas Originarios Campesinos y Afro bolivianos para la convivencia armónica con la Madre Tierra.', estado: 'ACTIVO' }
+  { id: '9010197e-5edb-4736-bf6c-ab83f8d14044', grupo: '_EJE_10_', codigo: '10.5', nombre: 'Implementar acciones de revalorización, protección y promoción de los saberes y conocimientos ancestrales de las Naciones Pueblos Indígenas Originarios Campesinos y Afro bolivianos para la convivencia armónica con la Madre Tierra.', estado: 'ACTIVO' },
+  // tipo de unidad
+  { id: '9e000e89-3456-44da-8ac4-578c70011d3d', nombre: 'PIEZA', codigo: 'PZA.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: '77db5e75-d5ea-4995-99bf-8a522d39b37f', nombre: 'ROLLO', codigo: 'FR.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'e121f075-1823-4270-8da3-3a42fa18b64f', nombre: 'CAJA', codigo: 'CAJ.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: '54f82ad0-32da-438b-9252-fb552342ceea', nombre: 'PAQUETE', codigo: 'RO.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: '7d2b9866-2d33-487c-9b69-aca283842e05', nombre: 'OVILLO', codigo: 'PQT.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: '9a289c82-f65f-469c-997e-6b1c5e3dec3b', nombre: 'BIDON', codigo: 'BLK.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03797', nombre: 'FRASCO', codigo: 'F.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03701', nombre: 'TUBO', codigo: 'T.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03702', nombre: 'BALDE', codigo: 'B.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03703', nombre: 'JUEGO', codigo: 'J.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03704', nombre: 'METROS', codigo: 'M.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03705', nombre: 'PARES', codigo: 'P.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03706', nombre: 'BOLSA', codigo: 'BLS.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03707', nombre: 'KILOS', codigo: 'KL.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03708', nombre: 'LITROS', codigo: 'LTR.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03709', nombre: 'BLOCK', codigo: 'BLK.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03710', nombre: 'HOJA', codigo: 'H.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03711', nombre: 'EJEMPLAR', codigo: 'E.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03712', nombre: 'EQUIPO', codigo: 'EQU.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03713', nombre: 'SERVICIO', codigo: 'SER.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03714', nombre: 'UNIDAD', codigo: 'UND', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03715', nombre: 'BIEN', codigo: 'BN.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03716', nombre: 'DIAS', codigo: 'D.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03717', nombre: 'PASAJE', codigo: 'P.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03718', nombre: 'PASAJE TERRESTRE', codigo: 'PT.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' },
+  { id: 'eeb7f627-b0dc-40f7-b85c-81bf3ab03719', nombre: 'VIATICO', codigo: 'V.', grupo: 'TIPO_UNIDAD', estado: 'ACTIVO' }
 ];
 
 items = setTimestampsSeeder(items);

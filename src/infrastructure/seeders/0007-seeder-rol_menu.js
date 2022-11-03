@@ -14,7 +14,8 @@ let items = [
   { id: '67fcd676-938d-4c86-9b7f-e79508243c0c', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: '6dc27435-bb49-48c8-b98d-ed9024d10ec5' },
   { id: '49dc495f-8594-4c30-9308-5769f2067b66', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: 'a0882ff9-0d95-4d60-835d-85624f7a3469' },
   { id: '49dc495f-8594-4c30-9308-5769f2067b67', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: 'a0882ff9-0d95-4d60-835d-85624f7a3411' },
-
+  { id: '49dc495f-8594-4c30-9308-5769f2067b68', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: '6d2a65bd-a216-48d3-8964-de1fc7556ae4' },
+  
   // RED FUNCIONAL in SUPER ADMIN
   { id: '84ecb2ae-7e21-4f09-82e2-c156b4037455', id_rol: '88b0104c-1bd1-42b2-bb01-9bf0502bab5a', id_menu: '598a59b5-e1a3-4438-b4c4-b62506722eff' },
 

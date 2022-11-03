@@ -31,6 +31,31 @@ module.exports = (sequelize, DataTypes) => {
       xlabel    : lang.t('fields.idOperacionPadre'),
       field     : 'id_operacion_padre'
     },
+    lineamiento: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.lineamiento'),
+      field  : 'lineamiento'
+    },
+    eje: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.eje'),
+      field  : 'eje'
+    },
+    pilar: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.pilar'),
+      field  : 'pilar'
+    },
+    objetivo: {
+      type   : DataTypes.TEXT,
+      xlabel : lang.t('fields.objetivo'),
+      field  : 'objetivo'
+    },
+    accion: {
+      type   : DataTypes.JSONB,
+      xlabel : lang.t('fields.accion'),
+      field  : 'accion'
+    },
     codigo: {
       type   : DataTypes.STRING(200),
       xlabel : lang.t('fields.codigo'),

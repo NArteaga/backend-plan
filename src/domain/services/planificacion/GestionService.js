@@ -2,7 +2,7 @@
 
 const { ErrorApp } = require('../../lib/error');
 
-module.exports = function gestionService (repositories, helpers, res) {
+module.exports = function gestionService (repositories) {
   const { GestionRepository, FormulacionRepository, EntidadRepository } = repositories;
 
   async function findAll (params) {
@@ -18,7 +18,7 @@ module.exports = function gestionService (repositories, helpers, res) {
     try {
       const gestion = await GestionRepository.findOne(params);
       if (!gestion) {
-        throw new Error('El gestion no existe');
+        throw new Error('La gestion no existe');
       }
       return gestion;
     } catch (err) {
@@ -71,7 +71,6 @@ module.exports = function gestionService (repositories, helpers, res) {
 
   async function validarActivo (id) {
     const gestiones = await GestionRepository.findAll({ ejecutando: true });
-    console.log(gestiones);
     if (gestiones.count > 1) throw new Error('Solo puede tener una gestión en ejecución a la vez.');
     if (gestiones.count === 1) {
       const gestion = await GestionRepository.findOne({ id });

@@ -7,7 +7,7 @@ module.exports = function responsableRepository (models, Sequelize) {
   const { operacion, estructura, entidad, cronograma, formulacion } = models;
   const Op = Sequelize.Op;
 
-  async function calificaciones (params) {
+  async function calificaciones () {
     const query = `
     select tmp3.calificacion as calificacion, pe.nombre as tipo, se.nombre as entidad
     from (
@@ -31,7 +31,6 @@ module.exports = function responsableRepository (models, Sequelize) {
     ) tmp3 inner join planificacion_operacion po on (tmp3.id = po.id)
     inner join planificacion_estructura pe on (po.id_estructura = pe.id)
     inner join sys_entidad se on (po.id_entidad = se.id)
-    where pe.id_gestion = '${params.idGestion}'
     order by se.nombre`;
     const [results] = await operacion.options.sequelize.query(query);
     return results || null;
@@ -45,6 +44,11 @@ module.exports = function responsableRepository (models, Sequelize) {
       'idFormulacion',
       'idEstructura',
       'idOperacionPadre',
+      'lineamiento',
+      'eje',
+      'pilar',
+      'objetivo',
+      'accion',
       'codigo',
       'descripcion',
       'ponderacion',
@@ -70,7 +74,7 @@ module.exports = function responsableRepository (models, Sequelize) {
         as         : 'cronograma'
       },
       {
-        attributes : ['id', 'idGestion', 'nombre', 'nivel', 'sigla', 'editable', 'codigo', 'cronograma', 'codigoManual', 'areaRequerida'],
+        attributes : ['id', 'nombre', 'nivel', 'sigla', 'editable', 'codigo', 'cronograma', 'codigoManual', 'areaRequerida'],
         model      : estructura,
         as         : 'estructura'
       },
@@ -113,6 +117,11 @@ module.exports = function responsableRepository (models, Sequelize) {
       'idFormulacion',
       'idEstructura',
       'idOperacionPadre',
+      'lineamiento',
+      'eje',
+      'pilar',
+      'objetivo',
+      'accion',
       'codigo',
       'descripcion',
       'ponderacion',
@@ -139,7 +148,7 @@ module.exports = function responsableRepository (models, Sequelize) {
         as         : 'cronograma'
       },
       {
-        attributes : ['id', 'idGestion', 'nombre', 'nivel', 'sigla', 'editable', 'codigo', 'cronograma', 'codigoManual', 'areaRequerida'],
+        attributes : ['id', 'nombre', 'nivel', 'sigla', 'editable', 'codigo', 'cronograma', 'codigoManual', 'areaRequerida'],
         model      : estructura,
         as         : 'estructura'
       },
@@ -157,7 +166,6 @@ module.exports = function responsableRepository (models, Sequelize) {
       query.where.idFormulacion = params.idFormulacion;
     }
     if (params.idEstructura) {
-      console.log(params.idEstructura);
       query.where.idEstructura = {
         [Op.in]: params.idEstructura.split(',')
       };
@@ -202,6 +210,11 @@ module.exports = function responsableRepository (models, Sequelize) {
       'idEstructura',
       'idOperacionPadre',
       'idEntidad',
+      'lineamiento',
+      'eje',
+      'pilar',
+      'objetivo',
+      'accion',
       'codigo',
       'descripcion',
       'ponderacion',
@@ -231,7 +244,7 @@ module.exports = function responsableRepository (models, Sequelize) {
         as         : 'cronograma'
       },
       {
-        attributes : ['id', 'idGestion', 'nombre', 'nivel', 'sigla', 'editable', 'codigo', 'cronograma', 'codigoManual', 'areaRequerida'],
+        attributes : ['id', 'nombre', 'nivel', 'sigla', 'editable', 'codigo', 'cronograma', 'codigoManual', 'areaRequerida'],
         model      : estructura,
         as         : 'estructura'
       },

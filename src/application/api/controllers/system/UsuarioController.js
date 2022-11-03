@@ -1,6 +1,5 @@
 'use strict';
 
-const debug = require('debug')('app:controller:auth');
 const { Respuesta } = require('../../../lib/respuesta');
 const { Finalizado, HttpCodes } = require('../../../lib/globals');
 const { config } = require('../../../../common');
@@ -45,7 +44,6 @@ module.exports = function setupUsuarioController (services) {
       const data = req.body;
       data.userUpdated = req.user.idUsuario;
       data.id = req.params.id;
-      console.log(data);
       const respuesta = await UsuarioService.createOrUpdate(data);
       return res.status(200).send(new Respuesta('OK', Finalizado.OK, respuesta));
     } catch (error) {
@@ -92,7 +90,6 @@ module.exports = function setupUsuarioController (services) {
       const { backendUrl } = config.app;
       const archivos = req.files;
       let fileName = null;
-      console.log(req.query);
       if (archivos.documento) {
         const ext = (archivos.documento.name.split('.').pop()).toLowerCase();
         fileName = `${req.query.idEntidad}/${req.params.id}.${ext}`;

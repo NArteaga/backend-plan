@@ -17,7 +17,7 @@ module.exports = function authService (repositories, helpers, res) {
   const cliente = new issuer.Client(config.openid.client);
   cliente.CLOCK_TOLERANCE = 5;
 
-  async function getCode (data) {
+  async function getCode () {
     debug('Obtener código state');
     const { ciudadaniaDigital } = config.app;
     const state = crypto.randomBytes(16).toString('hex');
@@ -40,7 +40,6 @@ module.exports = function authService (repositories, helpers, res) {
           userCreated : '7171272e-b31b-4c34-9220-9f535c958c5c'
         };
         data.estado = 'INICIO';
-        console.log(data);
         await AuthRepository.createOrUpdate(data);
       }
 
@@ -53,7 +52,7 @@ module.exports = function authService (repositories, helpers, res) {
     }
   }
 
-  async function authorizate (req, info) {
+  async function authorizate (req) {
     debug('Autorizar código');
     let user;
     let respuesta;

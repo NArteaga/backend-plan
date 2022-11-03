@@ -23,6 +23,18 @@ module.exports = function GestionRepository (models, Sequelize) {
         [Op.iLike]: `%${params.nombre}%`
       };
     }
+    if (params.idEje) {
+      if (!Array.isArray(params.idEje)) {
+        query.where.idEje = {
+          [Op.contains]: params.idEje
+        };
+      } else {
+        const whereEje = [];
+        for (const id of params.idEje) whereEje.push({ [Op.contains]: id });
+        query.where.idEje = { [Op.or]: whereEje };
+        console.log(query.where.idEje);
+      }
+    }
     if (params.codigo) {
       query.where.codigo = params.codigo;
     }

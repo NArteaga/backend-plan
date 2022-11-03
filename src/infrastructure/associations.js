@@ -14,6 +14,7 @@ module.exports = function associations (models) {
     rolMenu,
     menu,
     aplicacion,
+    parametro,
     aplicacionPermiso,
     divisionPoliticaAdministrativa
   } = models;
@@ -26,11 +27,20 @@ module.exports = function associations (models) {
     cronograma
   } = models;
 
+  // financiera
+  const {
+    detalle,
+    ejecucion,
+    organismoFinanciador,
+    partidaPresupuestaria,
+    presupuesto
+  } = models;
+
   // red-funcional
   const {
     RFSolicitud,
     RFSolicitudHistorial,
-    RFDocumento,
+    RFDocumento
   } = models;
 
   RFSolicitud.belongsTo(entidad);
@@ -41,8 +51,6 @@ module.exports = function associations (models) {
 
   RFDocumento.belongsTo(RFSolicitud);
   RFSolicitud.hasMany(RFDocumento);
-
-
 
   // system
 
@@ -80,6 +88,7 @@ module.exports = function associations (models) {
   entidad.hasMany(auth,  { foreignKey: { name: 'idEntidad' }, as: 'sesionesEntidad' });
 
   divisionPoliticaAdministrativa.belongsTo(divisionPoliticaAdministrativa, { foreignKey: { name: 'idDpa'  }, as: 'divisionPoliticaPadre' });
+
   // planificacion
 
   formulacion.belongsTo(gestion, { foreignKey: { name: 'idGestion' }, as: 'gestion' });
@@ -99,6 +108,27 @@ module.exports = function associations (models) {
 
   cronograma.belongsTo(operacion, { foreignKey: { name: 'idOperacion' }, as: 'operacion' });
   operacion.hasMany(cronograma, { foreignKey: { name: 'idOperacion' }, as: 'cronograma' });
+
+  // financiera
+  detalle.belongsTo(ejecucion, { foreignKey: { name: 'idEjecucion' }, as: 'ejecucion' });
+  ejecucion.hasMany(detalle, { foreignKey: { name: 'idEjecucion' }, as: 'detalles' });
+
+  detalle.belongsTo(parametro, { foreignKey: { name: 'idUnidadMedida' }, as: 'unidadMedida' });
+
+  detalle.belongsTo(presupuesto, { foreignKey: { name: 'idPresupuesto' }, as: 'presupuesto' });
+  presupuesto.hasMany(detalle, { foreignKey: { name: 'idPresupuesto' }, as: 'ejecuciones' });
+
+  presupuesto.belongsTo(operacion, { foreignKey: { name: 'idOperacion' }, as: 'operacion' });
+  operacion.hasMany(presupuesto, { foreignKey: { name: 'idOperacion' }, as: 'presupuestos' });
+
+  presupuesto.belongsTo(organismoFinanciador, { foreignKey: { name: 'idOrganismoFinanciador' }, as: 'organismoFinanciador' });
+  organismoFinanciador.hasMany(presupuesto, { foreignKey: { name: 'idOrganismoFinanciador' }, as: 'presupuestos' });
+
+  presupuesto.belongsTo(partidaPresupuestaria, { foreignKey: { name: 'idPartidaPresupuestaria' }, as: 'partidaPresupuestaria' });
+  partidaPresupuestaria.hasMany(presupuesto, { foreignKey: { name: 'idPartidaPresupuestaria' }, as: 'presupuestos' });
+
+  partidaPresupuestaria.belongsTo(partidaPresupuestaria, { foreignKey: { name: 'idPartidaPadre' }, as: 'partidaPadre' });
+  partidaPresupuestaria.hasMany(partidaPresupuestaria, { foreignKey: { name: 'idPartidaPadre' }, as: 'partidasHijas' });
 
   return models;
 };

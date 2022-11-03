@@ -18,9 +18,12 @@ module.exports = function ParametroRepository (models, Sequelize) {
     }
 
     if (params.grupo) {
-      query.where.grupo = {
-        [Op.iLike]: `%${params.grupo}%`
-      };
+      if (!Array.isArray(params.grupo)) query.where.grupo = { [Op.iLike]: `%${params.grupo}%` };
+      else {
+        const whereGrupo = [];
+        for (const grupo of params.grupo) whereGrupo.push({ [Op.iLike]: `%${grupo}%` });
+        query.where.grupo = { [Op.or]: whereGrupo };
+      }
     }
 
     if (params.nombre) {

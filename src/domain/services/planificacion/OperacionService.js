@@ -1,43 +1,30 @@
 'use strict';
 
-// const { config } = require('../../../common');
 const { ErrorApp } = require('../../lib/error');
-// const ejs = require('ejs');
-// const fs = require('fs');
-// const path = require('path');
 
-// const wkhtmltopdf = require('wkhtmltopdf');
-/* if (process.platform === 'win32') {
-  wkhtmltopdf.command = 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe';
-} else {
-  wkhtmltopdf.command = 'wkhtmltopdf';
-} */
-
-module.exports = function operacionService (repositories, helpers, res) {
-  const { OperacionRepository, OperacionHistorialRepository, CronogramaRepository, EstructuraRepository, FormulacionRepository } = repositories;
+module.exports = function operacionService (repositories) {
+  const { PresupuestoRepository, OperacionRepository, OperacionHistorialRepository, CronogramaRepository, EstructuraRepository, FormulacionRepository } = repositories;
   async function findAll (params) {
     try {
       const operacion = await OperacionRepository.findAll(params);
       return operacion;
     } catch (err) {
-      console.log(err)
       throw new ErrorApp(err.message, 400);
     }
   }
 
   async function calificaciones (params) {
     try {
-      const result = await OperacionRepository.calificaciones(params)
-      if (!result) return null
-      const data = {}
+      const result = await OperacionRepository.calificaciones(params);
+      if (!result) return null;
+      const data = {};
       for (const item of result) {
-        if (!data[item.entidad]) data[item.entidad] = {}
-        if (!data[item.entidad][item.tipo]) data[item.entidad][item.tipo] = item.calificacion
-        else data[item.entidad][item.tipo] += item.calificacion
+        if (!data[item.entidad]) data[item.entidad] = {};
+        if (!data[item.entidad][item.tipo]) data[item.entidad][item.tipo] = item.calificacion;
+        else data[item.entidad][item.tipo] += item.calificacion;
       }
-      return data
+      return data;
     } catch (err) {
-      console.log(err)
       throw new ErrorApp(err.message, 400);
     }
   }
@@ -56,11 +43,13 @@ module.exports = function operacionService (repositories, helpers, res) {
 
   async function eliminar (id) {
     try {
-      console.log(id)
       const cantidadOperaciones = await OperacionRepository.countOperaciones({ idOperacionPadre: id });
-      console.log(cantidadOperaciones)
       if (cantidadOperaciones > 0) {
         throw new Error('No puede eliminar el registro por que tiene dependencias');
+      }
+      const presupuesto = await PresupuestoRepository.findAll({ idOperacion: id });
+      if (presupuesto.length > 0) {
+        throw new Error('No puede eliminar el registro por que tiene recursos asignados');
       }
       const operacion = await OperacionRepository.findOne({ id });
       const codigo = operacion.codigo.split('.').pop();
@@ -75,7 +64,6 @@ module.exports = function operacionService (repositories, helpers, res) {
       });
       return operacion;
     } catch (err) {
-      console.log(err)
       throw new ErrorApp(err.message, 400);
     }
   }
@@ -125,13 +113,13 @@ module.exports = function operacionService (repositories, helpers, res) {
             const codigos = operacionPadre.nroHijasDesAsociadas.sort();
             codigo = codigos.shift();
           }
-          await OperacionRepository.createOrUpdate({ id: operacionPadre.id, nroHijas: operacionPadre.nroHijas + 1 })
+          await OperacionRepository.createOrUpdate({ id: operacionPadre.id, nroHijas: operacionPadre.nroHijas + 1 });
         }
         datos.codigo = `${operacionPadre.codigo}.${codigo}`;
       }
-      const formulacion = await FormulacionRepository.findOne({ idEntidad: datos.entidad.id, idGestion: estructura.idGestion })
+      const formulacion = await FormulacionRepository.findOne({ idEntidad: datos.entidad.id, idGestion: estructura.idGestion });
       if (!formulacion?.id) {
-        throw new Error(`Error: La gestión no tiene una formulación creada en la gestión seleccionada y la entidad seleccionada`);
+        throw new Error('Error: La gestión no tiene una formulación creada en la gestión seleccionada y la entidad seleccionada');
       }
       datos.idEntidad = datos.entidad.id;
       datos.idFormulacion = formulacion.id;
@@ -164,7 +152,6 @@ module.exports = function operacionService (repositories, helpers, res) {
       }
       return operacion;
     } catch (err) {
-      console.log(err)
       throw new ErrorApp(err.message, 400);
     }
   }
@@ -188,13 +175,12 @@ module.exports = function operacionService (repositories, helpers, res) {
       const { rows } = await OperacionRepository.findAll({ idEntidad: data.idEntidad, idEstructura: estructura.id });
       let idPadres = [...new Set(rows.map(e => e.idOperacionPadre))];
       let operaciones = [...rows];
-      console.log(data)
       for (let i = 1; i < nivel; i++) {
         const estructuraHija = estructura;
         const { rows: operacionesPadre } = await OperacionRepository.findIn({
-          ids: idPadres,
-          idsEstructura: estructura.idEstructuraPadre,
-          idEntidad: data.idEntidad
+          ids           : idPadres,
+          idsEstructura : estructura.idEstructuraPadre,
+          idEntidad     : data.idEntidad
         });
         if (operacionesPadre.length > 0) {
           for (const padre of operacionesPadre) {
@@ -208,9 +194,8 @@ module.exports = function operacionService (repositories, helpers, res) {
         }
         estructura =  await EstructuraRepository.findOne({ id: estructura.idEstructuraPadre });
       }
-      return operaciones
+      return operaciones;
     } catch (error) {
-      console.log(error)
       throw new ErrorApp(error.message, 400);
     }
   }
